@@ -1,0 +1,333 @@
+\documentclass[11pt]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[a4paper,margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{graphicx}
+\usepackage{physics}
+\usepackage{siunitx}
+\usepackage{microtype}
+\usepackage{hyperref}
+\hypersetup{colorlinks=true, linkcolor=blue, citecolor=blue, urlcolor=blue}
+\usepackage{enumitem}
+\setlist{nosep}
+\usepackage{array,booktabs}
+\usepackage{xcolor}
+
+\newtheorem{definition}{Definition}
+\newtheorem{proposition}{Proposition}
+\newtheorem{theorem}{Theorem}
+\newtheorem{remark}{Remark}
+\newtheorem{example}{Example}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Exp}{\mathrm{Exp}}
+\newcommand{\Log}{\mathrm{Log}}
+\newcommand{\oplusS}{\mathbin{\oplus}}
+\newcommand{\otimesS}{\mathbin{\otimes}}
+\newcommand{\degree}{^\circ}
+
+\title{\textbf{Helical Time, Spiral Arithmetic, and the Geometry of Couplings}\\[4pt]
+\large A self-contained and intuitive presentation}
+\author{}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+We develop a self-contained, geometry-first framework in which
+(i) a single normalized logarithmic spiral carries a complete ordered-field structure \((S,\oplus,\otimes,\le_S)\) isomorphic to \((\R,+,\cdot,\le)\);
+(ii) a helical internal geometry (a compact angle \(\theta\) fibered over log-radius \(\mu=\ln r\)) encodes gauge couplings as fiber radii and fermion Yukawa matrices as overlap integrals of localized helical zero-modes; and
+(iii) a simple ``tick-stability'' principle---actualization occurs near integer ticks in the spiral--log coordinate---explains hierarchical masses, small mixings, and predicts log-periodic spectral signatures.
+We keep the presentation intuitive, with minimal formalism sufficient for clarity, and collect all definitions, normalizations, and numerical checks in appendices.
+\end{abstract}
+
+\tableofcontents
+
+\section{Executive summary (one page)}
+\textbf{Idea.} The physics of scales and phases can be encoded on a single normalized logarithmic spiral with a one-parameter group of similarities.
+The spiral admits canonical ``ticks'' at integer steps of a chosen unit angle and radius-ratio.
+We transfer ordinary arithmetic from \(\R\) to points on the spiral, and postulate a \emph{tick-stability principle}: potential modes become actual (long-lived, resonant) when their spiral--log coordinates lie within a small window around integer ticks and helical windings satisfy a simple selection rule.
+
+\textbf{Outcomes.}
+\begin{itemize}
+\item \emph{Gauge sector from geometry.} A compact helical fiber for \(U(1)\), \(SU(2)\), \(SU(3)\) with radii \(R_Y,R_2,R_3\) produces couplings via \(1/g_a^2=\kappa_a M_*^2 R_a^2\) (with order-one \(\kappa_a\)). The fine-structure constant \(\alpha\) fixes the \(U(1)\) fiber radius \(R_\theta\sim \mathcal{O}(10)\,\ell_P\); electroweak mixing is the ratio \(R_Y/R_2\); the strong coupling fixes \(R_3\sim \mathcal{O}(10)\,\ell_P\) at high scale.
+\item \emph{Fermion masses and mixing.} Chiral zero-modes are localized packets in \(\mu\) with integer/half-integer tick centers and simple integer windings along \(\theta\).
+Triple overlaps (left, right, Higgs) generate hierarchical Yukawas; small mixings arise from slight left-handed misalignment and near-neighbor winding differences. We give tuned benchmark sets.
+\item \emph{Predictions.} (i) Log-periodic spectral combs: preferred frequencies \(f_n=f_0\,\lambda^n\) (or times \(\tau_n=\tau_0\,\lambda^n\)) with \(\lambda\) the spiral ratio (golden case \(\lambda=\varphi\)).
+(ii) Standard probes constrain the helical scale: photon time-of-flight dispersion, GW speed/dispersion, and precision clocks.
+\end{itemize}
+
+\textbf{Scope and humility.}
+The spiral arithmetic itself is a coordinate choice; the new physics enters through the tick-stability postulate and the helical compact fiber.
+We keep explicit ``order-one'' factors \(\kappa_a\) and list numerical consequences for transparent comparison with data.
+
+\section{Spiral arithmetic: numbers as points on a logarithmic spiral}
+\subsection{Normalized spiral and similarity group}
+Fix parameters: a radius ratio \(\lambda>1\) per unit angle, a unit angle \(\alpha_0>0\), and a base radius \(r_0>0\).
+Let \(R_\theta\) be rotation by \(\theta\) and \(D_s\) dilation by \(s>0\).
+Define the one-parameter similarity group
+\begin{equation}
+G:=\{g_t:\R^2\to\R^2\mid g_t= D_{\lambda^{t}}\circ R_{t\alpha_0}\}_{t\in\R},\qquad
+g_s\circ g_t=g_{s+t},\ g_0=\mathrm{id}.
+\end{equation}
+Let \(e=(r_0,0)\) and \(S:=\{g_t(e):t\in\R\}\).
+In polar coordinates \(S=\{(r(\theta),\theta)\}\) with \(r(\theta)=r_0\,\lambda^{\theta/\alpha_0}\).
+
+\subsection{Spiral exponential and logarithm}
+The action of \(G\) on \(S\) is free and transitive. Define the bijections
+\begin{equation}
+\Exp:\R\to S,\quad \Exp(t)=g_t(e);\qquad \Log:S\to\R,\quad \Log(x)=t\iff x=g_t(e).
+\end{equation}
+Covariance: \(\Log(g_t(x))=\Log(x)+t\), \(\Exp(a+b)=g_a(\Exp(b))\).
+We call \(t\) the \emph{spiral--log coordinate} of \(x\).
+
+\subsection{Arithmetic and order on the spiral}
+Define for \(x,y\in S\):
+\begin{equation}
+x\oplus y:=\Exp(\Log x+\Log y),\qquad x\otimes y:=\Exp((\Log x)(\Log y)),
+\end{equation}
+with identities \(0_S=\Exp(0)=e\) and \(1_S=\Exp(1)=g_1(e)\). Inverses are \(\ominus x=\Exp(-\Log x)\) and \(x^{\otimes-1}=\Exp((\Log x)^{-1})\) for \(x\neq 0_S\).
+Order: \(x\le_S y\iff \Log x\le \Log y\).
+Equivalently,
+\begin{equation}
+x\oplus y=g_{\Log x}(y)=g_{\Log y}(x),\qquad
+x\otimes y= g_{(\Log x)(\Log y)}(e).
+\end{equation}
+
+\begin{theorem}[Field structure]\label{thm:field}
+\((S,\oplus,\otimes,\le_S)\) is an ordered field, and \(\Exp:(\R,+,\cdot,\le)\to (S,\oplus,\otimes,\le_S)\) is an order--field isomorphism.
+\end{theorem}
+
+\begin{remark}[Ticks and golden specialization]
+\emph{Ticks} are the points \(\Exp(n)=g_n(e)\), \(n\in\Z\).
+Setting \(\lambda=\varphi=(1+\sqrt{5})/2\) and e.g.\ \(\alpha_0=\tfrac{\pi}{2}\) produces radii \(r_0\varphi^n\) at quarter-turn ticks.
+Zeckendorf/Fibonacci numeration furnishes a canonical digit system for the monoid \((\N_S,\oplus)\).
+\end{remark}
+
+\section{Tick-stability principle and actualization}
+\subsection{Principle}
+\textbf{Tick-stability (postulate).} There exists a tick window of half-width \(\delta\in(0,\tfrac12]\) in the spiral coordinate
+\(\mathcal T_\delta:=\bigcup_{n\in\Z}[n-\delta,n+\delta]\)
+such that modes with \(t\in\mathcal T_\delta\) are dynamically preferred (long-lived or resonant). Actualization of a process involving three wave packets (initial, final, mediator) requires their coordinates to fall in overlapping tick windows and satisfy a helical winding selection rule (below).
+
+\subsection{Why this is natural}
+For Gaussian profiles localized at \(\mu\)-centers \( \mu^Q_i,\mu^R_j,\mu_H\) with widths \((\sigma_Q,\sigma_R,\sigma_H)\) (here \(\mu=\ln r\) is proportional to \(t\)), the triple overlap scales as
+\begin{equation}\label{eq:overlap}
+|Y^R_{ij}|\ \propto\ \exp\!\left[
+-\tfrac12\!\left(\frac{(\mu^Q_i-\bar\mu)^2}{\sigma_Q^2}+
+\frac{(\mu^R_j-\bar\mu)^2}{\sigma_R^2}+
+\frac{(\mu_H-\bar\mu)^2}{\sigma_H^2}\right)\right],\quad
+\bar\mu=\frac{\mu^Q_i/\sigma_Q^2+\mu^R_j/\sigma_R^2+\mu_H/\sigma_H^2}{\sigma_Q^{-2}+\sigma_R^{-2}+\sigma_H^{-2}}.
+\end{equation}
+This is maximized when all three centers coincide; restricting centers to ticks (or small neighborhoods) therefore maximizes couplings.
+In discrete-scale dynamics (Floquet intuition) stability bands likewise occur at \(\log f\in \log f_0 + \Z\log\lambda\).
+
+\begin{remark}[Practical mapping of \(\delta\) to widths]
+With \(\mu=\mu_0+n\Delta\), \(\Delta=\ln\lambda\), a common width \(\sigma\) implies a tolerance \(\delta\sim \sigma/\Delta\).
+Non-detection of log-periodic spectral combs constrains \(\delta\) and hence the geometric widths.
+\end{remark}
+
+\section{Helical kinematics in one page (for intuition)}
+We work in natural units \(c=\hbar=1\) unless noted. The helical manifold has a compact angle \(\theta\sim \theta+2\pi\) fibered over log-radius \(\mu=\ln r\).
+A minimal kinematic ansatz for a worldline parameter \(s\) is
+\begin{equation}
+\frac{dr}{ds}= \beta\, r\left(1-\frac{r}{r_{\max}}\right),\qquad
+\frac{d\theta}{ds}= \omega_0\, r^{-\alpha},\qquad
+\frac{d\vec x}{ds}= v_z(r)\,\hat{\mathbf z},\quad v_z(r)=v_\infty\!\left(1-e^{-r/r_*}\right),
+\end{equation}
+with \(\alpha\) dimensionless, \([\beta]=T^{-1}\), \(r_{\max}>0\), \(0<v_\infty\le 1\).
+This produces a regular spiral at small \(r\), saturating longitudinal speed at large \(r\).
+We identify \(\mu=\ln r\) (hence \(t\propto \mu\)) and use ticks in \(\mu\) to label preferred levels.
+
+\section{Gauge sector from helical fibers}\label{sec:gauge}
+We take gauge bosons as Kaluza--Klein connections along compact helical fibers with radii \(R_a\) and order-one geometric normalizations \(\kappa_a\). Dimensional reduction gives
+\begin{equation}\label{eq:gauge-kin}
+\frac{1}{g_a^2(\mu_H)}=\kappa_a\, M_*^2\, R_a^2,\qquad \alpha_a(\mu_H)=\frac{g_a^2(\mu_H)}{4\pi}=\frac{1}{4\pi\,\kappa_a\,M_*^2 R_a^2},
+\end{equation}
+at a high matching scale \(\mu_H\sim 1/R_a\) (we use the reduced Planck mass \(\bar M_{\rm Pl}\approx 2.435\times 10^{18}\,\mathrm{GeV}\) as reference).
+
+\subsection{Electromagnetism (\(U(1)\)) and \(\alpha\)}
+With \(\kappa_1=\tfrac12\) one finds
+\begin{equation}
+\alpha\ =\ \frac{1}{2\pi\,M_*^2 R_\theta^2}\quad\Rightarrow\quad
+R_\theta=\frac{1}{\sqrt{2\pi\alpha}\,M_*}\,.
+\end{equation}
+Numerically, with \(\alpha^{-1}\simeq 137.036\) and \(M_*=\bar M_{\rm Pl}\), \(R_\theta\simeq 3.8\times 10^{-34}\,\mathrm{m}\approx 24\,\ell_P\).
+Different \(\kappa_1\) or using the unreduced \(M_{\rm Pl}\) shift this by order-unity, but the radius remains \(\mathcal{O}(10)\,\ell_P\).
+
+\subsection{Electroweak mixing angle from a radius ratio}
+Let \(R_Y\) (hypercharge) and \(R_2\) (\(SU(2)_L\)) be the two fiber radii with normalizations \(\kappa_Y,\kappa_2\).
+Then
+\begin{equation}
+\sin^2\theta_W=\frac{g'^2}{g'^2+g^2}=\frac{1}{\,1+\lambda\,R_Y^2/R_2^2\,},\qquad \lambda:=\frac{\kappa_Y}{\kappa_2}\times\text{(hypercharge norm)}.
+\end{equation}
+Two simple choices reproduce \(\sin^2\theta_W(m_Z)\approx 0.231\):
+\begin{itemize}
+\item \textbf{GUT-normalized hypercharge:} take \(\lambda=5/3\), \(R_Y^2/R_2^2=2\) \(\Rightarrow\) \(\sin^2\theta_W=3/13=0.23077\).
+\item \textbf{Golden-step ratio:} \(\lambda=1\), \(R_Y/R_2=\varphi^{5/4}\) \(\Rightarrow\) \(\sin^2\theta_W=1/(1+\varphi^{5/2})\approx 0.23094\).
+\end{itemize}
+These realize the weak mixing angle as a \emph{pure geometric ratio} of helical radii (ticks or half-ticks).
+
+\subsection{Color (\(SU(3)\)) and \(\alpha_s\)}
+Equation~\eqref{eq:gauge-kin} gives
+\begin{equation}
+R_3=\frac{1}{M_*\,\sqrt{\kappa_3}\,g_s(\mu_H)}=\frac{1}{M_*\,\sqrt{4\pi\kappa_3\,\alpha_s(\mu_H)}}.
+\end{equation}
+Running \(\alpha_s(m_Z)\approx 0.118\) to high scale (\(\mu_H\sim M_*\)) at one loop yields \(\alpha_s(\mu_H)\sim 0.02\) and \(g_s(\mu_H)\sim 0.50\), giving \(R_3\sim (7\!-\!14)\,\ell_P\) for \(\kappa_3\in[2,\,1/2]\).
+Empirically, \(R_3\) and \(R_2\) come out nearly equal at the matching scale---a geometric hint of near-isotropy in the non-Abelian fibers.
+
+\section{Fermion masses and mixings from helical overlaps}\label{sec:yuk}
+\subsection{Profiles, levels, windings}
+Work in \(\mu=\ln r\) and a compact \(\theta\) fiber. Model chiral zero-modes and the Higgs as
+\begin{align}
+\psi^{Q_i}(\mu,\theta)&=N_Q e^{-\frac{(\mu-\mu_i^Q)^2}{2\sigma_Q^2}}\,e^{i m_i^Q\theta},\quad
+\psi^{U_j/D_j}(\mu,\theta)=N_{U/D} e^{-\frac{(\mu-\mu_j^{U/D})^2}{2\sigma_{U/D}^2}}\,e^{i m_j^{U/D}\theta},\\
+H(\mu,\theta)&=N_H e^{-\frac{(\mu-\mu_H)^2}{2\sigma_H^2}}\,e^{i m^H\theta}.
+\end{align}
+Yukawas arise from overlaps \(Y^{u,d}_{ij}\propto \int d\mu\,d\theta\, \psi^{Q_i}\psi^{U_j/D_j}H\). The radial integral gives \eqref{eq:overlap}; the \(\theta\) integral gives a soft selection \(\exp[-(m_i^Q+m_j^{R}+m^H)^2/(2\sigma_\theta^2)]\).
+
+\paragraph{Golden-step centers.} Place centers on a \(\varphi\)-ladder \(\mu=\mu_0+n\Delta\) with \(\Delta=\ln\varphi\), allowing occasional half-steps. Take broad \(\sigma_Q\) and narrower \(\sigma_{U,D}\), \(\sigma_H\) to obtain rank-1 dominance and hierarchical spectra; choose windings with diagonals unsuppressed and nearest-neighbor off-diagonals mildly suppressed.
+
+\subsection{Two concrete benchmarks}
+We summarize two simple working points; both set \(y_t=1\) and \(y_b=0.024\) by normalization.
+Levels are in multiples of \(\Delta\); windings are \(m^Q=(2,1,0)\), \(m^U=(-2,-1,0)\), \(m^D=(-2,-1,0)\), \(m_H=0\).
+
+\paragraph{Benchmark A (CKM-first).}
+\(\sigma_Q=1.2,\ \sigma_U=0.30,\ \sigma_D=0.40,\ \sigma_H=0.30,\ \sigma_\theta=1.2\);
+\(\mu^Q/\Delta=(2,1,0)\), \(\mu^U/\Delta=(5,2.6,0)\), \(\mu^D/\Delta=(3.0,1.1,0.9)\).
+Predictions:
+\((y_u,y_c,y_t)\approx(0,\ 0.00760,\ 1)\), \((y_d,y_s,y_b)\approx(9.6\cdot 10^{-5},\ 5.28\cdot 10^{-3},\ 0.024)\),
+\begin{equation*}
+|V_{\rm CKM}|\approx
+\begin{pmatrix}
+0.976 & 0.220 & 0.006\\
+0.219 & 0.975 & 0.040\\
+0.015 & 0.037 & 0.999
+\end{pmatrix}.
+\end{equation*}
+
+\paragraph{Benchmark B (mass-first).}
+\(\sigma_Q=1.0,\ \sigma_U=0.30,\ \sigma_D=0.32,\ \sigma_H=0.30,\ \sigma_\theta=2.0\);
+\(\mu^Q/\Delta=(2,1,0)\), \(\mu^U/\Delta=(4.6,2.6,0)\), \(\mu^D/\Delta=(3.2,0.6,1.0)\).
+Predictions:
+\((y_u,y_c,y_t)\approx(0,\ 0.00641,\ 1)\), \((y_d,y_s,y_b)\approx(2.6\cdot 10^{-5},\ 1.63\cdot 10^{-3},\ 0.024)\),
+\begin{equation*}
+|V_{\rm CKM}|\approx
+\begin{pmatrix}
+0.983 & 0.171 & 0.007\\
+0.171 & 0.984 & 0.056\\
+0.011 & 0.054 & 0.998
+\end{pmatrix}.
+\end{equation*}
+
+\begin{remark}[Minimal refinements to reach a full fit]
+Allow \(10\!-\!20\%\) family non-universality in \(\sigma_{U,D}\) to decouple \(|V_{us}|\) from \(y_s\), use a two-peak Higgs in \(\mu\) (two narrow Gaussians separated by a half-step) to selectively suppress second-generation overlaps, and include a small Wilson-line phase along \(\theta\) for a realistic Jarlskog invariant.
+\end{remark}
+
+\section{Predictions and constraints}\label{sec:pred}
+We summarize several channels; uncertainties and order-one factors are explicit to keep the mapping transparent.
+
+\subsection*{Conventions}
+Natural units \(c=\hbar=1\). For photons with a quadratic correction \(E^2=p^2+\eta\,p^4/M_H^2\), the group velocity is \(v_g=\partial E/\partial p\simeq 1+\tfrac{3}{2}\eta(E/M_H)^2\) at leading order.
+
+\begin{center}
+\renewcommand{\arraystretch}{1.15}
+\setlength{\tabcolsep}{6pt}
+\resizebox{\linewidth}{!}{%
+\begin{tabular}{|p{3.3cm}|p{6.1cm}|p{5.0cm}|p{4.1cm}|}
+\hline
+\textbf{Channel} & \textbf{Observable (helical mapping)} & \textbf{Representative bound} & \textbf{Implied helical bound}\\
+\hline
+Photon TOF dispersion (quadratic) & \(v_g \simeq 1 + \tfrac{3}{2}\eta (E/M_H)^2\) & short GRB analyses (e.g.\ GRB\,090510): \(E_{QG,2}\gtrsim 1.3\times 10^{11}\,\mathrm{GeV}\) & \(\displaystyle \frac{M_H}{\sqrt{|\eta|}} \gtrsim E_{QG,2}\) \\
+\hline
+GW speed vs.\ \(c\) & \(|v_g-c|/c \approx \tfrac{3}{2}|\eta_g|(E/M_H)^2\) at \(f\sim 100\) Hz & binary NS + GRB timing: \(|v_g-c|/c \lesssim 3\times 10^{-15}\) & \(\displaystyle \frac{M_H}{\sqrt{|\eta_g|}} \gtrsim h f \sqrt{\frac{3}{2\,\delta v/v}} \sim 10^{-5}\,\mathrm{eV}\) \\
+\hline
+GW dispersion (\(\alpha=4\)) & identify \(A_4=\epsilon_H/M_H^2\) in \(E^2=p^2 + A_4 p^4\) & network constraints: \(|A_4|\lesssim \mathcal{O}(10^{4})\,\mathrm{eV}^{-2}\) & \(\displaystyle \frac{M_H}{\sqrt{\epsilon_H}} \gtrsim 1/\sqrt{|A_4|} \sim 10^{-2}\,\mathrm{eV}\) \\
+\hline
+Atomic clocks (periodic modulation) & fractional modulation \(\delta\nu/\nu = A_H \cos(\Omega_H t)\) & state-of-the-art single-ion clocks: \(\lesssim 10^{-18}\!-\!10^{-19}\) & \(|A_H|\lesssim \text{few}\times 10^{-19}\) (hours--weeks)\\
+\hline
+Log-periodic comb search & peaks at \(f_n=f_0\lambda^n\) with common \(\lambda\) & (proposal) long-run spectral comb analyses & upper bound on tick window \(\delta\sim \sigma/\ln\lambda\) \\
+\hline
+\end{tabular}}
+\end{center}
+
+\subsection{Derived scales and cross-checks}
+From \(E_{QG,2}\gtrsim 1.3\times 10^{11}\,\mathrm{GeV}\) one infers (taking \(|\eta|=1\))
+\begin{align*}
+E_H &\approx 2.083\times 10^{1}\ \mathrm{J},\quad
+m_H = \frac{E}{c^2} \approx 2.32\times 10^{-16}\ \mathrm{kg},\quad
+\lambda_H = \frac{\hbar c}{E} \approx 1.52\times 10^{-27}\ \mathrm{m},\\
+f_H &= \frac{E}{h} \approx 3.14\times 10^{34}\ \mathrm{Hz},\quad
+T_H = \frac{E}{k_B} \approx 1.51\times 10^{24}\ \mathrm{K}.
+\end{align*}
+If \(M_H=E_{\rm Pl}\approx 1.221\times 10^{19}\,\mathrm{GeV}\), then \(|\eta|\lesssim (E_{QG,2}/E_{\rm Pl})^2\sim 10^{-16}\). GW-derived bounds are intrinsically weak at audio frequencies and sit far below the photon constraint.
+
+\section{Cosmological note (one paragraph and a remedy)}
+A simple power-law unfolding \(a(t)=a_0\,(1+t/\tau_H)^\gamma\) with \(\gamma=1/\varphi\simeq 0.618\) yields
+\(\ddot a/a = \gamma(\gamma-1)/(t+\tau_H)^2<0\): \emph{late-time deceleration}.
+Fitting \(H_0=\dot a/a\) at \(t=t_0\approx 13.8\,\mathrm{Gyr}\) gives \(\tau_H=\gamma/H_0-t_0 < 0\) for both Planck and SH0ES values of \(H_0\) (e.g.\ \(-4.8\) to \(-5.5\) Gyr).
+Acceleration can be achieved by taking \(\gamma>1\), adding a gentle exponential factor \(a\propto \exp[(t/\tau_H)^{1/\varphi}]\), or allowing a slow \(t\)-dependence \(\gamma(t)\) crossing \(1\) at late times.
+Cosmology is not the focus here; we note consistency and simple modifications.
+
+\section{Experimental roadmap}
+\begin{enumerate}
+\item \textbf{Clock tests.} Target periodic modulations and log-periodic sidebands in long ion/optical lattice clock runs; non-detections bound \(\delta\) and tick widths.
+\item \textbf{Astro triggers.} Use bright GRBs to refine \(E_{QG,2}\) bounds; search for log-periodic residuals in de-trended spectra.
+\item \textbf{GW catalogs.} Joint fits for \(A_4\) and log-periodic residuals after power-law subtraction in inspiral chirps.
+\item \textbf{Condensed-matter/mechanics.} High-\(Q\) oscillators (whispering gallery, nanomechanics): look for geometric spacing \(f_0\lambda^n\) distinct from harmonics.
+\end{enumerate}
+
+\section{Conclusions}
+A normalized logarithmic spiral with its similarity group provides a compact language for scale and phase.
+With one additional physical hypothesis---tick-stability near integer steps---and a helical fiber geometry, the framework organizes
+(i) gauge couplings as radii, with \(\alpha\), \(\sin^2\theta_W\), and \(\alpha_s\) emerging from \(\{R_Y,R_2,R_3\}\);
+(ii) fermion hierarchies and mixings from overlaps of wave packets pinned to ticks;
+and (iii) concrete predictions and null tests, notably log-periodic spectral combs and dispersion constraints.
+The construction is self-contained, simple to extend, and falsifiable.
+
+\appendix
+
+\section{Units, symbols, and constants}
+We set \(c=\hbar=1\) unless shown.
+\(\ell_P\approx 1.616\times 10^{-35}\,\mathrm{m}\), \(M_{\rm Pl}\approx 1.2209\times 10^{19}\,\mathrm{GeV}\), \(\bar M_{\rm Pl}\approx 2.435\times 10^{18}\,\mathrm{GeV}\), \(\alpha^{-1}\approx 137.036\), \(\varphi=(1+\sqrt{5})/2\), \(\Delta=\ln\varphi\).
+Spiral parameters: \(\lambda\) (radius ratio per unit angle), \(\alpha_0\) (unit angle), basepoint \(e=(r_0,0)\). Tick window: \(\delta\). Helical widths: \(\sigma_Q,\sigma_U,\sigma_D,\sigma_H\); winding width: \(\sigma_\theta\).
+
+\section{Spiral arithmetic: proofs and variations}
+\begin{proof}[Proof of Theorem~\ref{thm:field}]
+\(\Exp\) is bijective by construction. For \(a,b\in\R\),
+\(\Exp(a)\oplus \Exp(b)=\Exp(a+b)\) and \(\Exp(a)\otimes \Exp(b)=\Exp(ab)\) by definition, transporting all field axioms from \((\R,+,\cdot)\) to \((S,\oplus,\otimes)\). The order is preserved since \(x\le_S y\iff \Log x\le \Log y\). \qedhere
+\end{proof}
+\begin{remark}[Other normalizations]
+Different \((\lambda,\alpha_0)\) define isomorphic fields via \(t\mapsto at\) for some \(a>0\).
+The choice of basepoint \(e\) fixes \(0_S\); orientation fixes the sign of \(t\).
+\end{remark}
+
+\section{Golden hierarchies and level counts}
+For a base length \(\ell_0\) (e.g.\ \(\ell_P\)), a length \(\ell>0\) corresponds to an index \(n=\ln(\ell/\ell_0)/\ln\varphi\).
+Examples: the Bohr radius \(a_0\approx 5.29\times 10^{-11}\,\mathrm{m}\) yields \(n\approx 117.3\); the electron Compton wavelength \(\lambda_e\approx 2.43\times 10^{-12}\,\mathrm{m}\) gives \(n\approx 110.9\).
+A Hubble distance \(D_H\approx 1.37\times 10^{26}\,\mathrm{m}\) corresponds to \(n\approx 292\); a particle horizon \(\sim 4.4\times 10^{26}\,\mathrm{m}\) to \(n\approx 294\).
+
+\section{Minimal numerical integrator (illustrative)}
+A forward-Euler integrator for the helical ODEs with step \(\Delta s\):
+\begin{align*}
+r_{k+1} &= r_k + \beta r_k\!\left(1-\frac{r_k}{r_{\max}}\right)\Delta s,\\
+\theta_{k+1} &= \theta_k + \omega_0 r_k^{-\alpha}\,\Delta s,\\
+\vec x_{k+1} &= \vec x_k + v_z(r_k)\,\hat{\mathbf z}\,\Delta s.
+\end{align*}
+A representative numerically stable choice is \(\alpha=\tfrac{1}{2}\), \(\beta=1/\tau_H\), \(r_{\max}=1\), \(r(0)=0.05\), \(\theta(0)=0\), \(v_\infty=1\), \(r_*=r_{\max}\), and \(\Delta s\ll\min\{\tau_H, r_{\max}/v_\infty\}\).
+
+\section{Yukawa overlaps: symmetric-width corollary}
+When \(\sigma_Q=\sigma_R=\sigma_H=\sigma\), the magnitude of the entry simplifies to
+\begin{equation}
+|Y^R_{ij}|\ \propto\ \exp\!\left[-\frac{(\mu^Q_i-\mu^R_j)^2+(\mu^Q_i-\mu_H)^2+(\mu^R_j-\mu_H)^2}{6\sigma^2}\right]\,
+\exp\!\Big[-\frac{(m^Q_i+m^R_j+m^H)^2}{2\sigma_\theta^2}\Big].
+\end{equation}
+On a \(\varphi\)-ladder \(\mu=\mu_0+n\Delta\), this yields an explicit golden-step dependence: small integer separations dominate, half-steps give controllable enhancements, and larger separations are exponentially suppressed.
+
+\input{igs_results_section.tex}
+\end{document}

@@ -1,0 +1,507 @@
+\documentclass[11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[a4paper,margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{bm}
+\usepackage{enumitem}
+\usepackage{float} % for [H] exact figure placement
+\usepackage{graphicx}
+\usepackage[hidelinks]{hyperref}
+\hypersetup{
+  colorlinks=true,
+  linkcolor=blue!60!black,
+  citecolor=teal!60!black,
+  urlcolor=blue!60!black,
+  linktoc=page
+}
+\usepackage{physics}
+\usepackage{booktabs}
+\usepackage{ifthen}
+\usepackage{xcolor}
+
+\newtheorem{axiom}{Axiom}
+\newtheorem{definition}{Definition}
+\newtheorem{proposition}{Proposition}
+\newtheorem{theorem}{Theorem}
+\newtheorem{remark}{Remark}
+\newtheorem{example}{Example}
+
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\T}{\mathbb{T}}
+
+\title{Time--Probability Duality with Subsystem-Relative Clocks:\\
+A Solenoidal/Laminar Formalism with Matter, Mass, and Coherence-Induced Dilation}
+\author{}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+We present a self-contained laminar formalism in which \emph{time flow equals probability transport}. The total state space is a solenoid/lamination $\Sigma$ with invariant measure $\mu$.
+Two equivalent (dual) descriptions are used: (i) a measure-preserving flow $(\Sigma,\mu,\Phi^\theta)$; (ii) a stationary probability law on histories with the time shift. ``Freezing'' a subsystem means setting its \emph{effective} time-vector field to zero, which halts both probability pushforward and Actual$\leftrightarrow$Potential transfer. Fields and gauge structure are leafwise; a quadratic, saturating interface pump governs sector transfer. \emph{Matter} is defined as a leafwise-localized Floquet resonance; \emph{mass} is the rest quasi-energy (equivalently inverse localization length and dispersion curvature) in the effective Dirac regime. We introduce \emph{subsystem-relative clocks} and show how differing effective time rates produce \emph{coherence-induced dilation} effects that mirror relativistic redshift/dilation in appropriate limits. Two worked leafwise examples (temporal dimer/domain wall; locked vs.\ detuned pumping) illustrate the mechanism, and we outline a mapping to laboratory physics via calibration of emergent $(\tau_R,s)$ to $(t,x)$.
+\end{abstract}
+
+\tableofcontents
+
+\section*{Notation (quick reference)}
+\begin{tabular}{ll}
+$\Sigma$ & Solenoidal state space (lamination), invariant measure $\mu$ \\
+$I^d\times C$ & Local chart (leaf $\times$ Cantor transversal) \\
+$\tau_R,\tau_I$ & Leafwise and transversal (odometer) clocks \\
+$V,\,V_R^{(S)}$ & Global generator; subsystem $S$ time-vector field \\
+$g_\ell,\,\Delta_\ell$ & Leaf metric and Laplace--Beltrami operator \\
+$\mathcal A_\ell$ & Leafwise $U(1)$ connection; components $A_0,A_s$ \\
+$q^{(S)}$ & $\langle d\theta+\tilde A_\ell, V_R^{(S)}\rangle$ (gauge-invariant) \\
+$r_A^{(S)},r_P^{(S)}$ & Actual/Potential amplitudes for $S$ \\
+$u,J$ & Leafwise velocity and current ($u_{\rm field}=J/\rho$) \\
+$\Omega,m,v$ & Quasi-energy, mass gap $m=\Omega(0)$, leaf speed $v$ \\
+$t,x$ & Lab time/space: $t=\alpha_S\tau_R$, $x=\beta s$, $c_{\rm eff}=(\beta/\alpha)\,v$
+\end{tabular}
+
+\section*{Why a Solenoid? (and when a single leaf suffices)}
+Nested, memoryful $U(1)$ cycles (daily $\to$ monthly $\to$ seasonal $\to$ \dots) naturally realize the inverse limit of circles: a solenoid. Formally, tracking phases modulo progressively finer cycles and demanding consistency yields the projective limit $\Sigma=\varprojlim S^1$. This motivates the laminar state space when multi-scale cyclic structure is essential. 
+\emph{However}, all results in this paper that concern local transport, pumps, and dilation go through on a single leaf. In applications without clear multi-scale hierarchies, one can specialize to a fixed leaf (collapsing the Cantor transversal) without loss of near-term predictive content.
+
+
+\section{Dual Representations, State Space, and Clocks}
+
+\begin{axiom}[Solenoidal universe]
+Fix covers $p_n:S^1\to S^1$, $z\mapsto z^{k_n}$ ($k_n\ge 2$). The total compact state space is the solenoid
+$\Sigma=\varprojlim(S^1 \xleftarrow{p_1} S^1 \xleftarrow{p_2}\cdots)$,
+a \emph{lamination} with local product structure $I\times C$ (leaf $\times$ Cantor), and an invariant probability measure $\mu$ (Haar for constant degree).
+\end{axiom}
+
+\begin{axiom}[Time--probability duality: two equivalent descriptions]\label{ax:duality}
+A solenoidal universe is either:
+\begin{enumerate}[label=(\alph*)]
+\item a \emph{measure-preserving dynamical system} $(\Sigma,\mu,\Phi^\theta)$, with generator $V$ and pushforward of densities $\rho_\theta=\Phi^\theta_{\#}\rho_0$ solving the Liouville/continuity equation
+$\partial_\theta \rho + \nabla\!\cdot_\mu(\rho V)=0$; or
+\item a \emph{stationary probability law on histories} $(\Sigma^\R,\mathcal B,\mathbb P)$ with the \emph{shift} $(\sigma_\cdot)\mapsto(\sigma_{\cdot+\theta})$.
+\end{enumerate}
+These are mathematically equivalent (two representations of the same object). Thus, ``time flow'' and ``probability law'' are dual descriptions.
+\end{axiom}
+
+\begin{proposition}[Equivalence of flow and stationary histories (sketch)]
+Kolmogorov extension constructs from $(\Sigma,\mu,\Phi^\theta)$ a stationary law on path space $(\Sigma^\R,\mathcal B,\mathbb P)$ with consistent marginals and shift invariance.
+Conversely, any stationary law yields a flow (the shift) and an invariant marginal $\mu$.
+Thus the ``flow + invariant measure'' and the ``stationary law + shift'' descriptions are equivalent.
+\end{proposition}
+
+\begin{axiom}[Subsystem-relative clocks and freezing]\label{ax:freeze}
+For each subsystem $S$ and chart $(s,c)\in I\times C$, the leafwise clock $\tau_R$ induces a time-vector field $V_R^{(S)}$ on the degrees of freedom of $S$.
+\emph{Freezing $S$} means an operational regime with $V_R^{(S)}=0$ (for the observables of interest). This halts pushforward for $S$ and arrests interface transfer (Def.~\ref{def:drive}); other subsystems $S'$ may retain $V_R^{(S')}\neq 0$.
+Examples: Zeno limits, dynamical decoupling (average Hamiltonian $\to 0$), pinned Floquet phases (in stroboscopic frames), many-body localization/glassy arrest, and extreme redshift frames where $d\tau_R/dt\to 0$.
+\end{axiom}
+
+\paragraph{Scope of freeze (exact vs.\ approximate).}
+``Freeze'' may be exact (Zeno limit) or approximate via control (dynamical decoupling), meaning for observables of $S$ one has a bound $\|\Phi_\theta^{(S)}-\mathrm{Id}\|\le \epsilon\,\theta$ over the relevant timescale, with $\epsilon\ll 1$.
+
+\begin{axiom}[Observation and coarse-graining]
+An apparatus resolves a sub-$\sigma$-algebra $\mathcal F_{\rm obs}\subset\mathcal B(\Sigma)$ (finite cylinder partitions of $I\times C$ in practice). Observed probabilities are pushforwards of the fine-grained law to $(\Sigma,\mathcal F_{\rm obs})$. Micro-determinism (Dirac measures) is not excluded; ergodicity turns time-averages into spatial probabilities on coarse partitions.
+\end{axiom}
+
+\paragraph{Divergences (notation).}
+We use two divergences:
+(i) $\nabla\!\cdot_{\mu}$ is the divergence with respect to the invariant measure on $\Sigma$
+(the generator $V$ satisfies $\nabla\!\cdot_{\mu}V=0$ for measure-preserving flow);
+(ii) $\nabla_s\!\cdot$ is the leafwise metric divergence associated with $g_\ell$ (e.g., in 1D, $\nabla_s\!\cdot(\rho u)=\frac{1}{\sqrt{\alpha}}\partial_s(\sqrt{\alpha}\,\rho u)$).
+
+\section{Leafwise Geometry, Fields, and Interface}
+
+\begin{definition}[Leafwise metric and operators]
+Each leaf carries a smooth metric $g_\ell=\alpha(c,s)\,ds^2$ (measurable in $c$).
+The leafwise Laplace--Beltrami operator is
+\[
+\Delta_\ell \;=\; \frac{1}{\sqrt{\alpha}}\,\partial_s\!\Big(\frac{1}{\sqrt{\alpha}}\,\partial_s\Big)
+\;=\; \alpha^{-1}\partial_{ss}-\tfrac12\alpha^{-2}(\partial_s\alpha)\,\partial_s\,.
+\]
+Field coefficients may depend measurably on $c$ and be $T$-periodic in $\tau_R$ (Floquet).
+\end{definition}
+
+\begin{definition}[Leafwise wave/Dirac]
+For each $c\in C$,
+\begin{align*}
+(\partial_{\tau_R\tau_R}-c_0^2\Delta_\ell)\,\phi + U(\tau_R,c)\,\phi&=0,\\
+i\gamma^0\,(\partial_{\tau_R}+i q A_0)\psi \,+\, i\,v(c)\,\gamma^1\,(\partial_s+i q A_s)\psi \,-\, m\,\psi&=0,
+\end{align*}
+with $U(\tau_R{+}T)=U(\tau_R)$, and a leafwise $U(1)$ connection $\mathcal A_\ell=A_0(\tau_R,c)\,d\tau_R + A_s(\tau_R,c)\,ds$.
+\end{definition}
+
+\begin{definition}[Interface drive as a geometric contraction]\label{def:drive}
+Let $\mathcal A_\ell$ be a leafwise $U(1)$ 1-form. In a convenient gauge write $\mathcal A_\ell=d\theta+\tilde A_\ell$.
+Under $\theta\mapsto\theta+\chi$ and $\tilde A_\ell\mapsto\tilde A_\ell-d\chi$, the combination $d\theta+\tilde A_\ell$ is gauge-invariant.
+The \emph{phase-change drive} acting on subsystem $S$ is
+\begin{equation}
+q^{(S)}(\tau_R,c)=\big\langle d\theta+\tilde A_\ell,\;V_R^{(S)}\big\rangle, \quad\text{(gauge-invariant)}.
+\end{equation}
+Thus, if $S$ is frozen ($V_R^{(S)}=0$), then $q^{(S)}\equiv 0$.
+\end{definition}
+
+\begin{axiom}[Transfer-only pump (Actual $\leftrightarrow$ Potential)]
+\label{ax:pump}
+Let $r_A^{(S)}$ and $r_P^{(S)}$ be Actual and Potential amplitudes for subsystem $S$. Their exchange obeys
+\begin{align}
+\partial_{\tau_R} r_A^{(S)} &= \kappa(c)\,\big\langle (q^{(S)})^2\big\rangle_{\tau_R}\,\big(1-r_A^{(S)}\big) \, - \, \Gamma(c)\, r_A^{(S)} \, + \, \dots, \nonumber\\
+\partial_{\tau_R} r_P^{(S)} &= -\partial_{\tau_R} r_A^{(S)}\,, \label{eq:pump}
+\end{align}
+which keeps $r_A,r_P\in[0,1]$ and conserves $r_A{+}r_P$. Phase locking (e.g.\ midgap) makes $\langle (q^{(S)})^2\rangle_{\tau_R}>0$ and sustains Actualization.
+\end{axiom}
+
+\paragraph{What are Actual and Potential? (two identifications)}
+\emph{Minimal (two-level):} pick $P_A=|e\rangle\langle e|$. Then $r_A=\langle e|\rho|e\rangle$ and $r_P=1-r_A$; Eq.~\eqref{eq:pump} reduces to standard optical pumping with $\kappa\langle q^2\rangle\sim \Omega_R^2/\Gamma_2$ and $\Gamma\sim \Gamma_1$.
+\emph{Extended (leafwise mode):} choose $P_A$ as the projector onto a localized leaf mode; $r_P$ is the weight in the orthogonal complement (other leaf modes + transversal sector). Under coarse-graining, off-diagonal coherences contribute to $r_P$ unless directly observed. In both cases, $r_A+r_P=1$ by construction.
+
+
+\subsection*{Microfoundation of the pump and lapse (driven two-level model)}
+For a driven two-level subsystem $S$ with Rabi frequency $\Omega_R\propto q^{(S)}$, dephasing $\Gamma_\phi$ and relaxation $\Gamma_1$, the optical Bloch equations give
+\begin{equation}
+\dot r_A^{(S)} = \frac{\Omega_R^2}{\Gamma_2}\,(1-r_A^{(S)}) - \Gamma_1\, r_A^{(S)}\,,\qquad \Gamma_2=\Gamma_1/2+\Gamma_\phi.
+\end{equation}
+Identifying $\kappa\langle (q^{(S)})^2\rangle \equiv \Omega_R^2/\Gamma_2$ yields the saturating pump in Eq.~\eqref{eq:pump}.
+Phase coherence (Bloch vector length) sets the phase accumulation rate and hence the effective lapse $\alpha_S$, consistent with the expansion $F_S=1+\eta_S\langle (q^{(S)})^2\rangle+\cdots$ in Sec.~\ref{sec:dilation}.
+
+\paragraph{On the transversal $C$ and the odometer $\tau_I$.}
+In this paper’s predictions we restrict to a \emph{single leaf} (fixed $c$), which already captures locking/detuning, pumping, and dilation phenomena. The Cantor transversal $C$ and odometer flow $\tau_I$ become essential when multi-scale, near-commensurate modulations across many cycles are experimentally relevant (e.g., fractal gap structures, long-memory envelopes, and multi-tone sidebands). In such regimes, the solenoidal model is the natural completion; otherwise, fixing $c$ suffices.
+
+
+\section{Stability of the Pump--Lapse Feedback}
+\label{sec:stability}
+Let \(r_A\) obey Eq.~\eqref{eq:pump} and \(\alpha_S=\alpha_0(1+\eta_S\langle q^2\rangle+\zeta_S\langle r_A\rangle)\).
+Assume \(\eta_S,\zeta_S\ge 0\) and \(\kappa,\Gamma>0\).
+Then the map \(r_A\mapsto \mathcal T[r_A]=\frac{\kappa \langle q^2\rangle}{\kappa \langle q^2\rangle+\Gamma}\) is globally Lipschitz in \(\langle q^2\rangle\), and \(\langle q^2\rangle\) enters \(\alpha_S\) only linearly at this order.
+If the loop gain satisfies 
+\[
+\big|\partial \mathcal T/\partial \langle q^2\rangle\big|\cdot \big|\partial \langle q^2\rangle/\partial \alpha_S\big|\cdot |\partial \alpha_S/\partial r_A| \;<\; 1,
+\]
+then the coupled fixed point exists and is unique (Banach fixed-point), and trajectories converge monotonically from any initial condition with \(r_A\in[0,1]\).
+This prevents runaway feedback under weak coupling.
+
+
+\section{Space, Motion, and Kinematics}
+\label{sec:space_motion}
+
+\paragraph{Emergent space.} Locally, the lamination has charts $I^d\times C$ (leaf $\times$ Cantor).
+We interpret the $d$--dimensional leaf as \emph{emergent space}.
+A leafwise metric $g_\ell=g_{ij}(c,s)\,ds^i ds^j$ supplies distances.
+Laboratory coordinates arise by calibration $x^i=\beta^i{}_j\,s^j$ near a reference transversal $c_0$.
+
+\subsection{Motion as transport (continuity form)}
+Let $\rho_A(\tau_R,s,c)$ be Actual density on a leaf.
+The leafwise component of the global generator $V$ induces a velocity field $u(\tau_R,s,c)$ and the continuity equation
+\begin{equation}
+\partial_{\tau_R}\rho_A + \nabla_s\!\cdot\big(\rho_A\,u\big)=0,
+\qquad \nabla_s\!\cdot(\cdot)\ \text{with respect to } g_\ell.
+\end{equation}
+\emph{Motion} is the pushforward of $\rho_A$ along leaves by this velocity field.
+
+\subsection{Motion as current (field view)}
+For the leafwise Dirac field, define density and current
+\begin{equation}
+J^0=\psi^\dagger\psi,\qquad J^1=\psi^\dagger\alpha\,\psi,
+\end{equation}
+satisfying $\partial_{\tau_R}J^0+\partial_s J^1=0$.
+The \emph{current velocity} is
+\begin{equation}
+u_{\rm field}=\frac{J^1}{J^0}.
+\end{equation}
+(For a scalar Klein--Gordon leafwise model, use the standard conserved current induced by the KG Lagrangian; details omitted here.)
+For narrow wave packets and localized Floquet modes, $u_{\rm field}$ coincides with the transport velocity above.
+
+\subsection{Motion as dispersion (spectral view)}
+For a matter excitation with dispersion near $k=0$
+\begin{equation}
+\Omega(k,c)^2=m(c)^2+v(c)^2\,k^2+\mathcal O(k^3),
+\end{equation}
+the \emph{group velocity} is
+\begin{equation}
+u_{\rm group}(k,c)=\frac{\partial \Omega}{\partial k}=\frac{v(c)^2\,k}{\Omega(k,c)}.
+\end{equation}
+Massless branch ($m=0$) gives $|u_{\rm group}|=v(c)$ (leafwise speed limit); massive branch has $|u_{\rm group}|<v(c)$ and $u_{\rm group}\to 0$ as $k\to 0$.
+For packets, $u_{\rm group}=u_{\rm field}$ to leading order.
+
+\subsection{Inertial motion and forces}
+On a leaf with uniform $g_\ell$ and flat $U(1)$ gauge, motion is geodesic with constant $u$:
+\begin{equation}
+D_{\tau_R}u^i=0.
+\end{equation}
+Spatially varying $g_\ell$, gauge $A_\ell$, or parameters $(m,v,U)$ generate acceleration via Christoffel and gauge terms in the leafwise equations.
+
+\subsection{Role of the Potential (transversal) sector}
+The transversal label $c$ modulates:
+(i) the \emph{gauge} $A_\ell(\tau_R,c)$ (minimal coupling alters phases/currents);
+(ii) \emph{parameters} $m(c),v(c),U(\tau_R,c)$ (changing dispersion and thus velocities);
+(iii) the \emph{pump} $\partial_{\tau_R} r_A=\kappa\langle q^2\rangle(1-r_A)-\Gamma r_A$.
+The pump changes \emph{occupancy} (how much moves), not the \emph{kinematics} $u$ directly, except indirectly if $m_{\rm eff}=m_\ast+\lambda\langle r\rangle$ shifts the gap.
+
+\subsection{Operational (laboratory) velocity and speed limits}
+With calibration $t=\alpha_S\,\tau_R$, $x=\beta\,s$ for subsystem $S$,
+\begin{equation}
+v_{\rm phys}^{(S)} = \frac{dx}{dt}=\frac{\beta}{\alpha_S}\,\frac{d}{d\tau_R}\langle s\rangle
+=\frac{\beta}{\alpha_S}\,\frac{\int u\,\rho_A\, d\mu}{\int \rho_A\, d\mu}.
+\end{equation}
+The leafwise speed limit $v(c)$ maps to $c_{\rm eff}=(\beta/\alpha)\,v(c)$ after calibration.
+Subsystem-relative lapses $\alpha_S$ (including coherence-induced corrections) rescale the \emph{observed} speed without changing leafwise causality.
+
+\section{Causality and No-Superluminal Signaling}
+\label{sec:causality_proof}
+
+\begin{theorem}[Coherence-induced lapse does not alter leafwise causal cones]
+Consider the leafwise Dirac (or hyperbolic wave) dynamics with speed coefficient \(v(c)\) and a positive lapse calibration \(t=\alpha_S(\tau_R)\tau_R\). 
+Characteristics on a fixed leaf are determined by the principal symbol and propagate at speed \(\le v(c)\) with respect to \(\tau_R\).
+The reparametrization \(t=\alpha_S\tau_R\) rescales time but does not change characteristics; hence no signal can propagate faster than \(v(c)\) on the leaf, independent of \(\alpha_S\). 
+Between subsystems \(S\neq S'\), coupling terms are evaluated on the same leafwise PDE with speed \(v(c)\), so cross-subsystem signaling also obeys the same bound.
+\end{theorem}
+
+\begin{proof}[Sketch]
+The principal symbol of the leafwise evolution operator is \(\sigma_p(\partial_{\tau_R} + \mathcal D)=\omega + \sigma_p(\mathcal D)\), whose characteristic equation yields \(|\dot s/\dot \tau_R|\le v(c)\).
+Changing variables \(t=\alpha_S \tau_R\) multiplies \(\partial_{\tau_R}\) by \(\alpha_S^{-1}>0\), leaving the principal symbol invariant up to positive scaling; characteristics are unchanged as sets in \((\tau_R,s)\).
+All interaction vertices (drive, gauge) are lower-order terms and cannot move characteristics. 
+Therefore front velocities are bounded by \(v(c)\) in any clock gauge; mapping to lab time simply rescales the time axis for readout.
+\end{proof}
+
+
+\section{Entropy, Information, and Dual Evolution}
+Let $\rho$ be a fine-grained density on $\Sigma$.
+\begin{definition}[Fine/coarse entropies]
+Fine-grained entropy $\mathsf H[\rho]=-\int\rho\log\rho\,d\mu$ is conserved under $\mu$-preserving flow. For a product chart, $\mathsf H[\rho]=\mathsf H[\rho_\ell]+\mathsf H[\rho_\perp]-\mathsf I(\ell;\perp)$; coarse entropies over finite cylinder partitions can grow under mixing.
+\end{definition}
+
+\section{Matter, Mass, and Mass Content}
+\begin{definition}[Matter (species)]
+Fix $c\in C$. A \emph{matter excitation} is a leafwise-localized Floquet eigenmode $u(\tau_R,s)=e^{i\Omega\tau_R}p(\tau_R,s)$ with $p(\tau_R{+}T)=p(\tau_R)$, exponential envelope $e^{-|s-s_0|/\xi}$, and small growth/decay $|\sigma|\ll\Omega$.
+\end{definition}
+
+\begin{proposition}[Mass equivalences (effective Dirac regime)]
+Near $k=0$ the dispersion is $\Omega(k,c)^2=m(c)^2+v(c)^2 k^2+\dots$, and the following coincide:
+\begin{equation}
+m(c)=\Omega(0,c)=\frac{v(c)}{\xi(c)}=\frac{v(c)^2}{\left.\partial_k^2\Omega\right|_{k=0}}\,.
+\end{equation}
+\end{proposition}
+
+\begin{definition}[Mass content (occupancy)]
+With Actual density $\rho_A$ and species projectors $P_i$, define $\widehat M=\sum_i m_i P_i$ and $\langle M\rangle_\rho=\mathrm{Tr}(\rho_A\widehat M)=\int m_\ast(\sigma)\rho_A(\sigma)\,d\mu$.
+\end{definition}
+
+\begin{remark}[Potential-driven mass shift]
+If $m_{\rm eff}=m_\ast+\lambda(c)\,\langle r^{(S)}\rangle_{\tau_R}$, then the pump steady state $(r^{(S)})_{\rm ss}\approx \kappa\langle (q^{(S)})^2\rangle/\big(\kappa\langle (q^{(S)})^2\rangle+\Gamma\big)$ yields $\delta m\approx \lambda\, (r^{(S)})_{\rm ss}$ under locking.
+\end{remark}
+
+\section{Subsystem-Relative Time Rates and Coherence-Induced Dilation}\label{sec:dilation}
+
+\paragraph{Effective lapse for a subsystem.} For subsystem $S$ define a calibration between laboratory time $t$ and leafwise time by
+\begin{equation}
+dt = \alpha_S(c,s)\, d\tau_R,\qquad \alpha_S>0,
+\end{equation}
+where $\alpha_S$ is the \emph{effective lapse} inferred from $S$'s dynamics. If two subsystems $S_1,S_2$ have distinct lapses along the same chart, then equal $d\tau_R$ produces different laboratory durations $dt_1\neq dt_2$ --- an operational \emph{dilation}.
+
+\paragraph{Coherence-dilation ansatz.} We posit (as a weak-coupling \emph{ansatz}) that environmental/drive coherence modifies the lapse via
+\begin{equation}\label{eq:lapse}
+\alpha_S(c,s)=\alpha_0(c,s)\,F_S\!\left(\langle (q^{(S)})^2\rangle_{\tau_R},\,\langle r^{(S)}\rangle_{\tau_R},\,\text{invariants of }(\Sigma,\mu)\right),
+\end{equation}
+with $F_S$ monotone and $F_S(0,0,\cdot)=1$. Under \emph{locking} (large $\langle (q^{(S)})^2\rangle$), $F_S$ deviates from unity, producing \emph{coherence-induced dilation}. For small couplings one may expand $F_S=1+\eta_S\langle (q^{(S)})^2\rangle+\zeta_S\langle r^{(S)}\rangle+\cdots$.
+
+\paragraph{Relativistic-like effects.} If for a family of subsystems $S$ the lapse takes the \emph{multiplicative} form
+\begin{equation}
+\alpha_S=\alpha_{\rm kinematic}\cdot \alpha_{\rm gravitational}\cdot \alpha_{\rm coherence},
+\end{equation}
+then kinematic (motion), gravitational (potential), and coherence contributions approximately factor (to first order in small parameters). Choosing
+$\alpha_{\rm kinematic}=\gamma^{-1}$ (Lorentz), $\alpha_{\rm gravitational}=\sqrt{g_{00}}$ (static GR redshift), and
+$\alpha_{\rm coherence}=F_S(\cdot)$ realizes \emph{relativistic-like} dilations from coherence in addition to standard effects. In weak-coherence limits,
+\begin{equation}
+\alpha_{\rm coherence}\approx 1+\eta_S\,\langle (q^{(S)})^2\rangle_{\tau_R}+\dots
+\end{equation}
+with small $\eta_S$, giving testable, additive corrections to redshift/dilation without altering the underlying causal structure.
+We emphasize that this is an \emph{effective phenomenology} until field equations linking $\alpha_S$ to stress/drive are specified.
+
+\paragraph{Consistency with the pump.} Because $\alpha_S$ is defined via calibration against observables of $S$, changing $\alpha_S$ does not \emph{drive} the pump; rather, locking raises $\langle (q^{(S)})^2\rangle$ which both (i) increases Actualization via \eqref{eq:pump}, and (ii) shifts $\alpha_S$ via \eqref{eq:lapse}. Freeze sets $q^{(S)}=0$ and halts both effects.
+
+\paragraph{Empirical handles.} Compare pairs of subsystems with matched motion/potential but differing coherence (e.g., locked vs.\ slightly detuned clocks on the same leaf): measure (i) steady Actualization differences predicted by $\langle q^2\rangle$, and (ii) small but systematic lapse ratio shifts $dt_1/dt_2$ attributable to $F_S$.
+
+\section{Microphysical Derivations of the Lapse Function \(F_S\)}
+\label{sec:lapse_derivation}
+
+\subsection{Driven two-level model beyond the pump}
+Consider a driven two-level subsystem \(S\) with Hamiltonian (in a rotating frame) 
+\(
+H_S=\tfrac12\Delta\sigma_z+\tfrac12\Omega_R \sigma_x
+\), 
+relaxation \(\Gamma_1\), dephasing \(\Gamma_\phi\), and \(\Gamma_2=\Gamma_1/2+\Gamma_\phi\).
+Let \(r_A=\tfrac12(1+\langle\sigma_z\rangle)\), and let the Bloch vector be \(B=(\langle\sigma_x\rangle,\langle\sigma_y\rangle,\langle\sigma_z\rangle)\) with length \(C=\|B\|\in[0,1]\) (coherence).
+
+Standard optical Bloch equations yield the steady-state 
+\(
+\langle\sigma_z\rangle_{\!*}=-\frac{1}{1+\Omega_R^2/(\Gamma_1\Gamma_2)}\,,
+\) 
+so \(r_{A,*}=\frac{\Omega_R^2}{2(\Omega_R^2+\Gamma_1\Gamma_2)}\).
+We identify \(\Omega_R\propto q^{(S)}\) (on-resonance phase-change rate), hence the pump in Eq.~\eqref{eq:pump} with 
+\(\kappa \langle (q^{(S)})^2\rangle \equiv \Omega_R^2/\Gamma_2\).
+
+To connect the \emph{lapse}, we calibrate a clock tick of \(S\) by its phase accumulation rate around the Bloch sphere:
+\(
+\omega_{\rm eff}=\sqrt{\Delta^2+\Omega_R^2\,C^2}\,.
+\)
+For weak-to-moderate driving near resonance (\(\Delta=0\)) and small dephasing, \(C\approx \Gamma_2/\sqrt{\Gamma_2^2+\Omega_R^2}\).
+Expanding,
+\[
+\omega_{\rm eff} \;=\; \Omega_R\,C \;\approx\; \Omega_R\Big(1 - \tfrac12\,\frac{\Omega_R^2}{\Gamma_2^2} + \cdots\Big).
+\]
+Defining the lapse via \(dt=\alpha_S\,d\tau_R\) with a reference \(\omega_0\) (same device, zero drive), we obtain
+\begin{equation}
+\alpha_S \;=\; \frac{\omega_0}{\omega_{\rm eff}}
+\;\approx\; 1 \;+\; \frac{1}{2}\,\frac{\Omega_R^2}{\Gamma_2^2} \;+\; \cdots 
+\;=\; 1 \;+\; \eta_S\,\langle (q^{(S)})^2\rangle \;+\; \cdots,
+\qquad 
+\eta_S=\frac{\gamma_q^2}{2\Gamma_2^2},
+\label{eq:FS_from_Bloch}
+\end{equation}
+where \(\Omega_R=\gamma_q \sqrt{\langle (q^{(S)})^2\rangle}\). This realizes Eq.~\eqref{eq:lapse} with a microphysical \(\eta_S\).
+
+\subsection{Leafwise Dirac with weak coherent drive}
+Let the leafwise Dirac equation be 
+\(
+i\gamma^0(\partial_{\tau_R}+iqA_0)\psi+i\,v(c)\,\gamma^1(\partial_s+iqA_s)\psi - m\psi = 0
+\),
+and add a weak, near-resonant coherent term \(H_{\rm drv}=\lambda\,\mathsf{Re}[e^{i\Omega\tau_R} \hat{O}]\) that couples two quasi-energy levels separated by \(\Omega\approx m\).
+In the rotating-wave approximation, the effective two-level reduction yields the same structure as above with \(\Omega_R\propto \lambda\,\mathcal{M}\), where \(\mathcal{M}\) is a matrix element of \(\hat{O}\) between the two Floquet components.
+Therefore the calibration of the subsystem’s clock by its internal phase-advance rate again yields
+\[
+F_S \;=\; \frac{\alpha_S}{\alpha_0} \;\approx\; 1 + \eta_S\,\langle (q^{(S)})^2\rangle + \cdots,
+\]
+with \(\eta_S\) expressed through \(\lambda\), matrix elements, and decoherence rates (via \(\Gamma_2\)); details follow Eq.~\eqref{eq:FS_from_Bloch}.
+
+
+\section{Worked Leafwise Examples}
+\subsection{Temporal dimer, domain wall, and midgap pump}
+\begin{figure}[H]
+\centering
+\IfFileExists{leaf_discriminant_common_gaps.png}
+{\includegraphics[width=0.86\linewidth]{leaf_discriminant_common_gaps.png}}
+{\fbox{\parbox{0.86\linewidth}{\centering \vspace{1em}
+\textbf{Figure placeholder:} leaf\_discriminant\_common\_gaps.png \\
+(Units: $\omega T$. Shaded bands mark common gaps.) \vspace{1em}}}}
+\caption{Leafwise discriminant (units: $\omega T$) for left (solid) and right (dashed) dimers; shaded vertical bands mark common gaps.}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\IfFileExists{leaf_bound_mode_profile.png}
+{\includegraphics[width=0.80\linewidth]{leaf_bound_mode_profile.png}}
+{\fbox{\parbox{0.80\linewidth}{\centering \vspace{1em}
+\textbf{Figure placeholder:} leaf\_bound\_mode\_profile.png \\
+(Local bound mode profile in the first common gap.) \vspace{1em}}}}
+\caption{Localized bound mode $T(\tau_R)$ (normalized) in the first common gap; exponential decay on both sides.}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\IfFileExists{leaf_actualization_pump.png}
+{\includegraphics[width=0.80\linewidth]{leaf_actualization_pump.png}}
+{\fbox{\parbox{0.80\linewidth}{\centering \vspace{1em}
+\textbf{Figure placeholder:} leaf\_actualization\_pump.png \\
+(Parameters: $\kappa=1$, $\Gamma=1.5$.) \vspace{1em}}}}
+\caption{Leafwise Actualization under locked midgap drive $q\equiv \Omega=\pi/T$: parameters $\kappa=1$, $\Gamma=1.5$; lower damping $\Rightarrow$ higher steady amplitude.}
+\end{figure}
+
+\subsection{Locked vs.\ slightly detuned drives on the same leaf}
+\begin{figure}[H]
+\centering
+\IfFileExists{leaf_locked_vs_detuned_r.png}
+{\includegraphics[width=0.80\linewidth]{leaf_locked_vs_detuned_r.png}}
+{\fbox{\parbox{0.80\linewidth}{\centering \vspace{1em}
+\textbf{Figure placeholder:} leaf\_locked\_vs\_detuned\_r.png \\
+(Parameters: $\Omega=\pi/T$, $\delta=0.05\,\Omega$, $\kappa=1$, $\Gamma=1.5$.) \vspace{1em}}}}
+\caption{Actualization on the same leaf: locked vs.\ slightly detuned drives. Parameters $\Omega=\pi/T$, $\delta=0.05\,\Omega$, $\kappa=1$, $\Gamma=1.5$. $\langle q^2\rangle$ is four times larger in the locked case, yielding a higher steady level.}
+\end{figure}
+
+\section{Mapping to Laboratory Physics}
+\paragraph{Calibration and dispersion.} Near a reference $c_0$, choose $t=\alpha\,\tau_R$, $x=\beta\,s$. Then $E=\hbar\Omega/\alpha$, $p=\hbar k/\beta$ and
+$E^2=(m_{\rm phys}c_{\rm eff}^2)^2+(pc_{\rm eff})^2$ with $c_{\rm eff}=(\beta/\alpha)\,v$ and $m_{\rm phys}=(\hbar/\alpha)\Omega(0)/c_{\rm eff}^2$.
+
+\paragraph{Causality.} Because $c_{\rm eff}=(\beta/\alpha)v$ and leafwise cones are fixed by $v(c)$, small coherence-induced changes in $\alpha_S$ rescale observed speeds but cannot violate leafwise causal cones (no superluminal transport).
+
+\paragraph{Thermodynamics and information.} Joint fine-grained entropy is conserved; sector entropies trade with mutual information; coarse entropies over observed partitions grow under mixing. The Potential transversal serves as an information reservoir for leafwise dynamics.
+
+\paragraph{Limits.} In regimes with negligible coherence ($F_S\to 1$) and smooth multi-leaf geometry, standard wave/Dirac/relativistic phenomenology is recovered after calibration. Coherence-dilation offers controlled, potentially observable corrections when locking is strong.
+
+\paragraph{Operational predictions for locked vs.\ detuned (same leaf).}
+Let two identical subsystems share the same leaf and potential history; one is \emph{locked} at midgap with phase-change variance \(\langle q^2\rangle_{\rm lock}\), the other is slightly detuned with \(\langle q^2\rangle_{\rm det}\).
+From Eq.~\eqref{eq:lapse} and Eq.~\eqref{eq:FS_from_Bloch},
+\begin{equation}
+\frac{\Delta\alpha}{\alpha} 
+\;\equiv\; \frac{\alpha_{\rm lock}-\alpha_{\rm det}}{\alpha_0}
+\;\approx\; \eta_S\,\Big(\langle q^2\rangle_{\rm lock}-\langle q^2\rangle_{\rm det}\Big).
+\end{equation}
+Let a reference oscillator (same hardware, no drive) accrue phase \(\phi_0=\omega_0 T\) over lab time \(T\).
+Then the \emph{relative phase slip} between locked and detuned units is
+\begin{equation}
+\Delta\phi \;\approx\; \omega_0\,T\,\frac{\Delta\alpha}{\alpha}
+\;\approx\; \omega_0\,T\,\eta_S\,\Delta\langle q^2\rangle\,,
+\end{equation}
+which is linear in the coherence contrast \(\Delta\langle q^2\rangle\).
+If mass is coupled to Actualization (\(m_{\rm eff}=m_\*+\lambda\langle r\rangle\)), then the \emph{gap shift} between conditions is
+\begin{equation}
+\Delta m \;\approx\; \lambda\,\Big[\frac{\kappa\langle q^2\rangle}{\kappa\langle q^2\rangle+\Gamma}\Big]_{\rm lock}
+\;-\;
+\lambda\,\Big[\frac{\kappa\langle q^2\rangle}{\kappa\langle q^2\rangle+\Gamma}\Big]_{\rm det}.
+\end{equation}
+These relations specify the observables for ultracold, trapped‑ion, or cQED platforms: steady \(r_A\), phase accumulation, and spectral line shifts.
+
+\paragraph{Numerical feasibility (illustrative).}
+For $f_0\sim 4\times 10^{14}$ Hz (Sr), $\Delta=2\pi\times 10$ kHz, and $\Omega_R=2\pi\times (10,\,7)$ Hz, the AC Stark-like fractional contrast is 
+$\Delta(\delta f)/f_0 \approx 3\times 10^{-18}$, producing $\sim 80$\,rad of relative phase over $T=10^4$\,s. 
+In the internal (leafwise) calibration, the same contrast yields multi-radian slips in minutes. 
+Using the two-level expansion yields $\eta_S=\gamma_q^2/(2\Gamma_2^2)$; with $\Gamma_2=2\pi\times 1$ Hz and $\gamma_q=2\pi\times 100$ Hz, $\eta_S\approx 5\times 10^3$, which reinforces that one must work with $\Omega_R\ll\Gamma_2$ (or large detuning) so that the perturbative expansions remain valid and the fractional effect is tunable to the $10^{-18}$ band.
+
+
+\section{Conclusions}
+Time and probability are two equivalent descriptions of a single measure-preserving laminar dynamics. ``Freeze'' is subsystem-relative and halts both pushforward and interface transfer. Matter is leafwise-localized temporal resonance with mass defined kinematically; mass content is occupancy. Subsystem-relative lapses enable \emph{coherence-induced dilation}, providing a clean phenomenology for small, testable departures from purely kinematic/gravitational time dilation.
+
+\appendix
+
+\section{Solenoid Construction and Odometer Flow}
+\label{app:solenoid}
+Let \(p_n:S^1\to S^1\), \(z\mapsto z^{k_n}\) with \(k_n\ge 2\).
+The solenoid is \(\Sigma=\{(z_1,z_2,\dots)\in \prod S^1:\; p_n(z_{n+1})=z_n\ \forall n\}\) with product topology and Haar measure induced from the inverse limit. 
+The odometer is addition by one on \(\prod \Z/k_n\Z\), measurably conjugate to a rigid group translation on \(\Sigma\).
+
+\section{Floquet Transfer, Discriminant, and Common Gaps}
+\label{app:floquet}
+For a period-\(T\) linear system \(\partial_{\tau_R} \Phi(\tau_R)=M(\tau_R)\Phi(\tau_R)\), define the monodromy \(\mathcal M=\mathcal T\exp(\int_0^T M\,d\tau_R)\) and discriminant \(D=\mathrm{Tr}\,\mathcal M\).
+Gaps correspond to \(|D|>2\). In the dimer/domain-wall example, left/right unit cells produce \(D_L,D_R\); common gaps are the frequency windows where \(|D_L|>2\) and \(|D_R|>2\).
+
+\section{Reproducible Figure Scripts (Minimal)}
+\label{app:scripts}
+\subsection*{Discriminant and gaps}
+\begin{verbatim}
+# Python 3.x (no seaborn). Requires numpy, matplotlib.
+import numpy as np, matplotlib.pyplot as plt
+def monodromy(omega, params): 
+    # return 2x2 monodromy matrix for one period (placeholder)
+    pass
+def discriminant(omega, params): 
+    M = monodromy(omega, params); return np.trace(M)
+om = np.linspace(0, 4*np.pi, 800)
+DL = np.array([discriminant(w, paramsL) for w in om])
+DR = np.array([discriminant(w, paramsR) for w in om])
+plt.plot(om, DL, label='left'); plt.plot(om, DR, '--', label='right')
+plt.axhline(2, lw=1); plt.axhline(-2, lw=1); plt.legend(); plt.xlabel(r'$\omega T$')
+plt.ylabel('discriminant'); plt.title('Common gaps where |D|>2'); plt.show()
+\end{verbatim}
+
+\subsection*{Pump dynamics (locked vs. detuned)}
+\begin{verbatim}
+import numpy as np, matplotlib.pyplot as plt
+kappa, Gamma = 1.0, 1.5
+q2_lock, q2_det = 1.0, 0.25  # example: 4x contrast
+def rA_ss(q2): return (kappa*q2)/(kappa*q2 + Gamma)
+plt.bar(['detuned','locked'], [rA_ss(q2_det), rA_ss(q2_lock)])
+plt.ylabel('steady r_A'); plt.title('Actualization steady levels'); plt.show()
+\end{verbatim}
+
+
+\end{document}

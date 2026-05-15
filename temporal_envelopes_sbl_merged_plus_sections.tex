@@ -1,0 +1,462 @@
+\documentclass[11pt]{article}
+
+\usepackage[a4paper,margin=1in]{geometry}
+\usepackage{amsmath,amsthm,amssymb,mathtools}
+\usepackage{microtype}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\hypersetup{colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue}
+
+\title{\textbf{Temporal Envelopes from Complex-Base Dynamics:\\
+M\"obius Collection $\to$ Quench $\to$ Fractal Circular/Spiral Growth $\to$ Re-Closure}}
+\author{VR \& AI}
+\date{\today}
+
+% --- theorem envs ---
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{example}[theorem]{Example}
+
+% --- macros ---
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\Val}{\mathrm{Val}}
+\newcommand{\dd}{\mathrm{d}}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+We present a self-contained dynamical theory of \emph{temporal envelopes}---M\"obius, circular, and spiral---built on a configurable complex-base formalism with parameters $(s,b,l)$. The state is a hierarchical, phase-aware integer register over residue tracks modulo $l$, normalized by a local tri-site identity derived from a quadratic algebraic base $b$. A \emph{tick} deposits potential energy into the register and normalization redistributes it. With M\"obius holonomy (orientation reversal per loop), ticks \emph{collect} without directional drift; upon a threshold (\emph{quench}) the holonomy flips and the system enters a circular ($\kappa=0$) or spiral ($\kappa\neq0$) propagation regime that spawns \emph{fractal child} circles/spirals across levels via the shrink factor $s$. A termination rule re-closes the envelope to M\"obius. We give precise update maps, Lyapunov bounds, and invariance of the normalization calculus, and illustrate with the $\varphi$--$l=4$ quarter-turn lattice, including a figure-8 half-twist macrocycle.
+\end{abstract}
+
+\tableofcontents
+
+\section{Primer: the $(s,b,l)$ complex-base formalism}\label{sec:primer}
+
+We recall the essentials; see \cite{VR_AI_ComplexBase} for the full normalization theory and proofs.
+
+\subsection{Sites, tracks, and values}
+Fix $l\ge2$ and $b>1$. Let $U=e^{i2\pi/l}$ and $B=bU$.
+Indices $k\in\Z$ decompose into $l$ \emph{phase tracks} by residue $r\equiv k\ (\mathrm{mod}\ l)$, where $k=r+lt$ and $t\in\Z$. On a fixed track $r$ we write $d_t:=d_{r+lt}$.
+
+\begin{definition}[Strings and hierarchical sums]
+A (single-level) $(b,l)$-string is an integer array $(d_k)_{k\in\Z}$ with finite right tail and absolutely summable left tail; its value is
+$\Val(d)=\sum_{k\in\Z} d_k B^k$ (absolutely convergent).
+For multi-level hierarchies, fix a shrink $s\in(0,1]$ and arrays $d_{\ell,k}$ ($\ell=0,1,\dots$); the value is
+\begin{equation}
+Z \;=\; \sum_{\ell\ge0} s^\ell \sum_{k\in\Z} d_{\ell,k}\,B^k.
+\end{equation}
+\end{definition}
+
+\subsection{Quadratic base and tri-site identity}
+Assume $b$ solves $b^2-Pb+Q=0$ with $P,Q\in\Z$, $b>1$.
+Let $V_n(P,Q)$ be the Lucas sequence.
+Then for $n=l$ one has $b^{2l}=V_l b^l - Q^l$ and the \emph{phase-aligned identity}
+\begin{equation}\label{eq:tri}
+B^{k+2l} - V_l\,B^{k+l} + Q^l\,B^{k} \;=\; 0,\qquad (k\equiv r\ \mathrm{mod}\ l).
+\end{equation}
+This induces a \emph{tri-site} carry/borrow on each track and a deterministic, rightmost-first normalization that terminates and is confluent (see \cite{VR_AI_ComplexBase} for proofs).
+
+\begin{remark}[Lyapunov potential]
+Fix $q\in(1,\beta_l)$ with $\beta_l=b^l$. The weighted potential $E_q=\sum_t |d_t|\,q^t$ strictly decreases under a unit carry at site $t$, and hence normalization terminates.
+\end{remark}
+
+
+
+% ===== BEGIN MERGED ASSUMPTIONS & THRESHOLDS =====
+
+% --- Merged Addendum: Physics assumptions & thresholds for temporal envelopes ---
+
+\section{Action Principle for the Tri-Site Identity}
+\label{sec:action-trisite}
+
+Fix a residue track and consider a complex field $\psi=\{\psi_t\}_{t\in\mathbb Z}$. Define the second-order difference operator
+\[
+(\mathcal L\psi)_t := \psi_{t+1}-V_l\,\psi_t+Q^l\,\psi_{t-1}.
+\]
+
+\begin{proposition}[Constrained action]
+Let
+\[
+S[\psi,\lambda] \;=\; \sum_{t\in\mathbb Z}\, \lambda_t\,(\mathcal L\psi)_t,
+\]
+with Lagrange multipliers $\lambda_t\in\mathbb C$. The Euler--Lagrange equations are
+\[
+\frac{\partial S}{\partial \lambda_t} = 0 \ \Rightarrow\  (\mathcal L\psi)_t=0,\qquad
+\frac{\partial S}{\partial \psi_t} = 0 \ \Rightarrow\  (\mathcal L^\ast\lambda)_t=0,
+\]
+so extremals lie in $\ker \mathcal L$.
+\end{proposition}
+
+\begin{remark}[Unconstrained variants]
+(i) Penalized action: $S_\mu[\psi]=\tfrac12\sum_t |(\mathcal L\psi)_t|^2+\tfrac\mu2\sum_t|\psi_t|^2$.
+Global minimizers satisfy $\mathcal L\psi=0$ as $\mu\downarrow0$.
+(ii) Phase-locked harmonic action:
+\[
+S_\gamma[\psi]=\tfrac12\sum_t\big|\psi_{t+1}-b\,e^{i2\pi/l}\psi_t\big|^2+\tfrac\gamma2\sum_t|\psi_t|^2.
+\]
+Choosing $\gamma$ so that the characteristic roots at $l$-spaced sites match the Lucas relation reproduces \eqref{eq:tri} in $l$-steps.
+\end{remark}
+
+\section{Why $(\varphi,\,l=4)$}
+\label{sec:why-phi-l4}
+
+\begin{proposition}[Minimal half-twist lattice]
+A two-block macrocycle with equal scales and one site-step per block has monodromy $-1$ iff $l=4$.
+\end{proposition}
+
+\begin{proof}
+The macro angle is $2\times \frac{2\pi}{l}=\pi$. Hence $l=4$.
+\end{proof}
+
+\begin{proposition}[Symmetric collection]
+For metallic means $(Q=-1)$, the condition $Q^l=+1$ needed for symmetric neighbor updates holds iff $l$ is even; $l=4$ is the minimal lattice compatible with the previous proposition.
+\end{proposition}
+
+\begin{proposition}[Economy among metallic bases]
+For fixed even $l$, both $b^l$ and $V_l(P,-1)$ increase with $P\ge1$. Hence $(P,Q)=(1,-1)$ (golden ratio) yields the smallest digit set and simplest carry at that $l$.
+\end{proposition}
+\section{Assumptions, Thresholds, and Reproducible Rules}
+\label{sec:assump-thresholds}
+
+\subsection*{Standing assumptions}
+\begin{itemize}
+  \item \textbf{Quadratic base and tri-site rule.} Fix $b>1$ solving $b^2-Pb+Q=0$ and an even lattice $l\ge 2$. Let $U=e^{i2\pi/l}$, $B=bU$, $\beta_l=b^l>1$, and $V_l=V_l(P,Q)$. The phase-aligned identity \eqref{eq:tri} induces tri-site carries per track with deterministic normalization (rightmost-first), which \emph{terminates and is confluent} (see normalization theorem in the math draft).
+  \item \textbf{Collection symmetry.} We assume $Q^l=+1$ throughout the M\"obius collection stage so that neighbor updates are symmetric.
+  \item \textbf{Digits.} Use the nonnegative digit set $\mathcal D=\{0,1,\dots,V_l-1\}$ unless otherwise stated.
+  \item \textbf{Level vs lattice.} We write $\ell\in\N$ for \emph{level} and $l\in\N$ for the \emph{lattice} parameter to avoid clashes.
+\end{itemize}
+
+\subsection*{Operators}
+Let $d$ denote the raw integer digit arrays $\{d_{\ell,t,r}\}$. We define:
+\begin{align}
+  &\text{Tick at }(\ell^{*},r^{*},t^{*}): && T_{\ell^{*},r^{*},t^{*}}(d)\;=\;d+e_{\ell^{*},r^{*},t^{*}},\\
+  &\text{Normalization (per track):} && N(d)\;=\;\text{deterministic tri-site normalization to }\mathcal D,\\
+  &\text{M\"obius holonomy:} && R(d) \text{ acts by } t\mapsto -t\ \text{on chosen tracks},\\
+  &\text{Circular/spiral shift:} && S_\kappa(d) \text{ acts by } t\mapsto t+\kappa,\ \kappa\in\Z.
+\end{align}
+A \emph{macrocycle} with $N$ ticks and holonomy $\chi\in\{-1,+1\}$ updates (cf.\ \eqref{eq:macro-update})
+\begin{equation*}
+  \mathcal H_{\chi,\kappa}^{(N)}(d)\;=\;
+  \begin{cases}
+    R\!\circ N\!\circ T^{N}(d), & \chi=-1\quad\text{(M\"obius)},\\[2pt]
+    S_\kappa\!\circ N\!\circ T^{N}(d), & \chi=+1\quad\text{(circular/spiral)}.
+  \end{cases}
+\end{equation*}
+
+\subsection*{Invariants and Lyapunov}
+\begin{itemize}
+  \item \emph{Value preservation under $N$.} $N$ preserves $\Val(d)=\sum_{\ell,r,t} s^\ell d_{\ell,t,r}B^{\,r+lt}$.
+  \item \emph{Lyapunov potential.} Fix $q_\star=\sqrt{\beta_l}$ (so $1<q_\star<\beta_l$). Define
+  \begin{equation}
+  E_{q_\star}(d)\;=\;\sum_{\ell,r,t} s^\ell\,|d_{\ell,t,r}|\,q_\star^{\,t}.
+  \end{equation}
+  Each unit carry strictly reduces $E_{q_\star}$; each tick increases it by at least $s^{\ell^{*}}q_\star^{t^{*}}$ before normalization.
+  \item \emph{Center-of-mass on the anchor track.} With $Q^l=+1$, ticks at $(\ell^{*},r^{*},0)$ and M\"obius holonomy imply
+  $C_{\ell^{*},r^{*}}(d)=\sum_t t\,d_{\ell^{*},t,r^{*}}=0$ at the end of every M\"obius macrocycle.
+\end{itemize}
+
+\subsection*{Quench rule and mode selection}
+Fix a \emph{collection radius} $t_c\in l\Z_{\ge 1}$ (measured in track sites) and set
+\begin{equation}\label{eq:add-Ec}
+  q_\star:=\sqrt{\beta_l},\qquad E_c := s^{\ell^{*}}\,q_\star^{\,t_c}.
+\end{equation}
+At the end of a M\"obius macrocycle, if $E_{q_\star}(d)\ge E_c$, flip the holonomy to $\chi\leftarrow +1$ for the next macrocycle (\emph{quench}).
+Post-quench, choose the mode deterministically:
+\begin{equation}\label{eq:add-kappa}
+  \kappa=\begin{cases}
+    0, & \text{standing (circular) mode},\\
+    1, & \text{running (spiral) mode}.
+  \end{cases}
+\end{equation}
+\textbf{Angular advance and turns.} The angular advance per macrocycle is $\Delta\theta=2\pi\kappa/l$, so the number of turns accrued after $n$ spiral macrocycles is $n\kappa/l$.\\
+\textbf{Radial scale.} Along a fixed track, advancing by $l$ sites multiplies the radius by $\beta_l=b^l$. If the occupied support reaches $t_{\max}$ on any track, the envelope radius satisfies
+\begin{equation}
+  c_1\,\beta_l^{\lfloor t_{\max}/l\rfloor}\ \le\ r_{\mathrm{env}}\ \le\ c_2\,\beta_l^{\lfloor t_{\max}/l\rfloor},
+  \qquad c_1\in[1,b],\ c_2\in[b^{l-1},b^l].
+\end{equation}
+Since $E_{q_\star}(d)\ge s^{\ell^{*}}q_\star^{t_{\max}}$, the quench threshold \eqref{eq:add-Ec} corresponds to a minimum $t_{\max}\ge t_c$ and hence a minimum radius factor $\beta_l^{t_c/l}$.
+
+\subsection*{Spawn law (toy) and sufficient termination}
+At the end of each spiral (or circular) macrocycle, for each level $\ell$ perform an independent Bernoulli trial with probability
+\begin{equation}\label{eq:add-p}
+  p_\ell \;=\; p_0\,\rho^\ell,\qquad 0<p_0<1,\ \ 0<\rho<1.
+\end{equation}
+On success at level $\ell$, add a fixed \emph{child template} $\mathsf G_{\ell\to \ell+1}$ with at most $L$ occupied sites per track and digit magnitudes bounded by $D$; then normalize locally.
+\begin{proposition}[Finite spawns and termination per macrocycle]
+If $\{p_\ell\}$ are independent and satisfy $\sum_{\ell\ge0} p_\ell<\infty$ (true for \eqref{eq:add-p}), then with probability $1$ only finitely many levels spawn in any given macrocycle (Borel--Cantelli). Since each spawn adds finite support and normalization terminates trackwise, every macrocycle terminates almost surely.
+\end{proposition}
+
+\subsection*{Re-closure rule (deterministic schedule)}
+To guarantee reproducibility, cap the spiral stage to a fixed number $M_{\mathrm{run}}\in\N$ of macrocycles; then set $\chi\leftarrow -1$ (M\"obius) for the next macrocycle, regardless of $E_{q_\star}$. This yields the cycle
+\begin{equation*}
+\text{M\"obius collection} \ \xRightarrow{\ E_{q_\star}\ge E_c\ }\ \text{quench to }\chi{=}+1
+\ \xRightarrow{\ \text{$M_{\mathrm{run}}$ macrocycles}\ }\ \text{re-closure to }\chi{=}-1.
+\end{equation*}
+\begin{remark}
+One may supplement this with an energy rule: if during the spiral stage a macrocycle has \emph{no} spawns and uses \emph{no} ticks ($N=0$), then $E_{q_\star}$ is unchanged and re-closure can be triggered by an \emph{energy window} $E_{q_\star}\in [E_{\min},E_{\max}]$ chosen a priori. The deterministic cap $M_{\mathrm{run}}$ remains the reproducibility guarantee.
+\end{remark}
+
+\subsection*{Worked example (\texorpdfstring{$\varphi,l=4$}{phi,l=4}) with a short tick trace}
+Here $b=\varphi=\frac{1+\sqrt5}{2}$, $l=4$, so $\beta_4=\varphi^4\approx 6.854$, $q_\star=\sqrt{\beta_4}=\varphi^2\approx 2.618$, and $V_4=L_4=7$.
+Use $\mathcal D=\{0,1,\dots,6\}$ and ticks at $(\ell^{*},r^{*},t^{*})=(0,0,0)$ during M\"obius collection.
+
+\paragraph{Tick-by-tick on the anchor track (normalized state shown).}
+Let $(d_{-1},d_0,d_{+1})$ denote digits at $t=-1,0,+1$ on residue $r=0$.
+\begin{center}
+\begin{tabular}{r|c|c}
+tick \# & state $(d_{-1},d_0,d_{+1})$ & $E_{q_\star}$ \\ \hline
+0 & $(0,0,0)$ & $0$ \\
+1 & $(0,1,0)$ & $q_\star^0 = 1$ \\
+2 & $(0,2,0)$ & $2$ \\
+$\vdots$ & $\vdots$ & $\vdots$ \\
+6 & $(0,6,0)$ & $6$ \\
+7 & \textit{carry at $t{=}0$} $\Rightarrow$ $(1,0,1)$ & $q_\star^{-1}+q_\star^{+1}\approx 0.382+2.618=3.000$ \\
+8 & $(1,1,1)$ & $q_\star^{-1}+1+q_\star^{+1}\approx 0.382+1+2.618=4.000$ \\
+$\vdots$ & $\vdots$ & $\vdots$ \\
+13 & $(1,6,1)$ & $q_\star^{-1}+6+q_\star^{+1}\approx 0.382+6+2.618=9.000$ \\
+14 & \textit{carry at $t{=}0$} $\Rightarrow$ $(2,0,2)$ & $2\,(q_\star^{-1}+q_\star^{+1})\approx 2\times 3.000=6.000$ \\
+\end{tabular}
+\end{center}
+This illustrates: (i) symmetry around $t=0$, (ii) outward growth of support, and (iii) the Lyapunov behavior (carries reduce $E_{q_\star}$ locally).
+
+\paragraph{Quench parameters.}
+Choose $t_c=8$ (two full turns on a track). Then $E_c = s^{0}\,q_\star^{8}=(\varphi^2)^8=\varphi^{16}$.
+Upon hitting this threshold at the end of a M\"obius macrocycle, flip to $\chi=+1$ and choose $\kappa=1$.
+Set a reproducible cap $M_{\mathrm{run}}=5$ spiral macrocycles before re-closure.
+
+\paragraph{Spawn law.}
+Pick $p_0=0.2$ and $\rho=\tfrac{1}{3}$ in \eqref{eq:add-p}, with a child template bounded by $L=3$ sites per track and $D=6$ digits. Then $\sum_\ell p_\ell = \frac{p_0}{1-\rho}=0.3<\infty$, so macrocycles terminate almost surely.
+
+\subsection*{Cross-reference}
+These rules rely on the phase-aligned identity \eqref{eq:tri} and the normalization theorem (termination and confluence) proved in the math draft \cite{VR_AI_ComplexBase}.
+% --- End Merged Addendum ---
+
+% ===== END MERGED ASSUMPTIONS & THRESHOLDS =====
+
+\section{Temporal envelopes and ticks}\label{sec:envelopes}
+We model the temporal memory as a hierarchical register with an \emph{envelope type} (holonomy) and a \emph{tick} mechanism.
+
+\subsection{State}
+For each level $\ell\ge0$ and residue $r\in\{0,\dots,l-1\}$ we store digits $d_{\ell,t,r}\in\Z$ at sites $t\in\Z$.
+The register's value is
+\begin{equation}
+Z \;=\; \sum_{\ell\ge0} s^\ell \sum_{r=0}^{l-1} \sum_{t\in\Z} d_{\ell,t,r}\,B^{\,r+lt}.
+\end{equation}
+The envelope holonomy is the discrete variable $\chi\in\{-1,+1\}$:
+$\chi=-1$ (M\"obius) denotes orientation-reversing monodromy per loop; $\chi=+1$ (circular/spiral) is orientation-preserving.
+
+\subsection{Tick operator and normalization}
+A \emph{tick} at site $(\ell^{*},r^{*},t^{*})$ adds $+1$ then normalizes per track:
+\begin{equation}
+\mathsf{T}_{\ell^{*},r^{*},t^{*}}:\quad d\ \mapsto\ \mathcal N\!\big(d + e_{\ell^{*},r^{*},t^{*}}\big),
+\end{equation}
+where $\mathcal N$ is the deterministic tri-site normalization and $e_{\ell,r,t}$ is the basis vector at that site.
+Define the Lyapunov
+\(
+E_q(d)=\sum_{\ell,r,t} s^\ell |d_{\ell,t,r}| q^t,\ q\in(1,\beta_l).
+\)
+
+\begin{lemma}[Tick and carry monotonicity]
+Each tick increases $E_q$ by at least $s^{\ell^{*}} q^{t^{*}}$ before normalization; each carry strictly reduces $E_q$.
+\end{lemma}
+
+\subsection{Macrocycle and holonomy action}
+A \emph{macrocycle} applies $N$ ticks, then the holonomy action. For M\"obius we use index reflection $\mathsf R: t\mapsto -t$ on each affected track; for circular/spiral we use index shift $\mathsf S_\kappa: t\mapsto t+\kappa$ with integer $\kappa$ (pitch). Thus
+\begin{equation}\label{eq:macro-update}
+d^{+} \;=\;
+\begin{cases}
+\mathsf R\circ \mathcal N \circ \mathsf T^{N}(d), & \chi=-1\quad(\text{M\"obius}),\\[3pt]
+\mathsf S_\kappa\circ \mathcal N \circ \mathsf T^{N}(d), & \chi=+1\quad(\text{circular/spiral}).
+\end{cases}
+\end{equation}
+Because overlapping carries commute on each track, the order of the $N$ ticks inside a macrocycle is irrelevant.
+
+
+\section{Prediction: Chebyshev--Lucas Radial Law}
+\label{sec:killer}
+
+\begin{theorem}[Exact radial decomposition]
+Assume $Q^l=+1$. Let $d_t(T)$ be the normalized digits on the anchor track after $T$ ticks at $t=0$. Then $d_{-t}(T)=d_t(T)$ and
+\[
+T \;=\; d_0(T)\;+\;\sum_{j\ge1} d_j(T)\,U_j(V_l),
+\]
+where $U_0(V)=2$, $U_1(V)=V$, $U_{j+1}(V)=V U_j(V)-U_{j-1}(V)$ (i.e.\ $U_j(V)=2T_j(V/2)$ with $T_j$ Chebyshev polynomials of the first kind).
+\end{theorem}
+
+\begin{proof}
+Let $r>1$ solve $r^2-V_l r+1=0$. Define $I(d)=\sum_t d_t r^t$. A tick at $t=0$ adds $+1$ to $I$. A unit carry at site $t$ changes $I$ by $-V_l r^t+r^{t+1}+r^{t-1}=0$. Hence starting from $I=0$ we get $I(d(T))=T$. By symmetry $d_{-t}=d_t$,
+\[
+T \;=\; d_0+\sum_{j\ge1} d_j\,(r^j+r^{-j}),
+\]
+and since $r+r^{-1}=V_l$, the quantity $r^j+r^{-j}$ is the polynomial $U_j(V_l)$ defined by $U_0=2$, $U_1=V_l$, $U_{j+1}=V_l U_j-U_{j-1}$.
+\end{proof}
+
+\begin{remark}
+This gives a unique, palindromic expansion of $T$ in the Chebyshev--Lucas basis $\{U_j(V_l)\}$ with digits $0\le d_j\le V_l-1$ determined by normalization.
+\end{remark}
+
+\section{Stage I (M\"obius): collection without drift}\label{sec:mobius-collect}
+Assume ticks arrive at a fixed anchor $(\ell^{*},r^{*},t^{*}=0)$ each macrocycle while $\chi=-1$.
+
+\begin{proposition}[Collection and symmetry]
+Suppose $Q^l=+1$ (e.g., $b=\varphi$, even $l$). Under the M\"obius update \eqref{eq:macro-update}, the track $(\ell^{*},r^{*})$ remains mirror-symmetric in $t$, its occupied support radius grows monotonically with the cumulative tick count, and its index center of mass vanishes for all macrocycles:
+\(
+\sum_t t\, d_{\ell^{*},t,r^{*}}=0.
+\)
+\end{proposition}
+
+\begin{proof}[Sketch]
+Reflection $\mathsf R$ and a fixed injection site preserve symmetry. Tri-site carries send $(t)\mapsto (t-1,t,t+1)$ with neighbor increments $\pm Q^l$; for $Q^l=+1$ both neighbors increase together, pushing support outward while keeping mean zero. Termination per macrocycle follows from the Lyapunov argument.
+\end{proof}
+
+\section{Quench: unwrap to circular or spiral}\label{sec:quench}
+We impose a threshold rule that flips holonomy when the register is ``full''.
+
+\begin{definition}[Quench]
+Fix a threshold $E_c>0$. When $E_q(d)\ge E_c$ at the end of a macrocycle with $\chi=-1$, set $\chi\leftarrow +1$ for the next macrocycle.
+\end{definition}
+
+\begin{remark}[Macrocycle monodromy viewpoint]
+Equivalently, partition a macrocycle into blocks $j=1,\dots,J$; each contributes a scale $S_j>0$, a step count $m_j\in\N$ on lattice $(b_j,l_j)$, and a phase gate $\theta_j$. The total transform is
+\(
+T=\prod_j S_j b_j^{m_j}\exp\big(i\,2\pi\sum_j m_j/l_j\big)e^{i\sum_j\theta_j}.
+\)
+A ``half-twist'' condition (monodromy $-1$) is
+\(
+\prod_j S_j b_j^{m_j}=1,\ \ \sum_j m_j/l_j + \frac{1}{2\pi}\sum_j\theta_j\equiv \tfrac12 \ (\mathrm{mod}\ 1).
+\)
+Quench corresponds to switching from $T=-1$ to $T=+1$.
+\end{remark}
+
+\section{Stage II (circular/spiral): propagation and fractal children}\label{sec:spiral}
+With $\chi=+1$, choose an integer \emph{pitch} $\kappa$. The macrocycle update is $d^+=\mathsf S_\kappa\circ \mathcal N\circ \mathsf T^N(d)$.
+
+\begin{proposition}[Standing vs.\ running modes]
+If $\kappa=0$ (circular) there is no net index drift on the anchor track; if $\kappa\neq0$ (spiral) there is a drift of $\kappa$ sites per macrocycle. The tri-site normalization and its bounds are invariant under $\mathsf S_\kappa$.
+\end{proposition}
+
+\subsection{Fractal spawn across levels}
+Let $\Theta_\ell>0$ be level thresholds. When $E_q(d_{\ell,\cdot,\cdot})\ge \Theta_\ell$, spawn a child pattern at level $\ell+1$:
+\begin{equation}
+d_{\ell+1,\cdot,\cdot}\ \leftarrow\ d_{\ell+1,\cdot,\cdot}\ +\ \mathsf G_{\ell\to\ell+1},
+\end{equation}
+where $\mathsf G_{\ell\to\ell+1}$ is a finite-support template (e.g., a small loop on each residue) that will be scaled by $s$ in the value.
+Normalization then runs as usual.
+
+\begin{theorem}[Convergence and normalizability under spawn]
+If $s<1$ and each $\mathsf G_{\ell\to\ell+1}$ has finite support per track, then for any finite number of spawns per macrocycle, the value $Z$ converges absolutely and the post-spawn state is normalizable (terminates) at every macrocycle.
+\end{theorem}
+
+\begin{proof}[Sketch]
+Your convergence estimate gives $\sum_\ell s^\ell C_\ell<\infty$ when each level has finite support; normalization terminates by the Lyapunov decrease of carries.
+\end{proof}
+
+\section{Termination and re-closure to M\"obius}\label{sec:reclose}
+When outward propagation has relaxed, we re-close the envelope.
+
+\begin{definition}[Re-closure rule]
+Fix $E_{\mathrm{close}}>0$ with $E_{\mathrm{close}}<E_c$. If, at the end of a circular/spiral macrocycle, $E_q(d)<E_{\mathrm{close}}$ and no level satisfies $E_q(d_\ell)\ge\Theta_\ell$, set $\chi\leftarrow -1$ for the next macrocycle.
+\end{definition}
+
+\begin{remark}
+This yields the full cycle: \emph{M\"obius collection} $\Rightarrow$ \emph{quench} $\Rightarrow$ \emph{circular/spiral with fractal spawn} $\Rightarrow$ \emph{re-closure to M\"obius}.
+\end{remark}
+
+\section{Algorithms (macrocycle skeleton)}\label{sec:algo}
+\noindent\textbf{Input:} state $d$, holonomy $\chi$, thresholds $(E_c,E_{\mathrm{close}},\{\Theta_\ell\})$, pitch $\kappa$, ticks per macrocycle $N$.\\
+\textbf{Loop over macrocycles:}
+\begin{enumerate}
+\item Apply $N$ ticks at $(\ell^{*},r^{*},0)$ and normalize per track.
+\item If $\chi=-1$, apply reflection $\mathsf R$; if $\chi=+1$, apply shift $\mathsf S_\kappa$.
+\item For each level $\ell$, if $E_q(d_\ell)\ge \Theta_\ell$, add child template at level $\ell+1$ and re-normalize locally.
+\item Update $\chi$ by quench/re-closure rules.
+\end{enumerate}
+
+\section{Worked example: $\varphi$ with quarter-turn lattice}\label{sec:example}
+Set $b=\varphi=\tfrac{1+\sqrt5}{2}$, $l=4$ so $Q^l=+1$ and $V_l=L_4=7$. Use nonnegative digits $\{0,\dots,6\}$.
+\begin{itemize}
+\item \textbf{M\"obius collection:} ticks at $(\ell^{*}=0,r^{*}=0,t=0)$; the track remains symmetric and fills outward.
+\item \textbf{Quench:} when $E_q$ crosses $E_c$, set $\chi\leftarrow +1$.
+\item \textbf{Spiral phase:} choose $\kappa=1$ to get a helix in the time-circle embedding; set $s=\varphi^{-4}$ for level self-similarity after one full turn.
+\item \textbf{Re-closure:} when the register relaxes below $E_{\mathrm{close}}$ and no level triggers spawn, set $\chi\leftarrow -1$.
+\end{itemize}
+
+\begin{figure}[!htbp]
+  \centering
+  \includegraphics[width=0.58\linewidth]{figure8_phi_l4.png}
+  \caption{\textbf{Half-twist macrocycle (lemniscate-like)} for $(b,l)=(\varphi,4)$ using two equal blocks with a $\pi$ rotation and per-block scale $S=b^{-1}$, yielding monodromy $-1$ and a closed figure-8 centerline.}
+  \label{fig:fig8}
+\end{figure}
+
+\section{Discussion and outlook}
+The $(s,b,l)$ calculus provides a discrete, first-principles engine for temporal envelopes. The M\"obius $\leftrightarrow$ circular/spiral transition is captured by a holonomy flip driven by a Lyapunov threshold. The child spawn mechanism leverages the hierarchy to produce fractal bouquets while preserving the normalization guarantees. Connections to continuous models include (i) helical visualization with time drawn as a circle, where pitch is proportional to the index drift $\kappa$, and (ii) Kaluza--Klein optics where null rays project to geodesics of an optical metric (not developed here).
+
+\section*{Acknowledgments}
+We thank prior work on complex bases and normalization; our phase-aware, tri-site calculus and its dynamics build directly on those ideas.
+
+\begin{thebibliography}{10}
+
+\bibitem{VR_AI_ComplexBase}
+V.~R. and A.~I.
+\newblock Local Normal Forms for Complex Base Expansions: A General $(s,b,l)$ Framework and the $\varphi$ Specialization.
+\newblock (2025).
+
+\bibitem{Knuth1997}
+D.~E. Knuth.
+\newblock The Art of Computer Programming, Vol.~2: Seminumerical Algorithms (3rd ed.).
+\newblock Addison--Wesley, 1997.
+
+\bibitem{Penney1965}
+W.~Penney.
+\newblock A ``binary'' system for complex numbers.
+\newblock \emph{J. ACM} 12(2):247--248, 1965.
+
+\bibitem{Gilbert1981}
+W.~J. Gilbert.
+\newblock Radix representations of quadratic fields.
+\newblock \emph{J. Math. Anal. Appl.} 83(1):264--274, 1981.
+
+\bibitem{Gilbert1983}
+W.~J. Gilbert.
+\newblock Complex bases and {R}ademacher functions.
+\newblock \emph{J. Math. Anal. Appl.} 94(2):438--454, 1983.
+
+\bibitem{FrougnySakarovitch1992}
+C.~Frougny and J.~Sakarovitch.
+\newblock Number representation and finite automata.
+\newblock In \emph{Combinatorics, Automata and Number Theory}, 1992.
+
+\bibitem{Heuberger2007}
+C.~Heuberger.
+\newblock Canonical number systems in imaginary quadratic fields.
+\newblock \emph{Math. Comp.} 76(257):195--210, 2007.
+
+\bibitem{AkiyamaPetho2011}
+S.~Akiyama and A.~Peth\H{o}.
+\newblock Canonical number systems: a survey.
+\newblock In \emph{Geometry and Analysis of Fractals}, Springer, 2011.
+
+\end{thebibliography}
+
+
+\section{Bridge to Curvature}
+\label{sec:bridge-gr}
+Let $g=-\alpha(x)^2(d\theta+A)^2+h(x)$ on $\Sigma\times S^1_\theta$.
+
+\begin{proposition}[Optical metric law]
+Future-directed null geodesics of $g$ project to geodesics of the optical metric $\hat h=\alpha^{-2}h$ on $\Sigma$.
+\end{proposition}
+
+\begin{remark}[Curvature triggers]
+Nonconstant $\alpha$ and nonzero curvature $F=dA$ of the temporal connection produce nonzero curvature in $g$ (via KK reduction). Hence hierarchical $(s,b,l)$ fields $(\alpha,A)$ naturally induce curvature where child envelopes spawn.
+\end{remark}
+
+\end{document}

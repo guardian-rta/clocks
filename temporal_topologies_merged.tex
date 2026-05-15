@@ -1,0 +1,153 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{microtype}
+\usepackage{hyperref}
+\hypersetup{colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue}
+\usepackage{graphicx}
+\usepackage{enumitem}
+
+% Theorem-like envs
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+% Macros
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\tr}{\mathrm{tr}}
+
+\title{\textbf{Temporal Topologies: M\"obius Time, Circular/Helical Time,\\
+and Fractalized ``Birthing'' -- A Unified Decimated-Transfer and Complex-Base Framework}}
+\author{VR \& AI}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+We merge two complementary lines: (i) a \emph{decimated transfer-matrix} description of spinor dynamics on a \emph{temporal} M\"obius cycle (APBC) versus a circular cycle (PBC), and (ii) a \emph{complex-base} $(s,b,l)$ framework that realizes self-similar (fractal) temporal envelopes and multi-track spawning.
+The result is a minimal, falsifiable picture of \emph{net--zero yet infinite} time on the M\"obius stage, a binary holonomy signature (the $V_l$ sign flip), exact Green's functions and release laws (circular vs logarithmic spiral), and a mathematically controlled route to \emph{fractalization/birthing} of local temporal cycles with convergence guarantees.
+\end{abstract}
+
+\section{Temporal M\"obius structure (properties and test)}
+\subsection{Definition and holonomy}
+\begin{definition}[Temporal M\"obius cycle]
+A time macrocycle of duration $T$ contains $L\in\N$ Floquet steps.
+A \emph{circular} (periodic) time cycle imposes $\psi(t{+}T)=+\psi(t)$ (PBC). A \emph{M\"obius} (temporal) cycle imposes $\psi(t{+}T)=-\psi(t)$ (APBC), i.e.\ an orientation flip in time; space is not twisted.
+\end{definition}
+
+Let $U\in \mathrm{GL}(2,\C)$ be the one-step (Floquet/transfer) update on a spinor. Over $l$ steps define
+\begin{equation}
+V_l:=\tr(U^l),\qquad Q_l:=\det(U^l).
+\end{equation}
+Cayley--Hamilton on $U^l$ gives for any component $x_m$ sampled every $l$ steps the \emph{universal local recurrence}
+\begin{equation}\label{eq:R}
+x_{m+1}-V_l\,x_m+Q_l\,x_{m-1}=s_m,
+\end{equation}
+with source $s_m$ (injected ``ticks''). In closed SU(2) settings $Q_l=1$ and $|V_l|\le 2$.
+The temporal holonomy shifts the single-step eigenphase $\theta\mapsto \theta+\frac{\pi}{L}$ (APBC). If the macrocycle length equals the decimation stride ($L=l$), then
+\begin{equation}\label{eq:flip}
+\boxed{~V_l^{\mathrm{APBC}}=-\,V_l^{\mathrm{PBC}},\qquad Q_l^{\mathrm{APBC}}=Q_l^{\mathrm{PBC}}.~}
+\end{equation}
+Equation~\eqref{eq:flip} is a \emph{binary, falsifiable} signature of a temporal M\"obius holonomy.
+
+\subsection{Exact Green's functions; net--zero yet infinite time}
+Let $r_\pm$ be the roots of $z^2-V_l z + Q_l=0$. The homogeneous impulse response $G_n$ of \eqref{eq:R} is
+\begin{align}
+\text{distinct }r_\pm:&\quad G_n=\frac{r_+^{\,n}-r_-^{\,n}}{r_+-r_-},\ n\ge 0,\\
+\text{double root }r:&\quad G_n= n\, r^{\,n-1},\ n\ge 0.
+\end{align}
+In SU(2), set $V_l=2\cos\varphi$ (so $r_\pm=e^{\pm i\varphi}$), then $G_n=\sin(n\varphi)/\sin\varphi$ and the forced solution is the exact convolution $x_m=\sum_{j<m}G_{m-j}s_j$ plus a two-term transient.
+Let $s(m)=(-1)^m$ be the temporal orientation along macro-steps. Define signed and total-variation times
+\(
+\mathcal{T}_{\mathrm{signed}}(M)=\sum_{m<M}s(m)\,T,\ 
+\mathcal{T}_{\mathrm{var}}(M)=MT.
+\)
+Then for even $M=2N$, $\mathcal{T}_{\mathrm{signed}}(2N)=0$ and $\mathcal{T}_{\mathrm{var}}(2N)=2N\,T\to\infty$.
+Moreover, for any APBC-odd linear readout $y_m=s(m)\,x_m$, the even-window Ces\`aro average vanishes while a Poisson register of ticks diverges linearly: this is \emph{net--zero yet infinite time}.
+
+\subsection{Spectral check and Pin$^-$ remark}
+On a time circle of length $T$, the Euclidean Dirac operator $D=\frac{d}{d\tau}$ with boundary $\psi(\tau{+}T)=e^{i\pi s}\psi(\tau)$ has spectrum $\omega_n=\frac{2\pi}{T}(n+\frac{s}{2})$. PBC ($s{=}0$) has a zero mode; APBC ($s{=}1$) is gapped by $\pi/T$. Thus APBC removes the boundary zero mode (Pfaffian sign ambiguity) and is the unique reflection-positive choice for a temporal M\"obius cycle, consistent with the $\Pin^-$ picture (details omitted here for brevity).
+
+\section{Circular and helical temporal structures}
+\subsection{Circular (PBC) release: bounded echo}
+Post-quench (APBC$\to$PBC) with $Q_l=1$, $V_l=2\cos\varphi$, the homogeneous solution is
+\(
+x_{m_\star+n}=y_1\,U_{n-1}(\cos\varphi)-y_0\,U_{n-2}(\cos\varphi),
+\)
+a bounded echo (\(U_n\) Chebyshev of the second kind). No radial drift.
+
+\subsection{Helical/spiral envelopes: two realizations}
+\paragraph{Physical (open/active).}
+Allow openness $Q_l=q\neq 1$. Then $r_\pm=\sqrt{q}\,e^{\pm i\varphi}$ and
+\(
+x_{m_\star+n}=\sqrt{q}^{\,n}(A e^{in\varphi}+B e^{-in\varphi}),
+\)
+a logarithmic spiral with radial factor $\sqrt{q}$ per stride and pitch $p=\frac{2\pi}{\varphi}\log\sqrt{q}$.
+
+\paragraph{Geometric (complex-base embedding).}
+Embed the decoded sequence in a complex base $B=b\,e^{i(2\pi/l)}$ ($b>1$). Each stride-$l$ step advances angle by $2\pi$ and scales radius by $b^l$; the drawing is a log-spiral with pitch $l\log b$. This is a \emph{representation} layer; the dynamical tri-site coefficients remain the measured $V_l,Q_l$.
+
+\section{Fractalization / birthing via $(s,b,l)$}\label{sec:fractal}
+\subsection{Complex-base scaffold (geometry/representation)}
+Fix integers $l\ge 2$, $b>1$, $s\in(0,1]$, and $U=e^{i2\pi/l}$, $B=b\,U$. A hierarchical value is
+\begin{equation}
+z\;=\;\sum_{\ell\ge 0} s^\ell \sum_{k\in\Z} d_{\ell,k}\,B^{k},
+\end{equation}
+with per-level finite support and absolutely summable tails. For quadratic $b$ with $b^2-Pb+Q=0$, the \emph{phase-aligned} (tri-site) identity on residue tracks is
+\begin{equation}\label{eq:carry}
+B^{k+2l}-V_l(P,Q)\,B^{k+l}+Q^{l}\,B^{k}=0,
+\end{equation}
+($V_l$ a Lucas/Dickson polynomial). This identity generates local, value-preserving carries and yields canonical normal forms trackwise. \emph{Caveat:} \eqref{eq:carry} is a \emph{representation} identity (geometry), distinct from the \emph{dynamical} tri-site law \eqref{eq:R}. We exploit it to design self-similar temporal envelopes and multi-scale spawns.
+
+\subsection{Track-dependent self-similarity}
+Choose a global similarity exponent $M$ and tracks with $l_r\mid M$, bases $B_r=b^{M/l_r}e^{i2\pi/l_r}$; one full turn multiplies radius by $\beta=b^M$ on all tracks. The carry identity becomes track-uniform with coefficients $V_M(P,Q),Q^M$, enabling consistent multi-track normalization.
+
+\subsection{Birthing (spawn) rule and convergence}
+Let $R_{\ell}$ be a level-$\ell$ register (ticks accrued at level $\ell$). A simple spawn law:
+\begin{quote}
+If $R_{\ell}\ge R_c^{(\ell)}$, create a child level $\ell{+}1$ with scale $s^{\ell+1}$, choose a subset of tracks $\{l_r\mid M\}$, seed its initial digits from a linear map of the parent state, and reset $R_{\ell}\mapsto(1-\alpha_{\ell})R_{\ell}$.
+\end{quote}
+\emph{Termination (sufficient).} If $\sup_\ell \mathbb{E}[\text{active digits at level }\ell]\le C$ and $s<1$, then
+\(
+\sum_{\ell} s^\ell C
+\)
+converges; the hierarchical sum $z$ is absolutely convergent. Thus fractal spawning produces a \emph{finite} envelope while allowing arbitrarily many levels.
+
+\subsection{Coupling to decimated dynamics}
+At each active level, the decimated law \eqref{eq:R} holds with the \emph{measured} $(V_l,Q_l)$ of the medium (per mode). Spawning sets initial conditions for child levels; the event-coded \emph{pair} of checksums $I_\pm=\sum_k d_k r_\pm^k$ remains exact per mode (spinor-safe), providing robust counting across levels.
+
+\section{Binary tests, protocol, and decoding}
+\begin{enumerate}[leftmargin=1.2em]
+\item \textbf{Holonomy flip.} Calibrate $(V_l,Q_l)$ under PBC, switch to APBC (temporal M\"obius), refit near steady-mode. For $L{=}l$, verify $V_l^{\rm APBC}=-V_l^{\rm PBC}$ and $Q_l$ unchanged.
+\item \textbf{Circular vs spiral.} Post-quench, fit $Q_l$. If $Q_l=1$ \,$\Rightarrow$ bounded echo; if $Q_l\neq 1$ \,$\Rightarrow$ spiral with pitch $p=\frac{2\pi}{\varphi}\log\sqrt{Q_l}$.
+\item \textbf{Fractalization.} Detect multi-scale spawns by level histograms in the $(s,b,l)$ scaffold; convergence follows from the $s$-weighted support bound.
+\item \textbf{Checksums (spinor-safe).} Use $I_\pm$ with $r_\pm$ roots of $z^2-V_l z+Q_l=0$; for SU(2), $|r_\pm|=1$, so use both real/imag parts. A soft trellis adds penalty $\mu(|I_+(d){-}I_+^{\rm ref}|^2{+}|I_-(d){-}I_-^{\rm ref}|^2)$.
+\end{enumerate}
+
+\section*{Companion figures}
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.75\linewidth]{dirac_pbc_apbc_spectrum.png}
+  \caption{Discrete Dirac on a time circle: PBC shows a zero mode; APBC is gapped.}
+\end{figure}
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.75\linewidth]{checksum_penalty_demo.png}
+  \caption{Checksum penalty $\mu$ stabilizes reconstruction on SU(2) roots.}
+\end{figure}
+
+\section*{Discussion}
+The temporal M\"obius stage (APBC) enforces zero oriented DC while allowing unbounded accumulation on the cover. A quench to circular/spiral releases events with exact envelope laws and a binary signature ($V_l$ flip). The $(s,b,l)$ scaffold supplies a \emph{geometric} mechanism for self-similar envelopes and controlled spawning with clear convergence conditions. The three pieces fit: local dynamics (decimated law), global holonomy (PBC vs APBC), and geometric self-similarity (complex-base tracks).
+
+\section*{References (core pointers)}
+Witten (RMP 2016); Freed--Hopkins (arXiv:1604.06527); Kapustin et al.\ (JHEP 2015); Economou, \emph{Green's Functions in Quantum Physics}; Rivlin, \emph{Chebyshev Polynomials}; Kitagawa et al.\ (PRB 2010); Rudner et al.\ (PRX 2013).
+
+\end{document}

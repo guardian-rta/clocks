@@ -1,0 +1,193 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=1in]{geometry}
+\usepackage{lmodern}
+\usepackage[T1]{fontenc}
+\usepackage{microtype}
+\usepackage{amsmath,amssymb,mathtools}
+\usepackage{bm}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{siunitx}
+\usepackage{hyperref}
+\hypersetup{colorlinks=true, linkcolor=blue!60!black, urlcolor=blue!60!black, citecolor=blue!60!black}
+\usepackage{enumitem}
+\setlist{nosep, leftmargin=2em}
+\graphicspath{{./}{./figures/}{./data/}}
+
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\ellb}{\ell}
+\newcommand{\Rop}{\mathrm{R}}
+\newcommand{\Mop}{\mathrm{M}}
+\newcommand{\APBC}{\mathrm{APBC}}
+\newcommand{\PBC}{\mathrm{PBC}}
+\newcommand{\sgn}{\operatorname{sgn}}
+
+\title{\bf Temporal Envelopes, Births, and Holonomy:\\
+A Minimal $(\Rop,\Mop)$ Framework for Emergent Clocks, Gauge, and Locality}
+\author{}
+\date{Compiled: 2025-08-26 19:40 UTC}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+We develop and validate a minimal pre--space formalism based on two operations per tick: a unitary ``rotation'' $\Rop\in \mathrm{SU}(2)$ and a binary ``self--observational seam'' $\Mop$ (a phase, initially $\pi$). A binary schedule $m\in\{0,1\}^L$ selects when $\Mop$ acts within a macrocycle of length $L$.
+The complex stream of amplitudes is decimated at stride $\ell$; its envelope obeys a universal AR(2) law $y_{m+2}-V_\ell\,y_{m+1}+Q_\ell\,y_m=0$.
+A \emph{birth} at stride $\ell$ is the regime of tiny residuals and stable sign $V_\ell$ under periodic boundary conditions (PBC). Adding one extra seam at each $\ell$--block end (APBC) toggles the sign of $V_\ell$ iff the block parity is constant, yielding a $\Z_2$ holonomy bit $h_\ell$.
+We show: (i) spinor double--valuedness and a continuous temporal Aharonov--Bohm (AB) phase ($V_\ell(\phi)=2\cos(\ell\theta)\,e^{i\phi}$, $Q_\ell(\phi)=e^{i2\phi}$); (ii) locality via causal cones; (iii) controlled decoherence and scale decoupling under temporal noise; (iv) mixed--grid survival on $2^n$ and $3^n$; and (v) a redshift analogue from spatially varying seam noise.
+We conclude with a concrete roadmap to non--abelian seams, dispersion/``light cones'' with routing, an atlas of codewords, and a spectral route to geometry.
+\end{abstract}
+
+\section{Minimal formalism}
+Each macrocycle of length $L$ consists of repeated applications of a fixed $U=\Rop\in \mathrm{SU}(2)$, interleaved with a phase seam $\Mop$ of phase $\varphi\in[0,2\pi)$ when scheduled by $m_k\in\{0,1\}$:
+\begin{equation}
+\psi_{k+1} \;=\; \Big(e^{i\,m_k\varphi}\Big)U\,\psi_k,\qquad k=0,\dots,L-1,\qquad \psi\in\mathbb{C}^2.
+\end{equation}
+We observe the first component $x_k=(\psi_k)_0$ over $R$ macrocycles. For a stride $\ell\mid L$ and an offset $k_0\in[0,\ell-1]$ the decimated sequence $y_m=x_{k_0+m\ell}$ empirically obeys
+\begin{equation}
+y_{m+2} - V_\ell\,y_{m+1} + Q_\ell\,y_m \;\approx\; 0.
+\end{equation}
+Under real--$Q$ fits ($Q_\ell\equiv 1$) we recover the birth detector used throughout; under complex fits we obtain the exact AB law of Sec.~\ref{sec:ab}.
+
+\paragraph{Births and holonomy.} A birth at $\ell$ means (i) the least--squares residual rms$(\ell)\ll 1$ under PBC and (ii) robustness across offsets; empirically $Q_\ell=1$ in this gauge. Add one extra seam at every $\ell$--block end (APBC). Then
+\begin{equation}
+\sgn V_\ell(\APBC) \;=\; -\,\sgn V_\ell(\PBC)\quad \Leftrightarrow\quad 
+\text{block parity at }\ell\text{ is constant},
+\end{equation}
+defining the holonomy bit $h_\ell\in\{\pm1\}$. Collecting $\{h_\ell\}$ over a grid yields a \emph{holonomy code}.
+
+\paragraph{Parity transfer and inverse design.}
+Let $p_\ell$ be the parity (mod~2) of ones per $\ell$--block. Then a single APBC seam per $\ell$--block multiplies the coarse map by $(-1)^{p_\ell}$, explaining the flip/no--flip dichotomy. The inverse problem (design $m$ from a desired constant--parity table) is solved by slicing $L$ into $2$--adic layers and applying Möbius inversion on the odd divisor lattice; we include a constructive formula in App.~\ref{app:inverse}.
+
+\section{Substitution schedules}
+We study self--similar schedules from substitution systems (Thue--Morse, Cantor). For Thue--Morse, $L=2^n$ and many $\ell=2^k$ have constant counts per block at special offsets; for Cantor, $L=3^n$ similarly aligns on $\ell=3^k$. These furnish clean laboratories for births and holonomy codes.
+
+\section{Noise and decoupling}\label{sec:noise}
+We formalize three perturbations that selectively decouple larger--scale clocks.
+\paragraph{Phase jitter on $R$.}
+Each tick acquires a small $z$--rotation $R_z(\xi_k)$, $\mathbb{E}[\xi_k]=0$. For i.i.d.\ Gaussian $\xi_k\sim\mathcal N(0,\sigma^2)$,
+\begin{equation}
+\mathbb{E}[V_\ell]\;\approx\;2\cos(\ell\theta)\,e^{-\tfrac12\ell\sigma^2},\quad Q_\ell=1,
+\end{equation}
+so larger $\ell$ decohere first. With AR(1) correlation $\rho$, replace $\ell$ by $f(\ell,\rho)=\ell+2\sum_{h=1}^{\ell-1}(\ell-h)\rho^h$.
+\paragraph{Seam bit--flips.}
+XOR Bernoulli($p$) noise into $m$: the probability an $\ell$--block has odd parity is
+\begin{equation}
+p_{\mathrm{odd}}(\ell)=\frac{1-(1-2p)^\ell}{2}\;\to\;\tfrac12,
+\end{equation}
+so large $\ell$ are more fragile at fixed $p$.
+\paragraph{APBC--only random gating.}
+Randomly add a seam at each $\ell$--block end with prob $q_\ell$ in APBC only. PBC births remain intact while $h_\ell$ becomes $\mathrm{Bern}(q_\ell)$ across scales (empirically independent).
+
+\subsection*{Noise protocol (experimental recipe)}\label{sec:noise-protocol}
+\noindent\fbox{\parbox{0.97\linewidth}{\textbf{Goal.} Decouple larger clocks while preserving smaller ones.\\
+\textbf{Phase jitter frontier:} smallest $\sigma$ with rms$_\ell(\sigma)>\tau$ or $|V_\ell(\sigma)|\le \eta|V_\ell(0)|$; predicted $\sigma_\ell^\star\propto \ell^{-1/2}$.\\
+\textbf{Seam bit--flip frontier:} minimal $p$ so that consensus probability $(1-p_{\mathrm{odd}})^{B}+p_{\mathrm{odd}}^{B}\le \alpha$ ($B=L/\ell$), or mismatch prob $\ge\beta$.\\
+\textbf{APBC gating:} choose $q_\ell$ to randomize $h_\ell$ across scales without spoiling births.}}
+
+\section{Temporal AB: complex fits}\label{sec:ab}
+With one U(1) seam of phase $\phi$ per $\ell$--block (and constant block counts), the coarse map is $S_\phi=e^{i\phi}U^\ell$ and the exact invariants are
+\begin{equation}
+V_\ell(\phi)=\mathrm{tr}(S_\phi)=2\cos(\ell\theta)\,e^{i\phi},\qquad
+Q_\ell(\phi)=\det(S_\phi)=e^{i2\phi},
+\end{equation}
+validated by complex least--squares fits with residuals $\sim 10^{-15}$ across $\phi$. The special case $\phi=\pi$ realizes the spinor $2\pi$ sign.
+
+\section{Causal cones}
+A time--localized seam at global tick $t_0$ affects the $\ell$--decimated stream only when $k_0+m\ell\ge t_0$, forming a \emph{sampling cone}
+\begin{equation}
+m_{\mathrm{front}}(k_0)=\max\!\left(0,\left\lceil\frac{t_0-k_0}{\ell}\right\rceil\right).
+\end{equation}
+With routing between neighboring blocks, the cone acquires a lateral slope (emergent ``speed of light'').
+
+\section{Mixed--grid survival and codewords}
+On $2^n$ and $3^n$ simultaneously, we confirmed: constant parity at $\ell$ $\Leftrightarrow$ clean APBC flip with tiny rms; variable parity $\Rightarrow$ no clean flip. Collecting flips across a grid yields a binary holonomy code; adding AB phases yields continuous labels atop $\Z_2$.
+
+\section{Redshift analogue}
+Let seam noise $p(x)$ vary across space (different halves of the $\ell$--blocks). The birth--loss frontier $p_\ell^\star(x)$ shifts coherently: noisier regions lose their clocks at smaller $p$. This operationalizes gravitational redshift as time--rate inhomogeneity.
+
+\section{Simulations to date (manifest)}
+Below we summarize the experiments we implemented and the artifacts the notebook exported. (Some paths may need regeneration if files have expired; see Sec.~\ref{sec:regen}.)
+\begin{itemize}
+  \item \textbf{Birth tables and holonomy codes:} PBC/APBC comparisons for Thue--Morse and Cantor schedules; per--block seams, global seam; flip detection and holonomy codewords (\emph{CSV:} e.g., \texttt{data/holonomy\_code\_TM.csv}).
+  \item \textbf{Phase jitter sweep (noise):} rms and $V_\ell$ vs $\sigma$ for $\ell\in\{8,32,128,512\}$; AR(1) correlation option. (\emph{CSV:} \texttt{/mnt/data/noise\_phase\_sweep\_TM.csv}).
+  \item \textbf{Seam bit--flip sweep:} empirical fraction of odd blocks vs $\ell$ and theory $p_{\mathrm{odd}}(\ell)$; (\emph{CSV:} \texttt{/mnt/data/noise\_bitflip\_sweep\_TM.csv}).
+  \item \textbf{APBC random gating:} independence of flips across scales; flip correlation matrix $\approx 0$ off diagonal. (\emph{CSV:} \texttt{/mnt/data/noise\_apbc\_random\_gating\_TM.csv}).
+  \item \textbf{Decoupling frontiers:} $\sigma_\ell^\star$ (V--based and rms--based) and $p_\ell^\star$ (const--parity and mismatch criteria), including AR(1) analytic overlay $\sigma^\star_{\rm pred}(\ell)\propto \ell^{-1/2}$. (\emph{PNGs/CSV}.)
+  \item \textbf{Temporal AB (U(1)):} complex $(V,Q)$ vs $\phi$ with constant per--block counts; Re/Im match theory; unwrapped $\arg Q$ has slope $2$. (\emph{PNGs:} e.g., \texttt{/mnt/data/fig1--fig4.png}.)
+  \item \textbf{Causal cone (sampling):} localized seam burst heatmaps and analytic front overlays. (\emph{PNG:} \texttt{/mnt/data/causal\_cone\_TM\_l128.png}, \texttt{/mnt/data/causal-cone-overlay.png}.)
+  \item \textbf{Mixed--grid codebook:} simultaneous $2^n$ and $3^n$ measurements; survival law holds. (\emph{CSV:} \texttt{/mnt/data/codebook\_2power.csv}, \texttt{/mnt/data/codebook\_3power.csv}.)
+  \item \textbf{Redshift analogue:} masked seam noise (left/right halves) frontier shift across $\ell$. (\emph{CSV:} \texttt{/mnt/data/redshift\_frontiers\_masked\_TM.csv}.)
+\end{itemize}
+
+\section{Roadmap: from pre--space to physics}
+We outline a falsifiable program that extends the present results into kinematics, fields, and geometry.
+\subsection*{R1. Non--abelian seams (SU(2))}
+Replace the U(1) seam by $W(\alpha\hat n\cdot\sigma)\in \mathrm{SU}(2)$ per block. Predict $Q\equiv 1$, while $V(\alpha)=\mathrm{tr}(W U^\ell)$ traces a circle/ellipse in $\mathbb{C}$. \emph{Deliverables:} complex $V(\alpha)$ loops; residuals $\sim 10^{-15}$.
+\subsection*{R2. Block--space routing and dispersion}
+Add nearest--neighbor routing between $\ell$--blocks each macrocycle; launch localized bursts; measure the cone slope and extract dispersion $\omega(k)$. \emph{Deliverables:} linear branches near tuned $\ell\theta\approx \pi/2$ (massless), gapped branches away from it (mass).
+\subsection*{R3. Mixed--grid atlas}
+Enumerate a small library of substitution schedules; record (birth set, holonomy flips, AB phases) on $2^n$ and $3^n$. Verify XOR composition laws and parity transfer. \emph{Deliverables:} a codebook CSV and figure panels.
+\subsection*{R4. Redshift maps}
+Impose $p(x)$ or $\phi(x)$ gradients; map $\sigma_\ell^\star(x)$ and $p_\ell^\star(x)$. \emph{Deliverables:} frontier surfaces vs position; quantitative matches to the noise calculus.
+\subsection*{R5. Inverse design with constraints}
+Extend App.~\ref{app:inverse} to synthesize $m$ with target births and additional constraints (density, balance, forbidden seams). \emph{Deliverables:} solver + verification tables.
+\subsection*{R6. Spectral geometry and curvature}
+Use the $\ell$--family of AR(2) operators to define a spectral metric; treat $\phi$ as a connection; define curvature from plaquette sums in block--space. \emph{Deliverables:} scalar curvature proxy vs engineered $\phi$ gradients; redshift--curvature link.
+
+\section{Falsifiable predictions}
+\begin{enumerate}
+\item \textbf{AB law:} $V_\ell(\phi)=2\cos(\ell\theta)e^{i\phi}$ and $Q_\ell=e^{i2\phi}$ (measured already).
+\item \textbf{Frontiers:} $\sigma_\ell^\star\propto \ell^{-1/2}$ (after correlation correction), $p_{\mathrm{odd}}(\ell)=\tfrac{1-(1-2p)^\ell}{2}$.
+\item \textbf{Cone speed:} routing by $\pm 1$ block per macrocycle $\Rightarrow$ cone slope $1$.
+\item \textbf{Mass gap:} detuning $\ell\theta$ from $\pi/2$ opens a gap proportional to $|\varepsilon|$.
+\item \textbf{Atlas laws:} XOR of schedules adds holonomy codes mod~2; mixed--grid survival follows parity transfer.
+\end{enumerate}
+
+\section{Regenerating figures and tables}\label{sec:regen}
+This workspace may expire intermediate files. To regenerate all artifacts:
+\begin{enumerate}
+\item Run the \emph{Noise \& decoupling} sweeps (phase jitter, bit flips, APBC gating).
+\item Run the \emph{Decoupling frontiers} cell (V--based bisection + AR(1) overlay).
+\item Run the \emph{Temporal AB} complex--fit sweep at a constant--count offset.
+\item Run the \emph{Causal cone} heatmap with your preferred $\ell$ and burst tick; optionally add routing.
+\item Run the \emph{Mixed--grid codebook} demo; inspect/export CSVs.
+\item Run the \emph{Redshift analogue} demo; export CSV.
+\end{enumerate}
+
+\section*{Figure placeholders (auto-include if present)}
+\begin{center}
+\IfFileExists{fig1.png}{\includegraphics[width=.48\linewidth]{fig1.png}}{}
+\IfFileExists{fig2.png}{\includegraphics[width=.48\linewidth]{fig2.png}}{}\\[0.5em]
+\IfFileExists{seam-phase-V.png}{\includegraphics[width=.48\linewidth]{seam-phase-V.png}}{}
+\IfFileExists{seam-phase-RMS.png}{\includegraphics[width=.48\linewidth]{seam-phase-RMS.png}}{}\\[0.5em]
+\IfFileExists{causal_cone_TM_l128.png}{\includegraphics[width=.7\linewidth]{causal_cone_TM_l128.png}}{}
+\IfFileExists{causal-cone-overlay.png}{\includegraphics[width=.7\linewidth]{causal-cone-overlay.png}}{}
+\end{center}
+
+\appendix
+\section{Inverse design on the divisor lattice}\label{app:inverse}
+Let $c(\ell)\in\{0,1\}$ be desired constant parities. Slice $L=2^a L_{\mathrm{odd}}$; on each fixed $a$ layer, Möbius inversion over odd divisors yields block--seam coefficients $x(d)$ and the schedule $m=\bigoplus_{d\mid L} x(d)\,\chi_d$, where $\chi_d$ marks per--block seams at period $d$.
+\paragraph{Pseudocode.} We reproduce the implementation used in the notebook.
+\begin{verbatim}
+x = {d:0 for d in divisors(L)}
+for a in 0..v2(L):
+  L_odd = L // 2**a; if L_odd % 2 == 0: continue
+  c_a[t] = c(2**a * t) for t | L_odd, t odd
+  for t in sorted(odd_divisors(L_odd)):
+    val = XOR_{u | t, u odd, mu(u) != 0} c_a[t//u]
+    x[2**a * t] = val
+m = XOR_{d | L, x(d)=1} per_block_seam_pattern(L, d)
+\end{verbatim}
+
+\section{Complex $(V,Q)$ fit}\label{app:complex}
+Given $y_{m+2}=V y_{m+1} - Q y_m$, least squares over $\mathbb{C}$ returns $V,Q$ uniquely in the birth regime. Under a U(1) block seam of phase $\phi$ we get $V=2\cos(\ell\theta)e^{i\phi}$, $Q=e^{i2\phi}$ exactly.
+
+\section{Noise calculus and frontiers}\label{app:noise}
+Phase jitter with AR(1) correlation $\rho$ replaces $\ell$ by $f(\ell,\rho)$ in the exponential damping. Seam bit--flips yield $p_{\mathrm{odd}}(\ell)$ and feasibility floors for all--block consensus $2\cdot 2^{-B}$; practical frontiers use rms thresholds or mismatch criteria.
+
+\bigskip
+\noindent\textit{Data \& figure manifest (typical paths)}\quad
+\texttt{noise\_phase\_sweep\_TM.csv}, \texttt{noise\_bitflip\_sweep\_TM.csv}, \texttt{noise\_apbc\_random\_gating\_TM.csv}, \texttt{codebook\_2power.csv}, \texttt{codebook\_3power.csv}, \texttt{redshift\_frontiers\_masked\_TM.csv}, \texttt{causal\_cone\_TM\_l128.png}, \texttt{causal-cone-overlay.png}, \texttt{seam-phase-V.png}, \texttt{seam-phase-RMS.png}.
+
+\end{document}

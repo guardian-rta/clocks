@@ -1,0 +1,413 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{mathtools}
+\usepackage{bm}
+\usepackage{microtype}
+\usepackage{hyperref}
+\usepackage{xcolor}
+\usepackage{graphicx}
+
+\title{\vspace{-1em}\textbf{The $\boldsymbol{\varphi}$-Clock Universe}}
+\author{VR \& AI}
+\date{}
+
+\newtheorem{definition}{Definition}
+\newtheorem{lemma}{Lemma}
+\newtheorem{proposition}{Proposition}
+\newtheorem{theorem}{Theorem}
+\theoremstyle{remark}
+\newtheorem{remark}{Remark}
+
+\newcommand{\bb}[1]{\boxed{\;#1\;}}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+We give a complete first-principles formalism for a temporal universe driven by a single bi-infinite binary register, a single tick at $k{=}0$, and the unique value-preserving local rewrite $11\!\to\!100$.
+All derivations use only the golden identity $\varphi^2=\varphi+1$ (equivalently $1+\varphi^{-1}=\varphi$) and this rewrite.
+Negative indices are read through a purely temporal inversion lens into outer scale-channel labels $(R{=}\varphi^m,r{=}(2m)\!\!\pmod3)$, yielding conserved fast content $Q^-=\sum_{m\ge1}U_{-m}\varphi^{-m}$.
+Detuned unity admits a $\varphi$-log spiral envelope; the per-bit one-turn spiral-action is linear in $\varphi^{-m}$, so the total action is a constant multiple of $Q^-$.
+We define species (fast masks), a minimal read-out process into a uniform potential (instantiation), the expected instantiation rate $\lambda_S=\sum S(m)U_{-m}\varphi^{-2m}$, a branching readout that yields exponential growth (``big bang'') without changing the register, and an algebraic binding vs.\ scatter rule via $\varphi$-closure (worked example).
+A Z$_3$ spinor-like internal cycle arises from residues $r=(2m)\!\!\pmod3$ on depth triplets $\{m_0,m_0{+}2,m_0{+}4\}$, with phase advances gated by rung statistics.
+We close with a minimal field picture and a simple complexity bound for the tick.
+\end{abstract}
+
+\section{Axioms and admissible class}\label{sec:axioms}
+Let $\varphi=\frac{1+\sqrt5}{2}$ so $\varphi^2=\varphi+1$ and $1+\varphi^{-1}=\varphi$.
+
+\begin{definition}[Register and admissibility]
+A register is a bi-infinite binary string
+\[
+U=(\ldots,U_{-1}\ \mid\ U_0,U_1,U_2,\ldots),\qquad U_k\in\{0,1\},
+\]
+with the single constraint $U_kU_{k+1}\neq 11$ (\emph{no adjacent ones}).
+\end{definition}
+
+\begin{definition}[Tick and normalization]\label{def:tick}
+The unique value-preserving local rewrite is
+\begin{equation}\label{rw}
+\underline{11}\ \longrightarrow\ \underline{100}\qquad\text{at indices }(k{+}1,k)\mapsto(k{+}2,k{+}1,k),
+\end{equation}
+which restates $\varphi^{k+1}{+}\varphi^k=\varphi^{k+2}$.
+A tick injects $1$ at $k=0$ and normalizes:
+\begin{equation}\label{tick}
+U\ \mapsto\ \mathsf{Norm}\big(U+\mathbf e_0\big),\qquad (\mathbf e_0)_0=1, \ (\mathbf e_0)_k=0\ (k\neq0).
+\end{equation}
+\end{definition}
+
+\begin{remark}[Why $11\!\to\!100$ and why it halts]
+Let $E_q(U):=\sum_k q^{\,k}U_k$ for any $q\in(1,\varphi)$. Then under \eqref{rw} we have
+\[
+E_q(100)-E_q(11)=q^{k+2}-(q^{k+1}{+}q^k)=q^k(q^2-q-1)\ <\ 0,
+\]
+so repeated rewrites strictly decrease $E_q$, hence normalization halts.
+\end{remark}
+
+We work in a natural class that ensures well-defined functionals on the fast tail.
+
+\begin{definition}[Admissible class]\label{def:class}
+\(
+\mathcal{C}
+:=
+\big\{U\ \text{admissible}\ :\
+\#\{k\ge0:U_k=1\}<\infty,\ \ \sum_{m\ge1}U_{-m}\varphi^{-m}<\infty\big\}.
+\)
+\end{definition}
+
+\section{Uniqueness and locality}
+
+\paragraph{Normalization order (determinism).}
+To resolve the $111$ critical overlap at indices $(-1,0,1)$ we \emph{fix} normalization to apply $11\!\to\!100$ from \emph{higher to lower} indices (rightmost-first scan).
+This makes the post-tick normal form independent of rule order.
+With this choice, a boundary rewrite across $(-1,0)$ can occur at the first tick only if $U_{-1}=1$ and $U_{1}=0$ just before the tick.
+
+\begin{theorem}[Normal form exists and is unique]\label{thm:nf}
+Each tick (insertion at $k=0$) followed by rightmost-first normalization halts and yields a unique normal form.
+\end{theorem}
+\begin{proof}[Sketch]
+Halting: the potential $E_q(U)=\sum_k U_k q^k$ with $1<q<\varphi$ strictly decreases on $11\!\to\!100$.
+Local confluence: the only critical pair is $111$, which our rightmost-first order resolves deterministically by firing $(0,1)$ before $(-1,0)$.
+By Newman's lemma (termination $+$ local confluence), normalization is confluent; thus the normal form is unique.
+\end{proof}
+
+\begin{proposition}[Tick locality]\label{prop:local-fixed}
+Under a tick at $k=0$ and subsequent normalization, digits with $k\le -2$ never change.
+\end{proposition}
+\begin{proof}
+Each rewrite replaces $(k,k{+}1)$ by $(k{+}2,k{+}1,k)$, so the minimum index touched is non-decreasing.
+Starting at $k=0$, no chain of carries can cross below $-1$.
+\end{proof}
+
+\paragraph{Tickability.}
+We restrict ticks to states with $U_0=0$ (the slow prefix begins with a $0$); this avoids intermediate digits ``2'' during insertion.
+
+
+\begin{lemma}[Uniqueness of normal form (Zeckendorf-like)]\label{lem:uniq}
+If $U,V$ are admissible and $\sum_k U_k\varphi^k=\sum_k V_k\varphi^k$, then $U=V$.
+\end{lemma}
+
+\begin{remark}[Boundary probability: ensemble vs.\ time]\label{rem:boundary-prob}
+A boundary event at the first tick occurs iff $U_{-1}=1$ (and, with the rightmost-first rule, $U_1=0$).
+Under the Parry (max-entropy) measure on the golden-mean subshift, the marginal $\Pr[U_{-1}=1]=\pi_1=\frac{1}{1+\varphi^2}$.
+Along any single trajectory the boundary can occur at most once, so its time-average frequency tends to zero; $\pi_1$ is an \emph{ensemble} probability over initial states.
+Under a stationary ergodic measure, the boundary event is a zero‑frequency tail event along a single trajectory; probabilities are ensemble quantities.
+\end{remark}
+
+
+\section{Projection lens and conserved fast amount}\label{sec:proj}
+We do \emph{not} introduce space. The lens is a temporal relabeling of negative bits.
+For each $m\ge1$, if $U_{-m}=1$ we define an outer feature
+\begin{equation}\label{proj}
+(R_m,r_m):=\big(\varphi^{m},\ (2m)\bmod 3\big).
+\end{equation}
+Define the fast amount
+\begin{equation}\label{Qminus}
+\bb{\,Q^-(U):=\sum_{m\ge1} U_{-m}\,\varphi^{-m}\,}=\sum_{(R_m,r_m)}\frac{1}{R_m}.
+\end{equation}
+
+\begin{lemma}[Boundary and conservation]\label{lem:boundary}
+Any rewrite $11\!\to\!100$ with $k\le -2$ leaves $Q^-$ unchanged.
+A rewrite at $k=-1$ reduces $Q^-$ by exactly $\varphi^{-1}$.
+\end{lemma}
+
+\begin{remark}[Rarity of boundary events]
+In a single trajectory the boundary event can happen at most once (it requires $U_{-1}=1$ just before the tick; afterwards $U_{-1}\leftarrow 0$).
+Under the Parry (max-entropy) measure on the golden-mean subshift, $\Pr[U_{-1}=1]=\frac{1}{1+\varphi^2}$; along a single trajectory its time-average frequency tends to zero.
+\end{remark}
+
+\section{Detuned unity as a \texorpdfstring{$\varphi$}{phi}-log temporal spiral}\label{sec:spiral}
+Let $r(\theta)=r_\star e^{b\theta}$ be a logarithmic spiral.
+Its arc length between $\theta_0$ and $\theta_1$ is
+\begin{equation}\label{spiral-length}
+L=\int_{\theta_0}^{\theta_1}\!\!\sqrt{r^2+\Big(\frac{dr}{d\theta}\Big)^2}\,d\theta
+=\sqrt{1+b^2}\int r(\theta)\,d\theta
+=\frac{\sqrt{1+b^2}}{b}\,r(\theta_0)\big(e^{b(\theta_1-\theta_0)}-1\big).
+\end{equation}
+Choose growth per quarter turn $g=e^{b\pi/2}$ so over one full turn $e^{b(\theta_1-\theta_0)}=g^4$.
+Associate a fast bit at $-m$ with starting diameter $D_m=\varphi^{-m}$ (so $r(\theta_0)=\tfrac12\varphi^{-m}$) and orientation $\sigma\in\{+1,-1\}$ with $g=\varphi^\sigma$.
+Then the \emph{per-bit} one-turn spiral-action is
+\begin{equation}\label{bit-action}
+L_m^{(\sigma)}=\frac12\,\frac{\sqrt{1+b_\sigma^2}}{b_\sigma}\,\big(\varphi^{4\sigma}-1\big)\ \varphi^{-m}
+=:C_\sigma\,\varphi^{-m},\qquad b_\sigma=\tfrac{2}{\pi}\ln(\varphi^\sigma).
+\end{equation}
+Summing over the fast tail,
+\begin{equation}\label{total-action}
+\bb{\,L_{\text{turn}}^{(\sigma)}(U)=\sum_{m\ge1}U_{-m}\,L_m^{(\sigma)}=C_\sigma\,Q^-(U)\,},
+\end{equation}
+a constant multiple of $Q^-$ (changes only at the single boundary by $\Delta L^{(\sigma)}=-C_\sigma\varphi^{-1}$).
+
+\section{Slow rungs and scaling}\label{sec:rungs}
+A tick reaches slow rung $n$ iff the pre-tick slow prefix equals the alternating word $(01)^n$.
+Under a natural stationary measure on admissible slow prefixes (the golden-mean subshift), the probability of $(01)^n$ is $\propto\varphi^{-2n}$, yielding
+\begin{equation}\label{rung-scaling}
+\bb{\,f_n\ \propto\ \varphi^{-2n}\,f_0,\qquad T_n\ \propto\ \varphi^{2n}\,T_0\,}.
+\end{equation}
+\begin{remark}[Measure remark]
+The proportionality is asymptotic under any stationary, ergodic measure compatible with no-adjacency; for a fixed initial $U$ it gives a robust envelope for long-run frequencies.
+\end{remark}
+
+
+\subsection*{Markov construction for rung statistics}
+Let $\mathsf G$ be the golden-mean subshift forbidding $11$.
+The $2\times 2$ adjacency is $A=\begin{psmallmatrix}1&1\\1&0\end{psmallmatrix}$ with Perron root $\lambda=\varphi$ and right/left eigenvectors $v=(\varphi,1)$, $w=(1,\varphi^{-1})$.
+
+The Parry transition matrix is
+$P=\begin{psmallmatrix}\varphi^{-1} & \varphi^{-2}\\[2pt] 1 & 0\end{psmallmatrix}$.
+Its stationary distribution is
+\[
+\pi=\Big(\frac{\varphi^2}{1+\varphi^2},\ \frac{1}{1+\varphi^2}\Big),
+\]
+so for the alternating prefix $(01)^n$ we have
+\[
+\Pr[(01)^n]=\pi_0\,(P_{01}P_{10})^{n}
+=\frac{\varphi^2}{1+\varphi^2}\,\varphi^{-2n}\propto \varphi^{-2n}.
+\]
+Hence the expected waiting time to reach rung $n$ scales as $\varphi^{2n}$.
+
+\section{Species schema (genotype)}\label{sec:species}
+A \emph{species} is a fast-depth/channel mask: choose $\mathcal R_S\subseteq\{0,1,2\}$ and $\mathcal M_S\subseteq\mathbb N_{\ge1}$; set
+\(
+S(m)=\mathbf 1\{\,m\in\mathcal M_S\ \&\ (2m)\bmod3\in\mathcal R_S\,\}.
+\)
+Define observables
+\begin{align}
+\text{Multiplicity:}&\quad N_S(U)=\sum_{m\ge1} S(m)\,U_{-m},\\
+\text{Weight:}&\quad W_S(U)=\sum_{m\ge1} S(m)\,U_{-m}\,\varphi^{-m},\\
+\text{Channels:}&\quad \mathbf C_S(U)=(C_0,C_1,C_2),\ C_j=\sum_{m\ge1} S(m)\,U_{-m}\,\mathbf 1\{(2m)\bmod3=j\},\\
+\text{Central depth/time-scale:}&\quad \bar m_S=\frac{\sum m\,S(m)\,U_{-m}\,\varphi^{-m}}{\sum S(m)\,U_{-m}\,\varphi^{-m}},\quad
+T_S\propto \varphi^{2\bar m_S}T_0,\\
+\text{Spiral-action:}&\quad L_S^{(\sigma)}=C_\sigma\,W_S(U).
+\end{align}
+By Proposition~\ref{prop:local}, these are constants of motion except for the one-off boundary at $m{=}1$ (if present in $S$).
+
+\section{Instantiation in a uniform potential (phenotype)}\label{sec:inst}
+The outside \emph{foam} is a uniform set of temporal slots $\mathcal F=\{(R>1,r\in\{0,1,2\})\}$.
+A tick at time $\tau$ reaches a random rung $n_\tau$; it \emph{instantiates} all fast bits at depths $m\le n_\tau$:
+\begin{equation}
+\mathcal I_\tau=\{\, (R_m=\varphi^m,\ r_m) \ :\ U_{-m}=1,\ m\le n_\tau\,\}.
+\end{equation}
+Under the stationary measure, $\Pr[n_\tau\ge m]=\varphi^{-2m}$, hence the expected per-tick instantiation count for species $S$ is
+\begin{equation}\label{lambdaS}
+\bb{\,\lambda_S=\sum_{m\ge1} S(m)\,U_{-m}\,\varphi^{-2m}\,},\qquad \mathbb E\,N_S(T)=T\,\lambda_S.
+\end{equation}
+\paragraph{Branching readout (exponential phase, no change to $U$).}
+If each instantiation becomes a new reader with probability $\alpha$ and each reader produces on average $\lambda_\ast=\sum_{m\ge1}U_{-m}\varphi^{-2m}$ instantiations per tick, then the expected reader count obeys
+\begin{equation}\label{branching}
+\mathbb E\,\mathcal R_{t+1}=(1+\alpha\,\lambda_\ast)\,\mathbb E\,\mathcal R_t\quad\Rightarrow\quad
+\mathbb E\,\mathcal R_t=\mathcal R_0(1+\alpha\,\lambda_\ast)^t,
+\end{equation}
+i.e.\ an exponential ``big bang'' phase arising purely from readout replication.
+
+\section{Co-instantiation and binding via \texorpdfstring{$\varphi$}{phi}-closure}
+
+\paragraph{Greedy $\varphi$-closure and uniqueness.}
+Given a finite multiset of depths $M\subset\mathbb N$ with total weight $W=\sum_{m\in M}\varphi^{-m}$, let $m_{\rm eff}=\max\{m:\varphi^{-m}\le W\}$, $N=\lfloor W\varphi^{m_{\rm eff}}\rfloor$, and $\gamma=W-N\varphi^{-m_{\rm eff}}\in[0,\varphi^{-m_{\rm eff}})$.
+Then
+\[
+W=N\varphi^{-m_{\rm eff}}+\gamma,
+\]
+is unique: shifting $m_{\rm eff}$ up would force $\gamma<0$; down would make $\gamma\ge \varphi^{-m_{\rm eff}}$.
+We bind $N$ composites at depth $m_{\rm eff}$ and route $\gamma$ to a massless cascade.
+
+\label{sec:bind}
+The expected \emph{co-instantiation} rate of $S_1$ and $S_2$ is
+\begin{equation}\label{co}
+\bb{\,\Lambda_{12}=\sum_{m\ge1} S_1(m)\,S_2(m)\,U_{-m}\,\varphi^{-2m}\,}.
+\end{equation}
+Upon co-instantiation at the same depth $m$ (with channels fixed by $r=(2m)\bmod3$), we adopt a minimal algebraic outcome:
+
+\textbf{Interaction Rule (IR).} Given two co-instantiated depths, perform the greedy
+$\varphi$-closure on their total weight. If the resulting multiplicity $N\ge 1$,
+declare binding with multiplicity $N$ at depth $m_{\mathrm{eff}}$ and record the
+remainder $\gamma$ in the massless channel. If $N=0$, declare scatter.
+
+\paragraph{Worked example.}
+Depths $m$ and $m{+}2$ (non-adjacent in $U$) have weights $\varphi^{-m}$ and $\varphi^{-(m+2)}$:
+\begin{equation}\label{closure}
+\varphi^{-m}+\varphi^{-(m+2)}=(\varphi+\varphi^{-1})\,\varphi^{-(m+1)}=\sqrt5\,\varphi^{-(m+1)}.
+\end{equation}
+We declare a \emph{composite} at depth $m{+}1$ (channel rotates by $+2$ mod 3) plus a radiative remainder of $(\sqrt5-1)\varphi^{-(m+1)}$ in $\gamma$:
+\[
+A_m+B_{m+2}\ \longrightarrow\ C_{m+1}+\gamma.
+\]
+Action bookkeeping: $L^{(+)}(A_m)+L^{(+)}(B_{m+2})=L^{(+)}(C_{m+1})+L^{(+)}(\gamma)$ by linearity in \eqref{bit-action}.
+
+\section{\texorpdfstring{$\mathrm Z_3$}{Z3} spinor-like cycle (explicit construction)}\label{sec:spinor}
+Let a spinor species use depths $\mathcal M_{\mathrm{sp}}=\{m_0,m_0{+}2,m_0{+}4\}$ (respecting no-adjacency).
+Channels cycle:
+\(
+r(m_0{+}2k)=(2m_0{+}4k)\bmod3=r(m_0)+k\ (\bmod3).
+\)
+Define an internal phase $p\in\{0,1,2\}$ as the index of the most recently activated component; when a tick reaches the next component (depth increases by $2$), the phase advances
+\begin{equation}
+p\ \mapsto\ p+1\quad(\bmod 3).
+\end{equation}
+The probability per tick to activate depth $m_0{+}2k$ is $\varphi^{-2(m_0+2k)}$, hence the expected waiting time for each phase step is
+\begin{equation}
+\mathbb E[\Delta t_k]=\varphi^{2(m_0+2k)}.
+\end{equation}
+This gives a Z$_3$ internal cycle with geometrically increasing periods---spinor-like and purely temporal (not SU(2)).
+
+\section{Minimal field picture (optional bridge)}\label{sec:field}
+Let $\psi_r(m;t)$ be the accumulated instantiations in the foam.
+The tick defines a source
+\begin{equation}
+J_r(m;t)=U_{-m}\,\mathbf 1\{n_t\ge m\}\,\mathbf 1\{r=(2m)\bmod3\},
+\end{equation}
+and a free update $\psi_r(m;t{+}1)=\psi_r(m;t)+J_r(m;t)$.
+A minimal interaction (matching \eqref{closure}) is a $\varphi$-closure vertex
+\begin{equation}
+\psi_{r+2}(m{+}1;t{+}1)\ \leftarrow\ \kappa\ \psi_{r}(m;t)\,\psi_{r+1}(m{+}2;t),
+\end{equation}
+with a massless channel $\gamma$ recording the radiative remainder.
+No spatial geometry is assumed; this is a discrete, scale-indexed skeleton compatible with field-theoretic language.
+
+
+
+\subsection*{Operational distance and synchronization}
+Define the shared-prefix length $\ell(U,V)=\max\{L:\ U_{-m}=V_{-m}\ \forall m\le L\}$ and the ultrametric
+\[
+d_\varphi(U,V)=\varphi^{-\ell(U,V)}.
+\]
+An operational estimator from ticks is obtained by the shortest time $T^\ast$ needed for both registers to exhibit the same rung $n$; by $\mathbb E[T_n]\propto\varphi^{2n}$ we set
+\(
+\widehat d_\varphi\sim (T^\ast/T_0)^{-1/2}.
+\)
+
+\section{Algorithmic complexity}
+
+\subsection*{Deterministic tick harness (for simulation)}
+\begin{enumerate}
+\item Require $U_0=0$; set $U_0\leftarrow 1$ (tick).
+\item For $k$ descending from the largest index with $U_k=1$ down to $-1$, apply $11\!\to\!100$ at $(k{-}1,k)$ whenever present.
+\item Record: whether $(-1,0)$ fired (boundary), the rung $n$ (length of initial alternating $01$), and any species readouts.
+\end{enumerate}
+This runs in $O(n)$ when the slow prefix is $(01)^n$.
+
+
+Let the pre-tick slow prefix length be $n$ (maximal $(01)^n$). Normalization performs $O(n)$ rewrites and touches indices $\{0,1,\dots,O(n)\}$.
+Negative indices $k\le -2$ are never touched; the boundary $-1$ can be cleared once.
+Hence a tick has worst-case time $O(n)$ and space $O(n)$ on the slow side.
+
+\section{One-page recipe}
+\begin{itemize}
+\item \textbf{Engine:} single tick at $k=0$, single rewrite $11\to100$.
+\item \textbf{Lens:} fast bit $-m$ $\mapsto$ $(R=\varphi^m,\ r=(2m)\bmod3)$.
+\item \textbf{Conserved:} $Q^-=\sum U_{-m}\varphi^{-m}$ (changes only by $-\varphi^{-1}$ at $(-1,0)$).
+\item \textbf{Spiral-action:} $L^{(\sigma)}=C_\sigma Q^-$ with $C_\sigma$ from \eqref{bit-action}.
+\item \textbf{Rungs:} $f_n\propto\varphi^{-2n}$, $T_n\propto\varphi^{2n}$ (natural measures).
+\item \textbf{Species:} $(\mathcal R_S,\mathcal M_S)\Rightarrow N_S,W_S,\mathbf C_S,\bar m_S, L_S$ (constants of motion).
+\item \textbf{Instantiation:} per-tick rate $\lambda_S=\sum S(m)U_{-m}\varphi^{-2m}$; with branching readers \eqref{branching} gives exponential growth.
+\item \textbf{Interactions:} co-rate $\Lambda_{12}=\sum S_1S_2\,U_{-m}\varphi^{-2m}$; bind iff $\varphi$-closure to a single depth exists; else scatter.
+\item \textbf{Spinor:} depths $m_0,m_0{+}2,m_0{+}4$ give a Z$_3$ phase advancing when rung reaches the next depth.
+\end{itemize}
+
+\section*{Figure}
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=\linewidth]{phi_clock_universe_species_figure.pdf}
+  \caption{Tick at $k=0$ and the unique normalization $11\!\to\!100$ across $(-1,0)$ remove the nearest fast bit and promote one unit to the slow side, changing $Q^-$ by $-\varphi^{-1}$.
+  The inversion lens re-labels a fast bit at $-m$ as $(R=\varphi^{m},\,r=(2m)\bmod3)$.
+  The view is purely temporal (no spatial postulate).}
+\end{figure}
+
+\section*{Consistency and minimalism}
+Every equation is a consequence of $\varphi^2=\varphi+1$ and $11\to100$, plus standard calculus for the log-spiral length \eqref{spiral-length} (choice of units enters only through starting diameter).
+No extra forces, spaces, or Hamiltonians are assumed; if a spatial metric is ever desired, it must be constructed operationally from synchronization times, not postulated.
+
+
+% ---------- Appendix: Concrete Examples (input this file) ----------
+\appendix
+\section*{Appendix: Concrete Examples}
+
+\subsection*{A1. A small register and its invariants}
+Consider the admissible register with fast bits at depths $m=1$ and $m=3$ (i.e.\ $U_{-1}=U_{-3}=1$) and no slow bits. Then
+\begin{align*}
+Q^-(U) &= \varphi^{-1}+\varphi^{-3} \;=\; 0.618034+0.236068 \;=\; 0.854102,\\
+L_{\text{turn}}^{(+)}(U) &= C_+\,Q^- \quad\text{with } C_+=\tfrac12\frac{\sqrt{1+b_+^2}}{b_+}(\varphi^4-1)
+\approx 9.992927 \;\Rightarrow\; L_{\text{turn}}^{(+)}\approx 8.534978,\\
+L_{\text{turn}}^{(-)}(U) &= C_-\,Q^- \quad\text{with } C_-=\tfrac12\frac{\sqrt{1+b_-^2}}{b_-}(\varphi^{-4}-1)
+\approx 1.457948 \;\Rightarrow\; L_{\text{turn}}^{(-)}\approx 1.245237.
+\end{align*}
+(Here $b_\pm=\tfrac{2}{\pi}\ln(\varphi^\pm)$.) These numbers match Eq.\,( \ref{total-action} ): action is linear in $Q^-(U)$.
+
+\subsection*{A2. One tick and the slow rung}
+Let the pre-tick slow prefix be $(01)^2$, i.e.\ $(U_0,U_1,U_2,U_3)=(0,1,0,1)$. Injecting a tick at $k=0$ and applying only $11\!\to\!100$:
+\begin{align*}
+\cdots\mid \underline{0,1},0,1 \;+\; \mathbf e_0 &\;\Rightarrow\; \cdots\mid \underline{1,1},0,1 \;\xRightarrow{11\to100}\; \cdots\mid 0,0,\underline{1,1}
+\\[-0.25em]&\;\xRightarrow{11\to100}\; \cdots\mid 0,0,0,0,1,
+\end{align*}
+so the tick reaches \emph{rung} $n=2$ and leaves a single $1$ at index $2n=4$ (all intermediate slow indices cleared).
+
+\subsection*{A3. Instantiation rate for a species}
+Let the species mask $S$ select depths $\{1,3\}$. Then the expected instantiations per tick are
+\begin{equation*}
+\lambda_S=\sum_{m\in\{1,3\}}\varphi^{-2m}=\varphi^{-2}+\varphi^{-6}
+= 0.381966+0.055728= 0.437694.
+\end{equation*}
+Over $T$ ticks the expected count is $T\,\lambda_S$. The \emph{rest content} of this species is
+\begin{equation*}
+W_S=\sum_{m\in\{1,3\}}\varphi^{-m}=\varphi^{-1}+\varphi^{-3}=0.854102,\qquad
+L_S^{(\sigma)}=C_\sigma\,W_S.
+\end{equation*}
+
+\subsection*{A4. Binding vs.\ scatter by $\varphi$-closure (worked)} 
+Two co-instantiated depths $m$ and $m\!+\!2$ have weights $\varphi^{-m}$ and $\varphi^{-(m+2)}$. Their sum is
+\begin{equation*}
+\varphi^{-m}+\varphi^{-(m+2)}=(\varphi+\varphi^{-1})\varphi^{-(m+1)}=\sqrt5\,\varphi^{-(m+1)}.
+\end{equation*}
+Thus we declare a composite at depth $m{+}1$ plus a \emph{massless} remainder $\gamma$ of size $(\sqrt5-1)\varphi^{-(m+1)}$.
+For $m=2$ one gets numerically
+\begin{align*}
+\varphi^{-m}+\varphi^{-(m+2)}&=0.527864,\\
+\text{composite weight at $m{+}1$}&=\varphi^{-(m+1)}=0.236068,\\
+\gamma\text{ (radiative remainder)}&=(\sqrt5-1)\varphi^{-(m+1)}=0.291796.
+\end{align*}
+Action bookkeeping follows from linearity: $L^{(+)}$ of inputs equals $L^{(+)}$ of outputs.
+
+\subsection*{A5. Z$_3$ spinor cycle (explicit)} 
+Choose $m_0=2$, so the triplet depths are $\{2,4,6\}$ with residues
+\(
+r=\{1,2,0\}=\{(2m)\bmod3\}.
+\)
+Each activation advances the internal phase $p\mapsto p+1$ (mod 3). Expected waiting times per phase step are
+\begin{equation*}
+\mathbb E[\Delta t_k]=\varphi^{2(m_0+2k)}=\{6.854102,\,46.978714,\,321.996894\}.
+\end{equation*}
+
+\subsection*{A6. Branching readout (``big bang'' phase)} 
+If every instantiation becomes a new reader with probability $\alpha=0.120000$ and a reader's mean per-tick output is
+\(
+\lambda_\ast=\sum_{m=1}^4\varphi^{-2m}=0.604878,
+\)
+then the expected reader count grows as
+\begin{equation*}
+\mathbb E\,\mathcal R_t=\mathcal R_0\,(1+\alpha\lambda_\ast)^t
+=\mathcal R_0\,(1.072585)^t.
+\end{equation*}
+This is exponential, while the register and its law remain unchanged.
+
+
+\end{document}

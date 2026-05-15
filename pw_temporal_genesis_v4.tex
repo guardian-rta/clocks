@@ -1,0 +1,310 @@
+
+% =======================================================================
+% pw_temporal_genesis_v4.tex
+% From No Clock to Relational Time: Page–Wooters Genesis of Clocks,
+% AR(∞)->AR(2) Decoherence, Multiplicities, and an Emergent Newtonian Limit
+% =======================================================================
+\documentclass[11pt]{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,mathtools,bm}
+\usepackage{physics}
+\usepackage{graphicx}
+\usepackage{lmodern}
+\usepackage{microtype}
+\usepackage{booktabs}
+\usepackage{hyperref}
+\usepackage[most]{tcolorbox}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,calc,positioning}
+\hypersetup{colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue}
+
+% --- Boxes ---
+\tcbset{sharp corners, colback=white, boxsep=1.0ex}
+\newtcolorbox{mydef}[1]{breakable,colframe=black!55,colback=black!2,title=\textbf{#1}}
+\newtcolorbox{mythm}[1]{breakable,colframe=blue!60!black,colback=blue!2,title=\textbf{#1}}
+\newtcolorbox{myprop}[1]{breakable,colframe=green!60!black,colback=green!2,title=\textbf{#1}}
+\newtcolorbox{proofbox}[1]{breakable,colframe=black!60,colback=black!1,title=\textbf{#1}}
+\newtcolorbox{mybox}[1]{breakable,colframe=black!40,colback=black!3,title=\textbf{#1}}
+
+% --- Shortcuts ---
+\newcommand{\Id}{\mathsf{I}}
+\newcommand{\Adj}{\mathsf{A}}
+\newcommand{\Lap}{\mathsf{L}_\alpha}
+\newcommand{\M}{M}
+\newcommand{\V}{V}
+\newcommand{\Vl}{V_\ell}
+\newcommand{\Q}{Q}
+\newcommand{\Qell}{Q^\ell}
+\newcommand{\Thet}{\Theta}
+\newcommand{\eps}{\varepsilon}
+
+% --- Notation fix: Q_\ell is (det M)^\ell
+\renewcommand{\Qell}{Q_\ell}
+
+\title{\vspace{-0.8cm}\Large From No Clock to Relational Time:\\
+\large Page--Wooters Genesis of Clocks, AR($\infty$)$\to$AR(2) Decoherence, Multiplicities, and an Emergent Newtonian Limit}
+\author{}
+\date{\today}
+
+\begin{document}
+\maketitle
+\vspace{-1.2em}\hrule\vspace{0.6em}
+
+\begin{abstract}
+We rebuild dynamics from a ``clockless'' starting point using Page--Wooters (PW) conditioning.
+A single two-state \emph{transfer engine} $M\!\in\!\mathrm{GL}(2,\mathbb C)$ and an \emph{envelope} $E=\exp(-s\,\Lap^\dagger\Lap)$ ($s$ dimensionless) generate residue tracks that obey an \emph{exact} stride-$\ell$ three-term identity. We show how AR($\infty$) parents reduce to AR(2) surrogates $(V,Q)=(2\rho\cos\theta,\rho^2)$, how decoherence appears as \emph{phase diffusion} with rate $D=\tfrac12 S_\delta(0)$ after demodulation, and how multiplicities arise from residues, spin-structure, and composite monodromies. A finite-loop bridge bounds the gap between envelope transport and Levi--Civita holonomy. In a Newtonian/weak-field limit, clock-rate inhomogeneities sourced by low-frequency phase noise lead to a discrete Poisson equation whose continuum limit is $\nabla^2\Phi=4\pi G\rho$.
+\end{abstract}
+
+\tableofcontents
+\vspace{0.6em}\hrule\vspace{0.8em}
+
+% =======================================================================
+\section{Symbols, Units, and Standing Conventions}
+% =======================================================================
+\begin{center}
+\begin{tabular}{@{}llp{8.1cm}@{}}
+\toprule
+Symbol & Units & Meaning \\
+\midrule
+$a$ & length & graph spacing (lattice constant) \\
+$\tau$ & time & one update step; \emph{per-step} quantities are dimensionless \\
+$E$ & --- & envelope per step: $E=\exp(-s\,\Lap^\dagger\Lap)$ \\
+$s$ & 1 & envelope strength $s=\sigma^2\kappa\,\tau$ (dimensionless) \\
+$\sigma^2,\kappa$ & $1/\text{time}$, $1/\text{length}^2$ & envelope noise level and stiffness (appear only in $s$) \\
+$\Lap$ & $1/\text{length}$ & PSD Laplacian: $(\Id-\alpha\Adj)^\dagger(\Id-\alpha\Adj)$, choose $0<\alpha<\|\Adj\|_2^{-1}$ \\
+$\Lambda_{\max}$ & 1 & largest singular value of $\Lap$ (dimensionless after $a$ absorbs units) \\
+$\M$ & --- & $2\times 2$ transfer per step ($\M\in\mathrm{GL}(2,\mathbb C)$) \\
+$V_\ell,\ Q_\ell$ & --- & $V_\ell=\mathrm{tr}(\M^\ell)$, $Q_\ell=(\det\M)^\ell$ \\
+$r_\pm$ & --- & roots of $z^2-\Vl z+\Qell$, write $r_\pm=\rho e^{\pm i\theta}$ when $0<\rho\le1$ \\
+$\varepsilon(\mathbf q)$ & rad/step & per-step band phase; group velocity $a\nabla_{\mathbf q}\varepsilon$ \\
+$\Thet^a{}_i$ & 1 & clock-tensor (coframe): $e^a=\Thet^a{}_i\,dx^i$ \\
+$\omega,\ \Omega$ & 1 & connection one-form and curvature two-form for the induced Levi--Civita structure \\
+$F^a{}_{ij}$ & 1 & antisymmetric defect: $\partial_i\Thet^a{}_j-\partial_j\Thet^a{}_i$ \\
+$D$ & $1/\text{step}$ & dephasing rate; $D=\tfrac12 S_\delta(0)$ from demodulated phase noise \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\paragraph{Group and inner product.}
+We allow gain/loss ($M\in\mathrm{GL}(2,\mathbb C)$). When convenient, define the SL-normalized
+$\widetilde M:=M/(\det M)^{1/2}\in\mathrm{SL}(2,\mathbb C)$. Then
+$\widetilde Q_\ell=1$ and $\widetilde V_\ell=(\det M)^{-\ell/2}\,V_\ell$.
+Note the decimated law in \eqref{eq:engine} transforms accordingly; we do not claim $V_\ell$
+is invariant under this normalization.
+
+
+% =======================================================================
+\section{Layer 0: ``No Clock'' as Label Space with Probes and Twists}
+% =======================================================================
+We start with a finite label set $\mathcal E$ (no order) and three \emph{probes}:
+(i) a \emph{localizer} that defines supports (what can co-occur),
+(ii) a \emph{transfer test} that measures a $2\times2$ response on small supports, and
+(iii) a $\mathbb Z_2$ \emph{twist} that flips a sign when a loop is traversed once (a Möbius identification).
+These are \emph{regulators} and \emph{diagnostics}, not ontological time.
+Only after choosing a section (gauge) that lists labels do we \emph{name} indices $k\in\mathbb Z$ and speak about ``updates.''
+This avoids the ``no-clock'' paradox by keeping order as gauge, not as axiom.
+
+% =======================================================================
+\section{PW Conditioning and the Exact Engine Identity}
+% =======================================================================
+\begin{mydef}{Discrete PW constraint and conditioning}
+Let $\mathcal H_C\otimes\mathcal H_S$ carry a joint state $\ket{\Psi}$ that satisfies a discrete PW-style constraint $(U_C\otimes U_S)\ket{\Psi}=\ket{\Psi}$.
+Conditioning on a clock sector $\ket{t}$ yields an \emph{operational} update on $S$ generated by a transfer $\M$ acting on two-component observables (spinors) extracted by the probes.
+\end{mydef}
+
+\begin{mythm}{Universal decimated three-term law (exact)}
+For stride $\ell\ge1$ and any residue track $y^{(r)}_t=x_{r+\ell t}$ obtained from a linear observable of the two-state engine,
+\begin{equation}
+y^{(r)}_{t+2}-V_\ell\,y^{(r)}_{t+1}+Q_\ell\,y^{(r)}_{t}=0,\qquad
+V_\ell=\mathrm{tr}(\M^\ell),\quad Q_\ell=(\det\M)^\ell.
+\label{eq:engine}
+\end{equation}
+\end{mythm}
+
+\begin{proofbox}{Cayley--Hamilton on $M^\ell$}
+The characteristic polynomial of $\M^\ell$ is $\lambda^2-\Vl\lambda+\Qell$.
+Apply it to any state segment and project with a linear functional; details as in the standard 2$\times$2 CH proof.
+\end{proofbox}
+
+\paragraph{Unitary specialization.}
+If $\M\in\mathrm{SU}(2)$ then $Q_\ell=1$ and $|V_\ell|\le2$; write $V_\ell=2\cos\phi_\ell$ and $r_\pm=e^{\pm i\phi_\ell}$.
+
+% =======================================================================
+\section{AR($\infty$) Parent $\Rightarrow$ AR(2) Surrogate and Decoherence}
+% =======================================================================
+\begin{myprop}{Pad\'e reduction around a dominant conjugate pair}
+Assume a coarse observable has an AR($\infty$) representation whose transfer has a dominant pair $r_\pm=\rho e^{\pm i\theta}$ ($0<\rho\le 1$).
+Then a $[1/1]$ Pad\'e match yields the AR(2) surrogate
+\begin{equation}
+x^{(2)}_{t+2}-V\,x^{(2)}_{t+1}+Q\,x^{(2)}_{t}=u_t,\qquad
+V=2\rho\cos\theta,\quad Q=\rho^2,
+\label{eq:ar2sur}
+\end{equation}
+which reproduces the pair exactly and pushes all other poles/zeros into the MA($\infty$) innovation $u_t$.
+\end{myprop}
+
+\paragraph{Model-selection diagnostics.}
+Empirically require a gap between $|r_+|$ and the largest tail amplitude (e.g.\ $\gtrsim1.2$) and whiteness of $u_t$ (Ljung--Box at 5\%).
+
+\paragraph{Decoherence as phase diffusion.}
+Demodulate the leading mode $a_t$ and model multiplicative phase noise
+\begin{equation}
+a_{t+1}=\rho\,e^{i(\theta+\delta_t)}a_t,\qquad \mathbb E\,\delta_t=0.
+\end{equation}
+Then
+\begin{equation}
+|\mathcal C(t)|:=\frac{|\mathbb E[a_t\overline{a_0}]|}{\mathbb E|a_0|^2}\ \approx\ \rho^{\,t}\,e^{-\frac12 S_\delta(0)\,t},
+\qquad D:=\tfrac12 S_\delta(0).
+\end{equation}
+In an additive picture $a_{t+1}=r_+ a_t+\xi_t$ (small noise), $\delta_t\approx\Im\!\big(\xi_t/(r_+a_t)\big)$; estimate $S_\delta(0)$ from demodulated, amplitude-weighted residuals.
+
+% =======================================================================
+\section{Birth of Clocks: Net-Zero Sources and Ring Green Functions}
+% =======================================================================
+Consider the forced decimated law $x_{m+1}-Vx_m+Qx_{m-1}=s_m$ with a net-zero probe (e.g.\ opposite signs half a macrocycle apart). 
+On an $L$-site ring,
+\[
+G^{(L)}_n=\frac{1}{L}\sum_{k=0}^{L-1}
+\frac{e^{2\pi i k n/L}}{\,V-2\sqrt{Q}\cos(2\pi k/L)\,}.
+\]
+A \emph{net-zero} source has $S(0)=0$, so the DC Fourier bin ($k=0$) is not excited.
+Handle the resonance $V=2\sqrt Q$ by continuity (double-root/pseudoinverse limit).
+For $Q=1$, $V=2\cos\phi$ and large $L$, $G^{(L)}_n\to \sin(n\phi)/\sin\phi$.
+
+\paragraph{Binary spin-structure probe (PBC vs APBC).}
+A discrete Dirac operator on a time circle has a PBC zero mode and an APBC gap $\pi/T$; in data \emph{estimators} built from conditioned streams exhibit a sign flip $\widehat V_L^{\rm APBC}\!=\!-\widehat V_L^{\rm PBC}$ while the intrinsic $V_L=\mathrm{tr}(M^L)$ is unchanged. 
+
+\begin{proofbox}{Least-squares flip at stride $L$}
+\(\widehat V_L=\dfrac{\sum_t (y_{t+2}\overline{y_{t+1}}+y_t\overline{y_{t+1}})}
+{\sum_t |y_{t+1}|^2}\).
+Under APBC, \(y_t\mapsto (-1)^t y_t\): the numerator picks up \((-1)\) and the
+denominator does not, hence \(\widehat V_L\mapsto -\widehat V_L\).
+\end{proofbox}
+
+
+% =======================================================================
+\section{Multiplicity Mechanisms and Species Labels}
+% =======================================================================
+Residue multiplicity (stride $\ell$) gives up to $\ell$ independent tracks (decoupled at scale set by the envelope gap).
+Topological/holonomy multiplicity (PBC/APBC, Möbius vs circle, Pin$^\pm$) yields protected doublets.
+Composite multiplicities arise from noncommuting steps via the Magnus expansion; effective traces $V_\ell(M_{\rm eff})$ bifurcate with commutators.
+
+\begin{mydef}{Operational species label}
+\(\Lambda=\big(\ell,\ V_\ell,\ Q_\ell,\ r_\pm,\ \chi\in\{\pm1\},\ (c_0,c_1),\ \mathrm{hol}\big)\),
+where $\chi$ is PBC/APBC parity, $(c_0,c_1)$ are checksums (TKNN-like gap labels), and $\mathrm{hol}$ records the holonomy class.
+\end{mydef}
+
+% =======================================================================
+\section{Envelope Locality and Speed Limits (dimensionless $s$)}
+% =======================================================================
+Per step, use $E=\exp(-s\,\Lap^\dagger\Lap)$ with $s=\sigma^2\kappa\tau$.
+A Fourier/group-velocity bound reads
+\begin{equation}
+v_{\max}\ \lesssim\ \frac{a\,\sup_{\mathbf q}\|\nabla_{\mathbf q}\varepsilon(\mathbf q)\|}{1+s\,\Lambda_{\max}^2},
+\quad\text{or}\quad
+v_{\max}\ \lesssim\ \frac{2 a\,\|\widehat K\|\,\Delta}{1+s\,\Lambda_{\max}^2}
+\end{equation}
+for local degree $\Delta$.
+For directed/weighted graphs choose $0<\alpha<\|\Adj\|_2^{-1}$ so that $\Lap=(\Id-\alpha\Adj)^\dagger(\Id-\alpha\Adj)$ is well-conditioned and use singular-value radii.
+
+% =======================================================================
+\section{Finite-Loop Bridge to Levi--Civita Transport}
+% =======================================================================
+Let $e^a=\Thet^a{}_i\,dx^i$ be the coframe and $F^a{}_{ij}=\partial_i\Thet^a{}_j-\partial_j\Thet^a{}_i$ the antisymmetric defect.
+With mesh $h$ and loop diameter $\ell$,
+\begin{equation}
+\|P_{\rm env}(C)-H_{\rm LC}(C)\|\ \le\ C\Big(\sqrt{\!\int_{\Sigma(C)}\!\!\|F\|^2\,dA}\ +\ h\ +\ \ell^3\|\nabla\Omega\|_\infty\ +\ \mu^{-1}s\,\ell\Big).
+\label{eq:bridge}
+\end{equation}
+\emph{Idea of proof.} (i) Strang splitting + BCH along edges bounds noncommutativity (the $s$-term);
+(ii) non-Abelian Stokes converts loop differences to surface integrals (the $F$-term); (iii) Poincar\'e/trace yields $L^2$ bounds on boundary integrals; (iv) Taylor remainders give the $\ell^3$ term.
+
+% =======================================================================
+\section{Emergent Newtonian Limit from AR($\infty$) Tails}
+% =======================================================================
+In the weak-field/quasi-static regime, gravitational time dilation reads $g_{00}\approx-(1+2\Phi)$ (units $c=1$). In our operational setting the local clock-rate shift is encoded by low-frequency phase noise $S_\delta(0,\mathbf x)$ (after demodulation).
+
+\begin{myprop}{Discrete Poisson law (operational, calibrated)}
+Let the demodulated phase-increment process $\delta_t(\mathbf x)$ be stationary with
+zero-frequency power $S_\delta(0,\mathbf x)$ (units: $1/\text{step}$). Define a
+\emph{dimensionless} potential by
+\[
+\Phi(\mathbf x)=\gamma_G\,\tau\,S_\delta(0,\mathbf x),
+\]
+so that $\gamma_G$ is a dimensionless calibration constant (set once by a reference
+redshift experiment). On a graph,
+\[
+(\Delta_a \Phi)(\mathbf x):=\frac{1}{a^2}\!\sum_{\mathbf y\sim \mathbf x}\!
+\big(\Phi(\mathbf y)-\Phi(\mathbf x)\big)=4\pi G\,\rho(\mathbf x),
+\quad \rho(\mathbf x)=\alpha\,S_\delta(0,\mathbf x),
+\]
+with $\alpha$ absorbing units (kg·s per step in SI). As $a\to0$ one recovers
+$\nabla^2\Phi=4\pi G\rho$.
+\end{myprop}
+
+\paragraph{Assumptions and test.}
+Quasi-static, weak-field (Newtonian gauge), and short-loop bridge error in \eqref{eq:bridge}.
+Calibrate $\gamma_G$ once using a known potential difference (e.g., vertical redshift
+over height $H$), then \emph{predict} $\Phi$ from $S_\delta(0)$ in new regions.
+Report $\Delta\Phi/\Phi$ and a bootstrap CI.
+
+
+\begin{proofbox}{Sketch}
+The bridge \eqref{eq:bridge} implies that small-loop holonomies collapse to the Levi--Civita limit controlled by $F$ and its gradients.
+In the Newtonian gauge, spatial curvature is negligible and $g_{00}$ dominates; phase slippage (clock-rate noise) accumulates along $t$ and induces an effective potential $\Phi$ via \eqref{eq:constitutive}.
+Conservation on the graph (net-zero probes) yields a discrete divergence law taking the form \eqref{eq:discpoisson}; the continuum follows from $a\to0$.
+\end{proofbox}
+
+\paragraph{Interpretation.}
+AR($\infty$)$\to$AR(2) is a controlled coarse-graining.
+The coherent two-pole core is the ``system''; the tail is an ``environment'' whose low-frequency phase power acts as a \emph{mass density proxy}.
+This aligns with gravity--decoherence hypotheses: mass-energy inhomogeneities (phase noise power) set the Newtonian potential via the Poisson law.
+
+% =======================================================================
+\section{Experiments and Estimators (Reproducible Recipes)}
+% =======================================================================
+\begin{mybox}{A/B: PBC vs APBC (operational flip)}
+Fit AR(2) on identical streams under PBC and APBC; report $(\widehat V_L,\widehat Q_L)$ and the demodulated $(\widehat\rho,\widehat D)$.
+Expect a sign flip of $\widehat V_L$; the intrinsic $V_L$ is unchanged.
+\end{mybox}
+
+\begin{mybox}{Tail and decoherence sweep}
+Synthetically vary tail power to scan $\rho$ and $D$; compare empirical $|\mathcal C(t)|$ to the prediction $|\widehat r_+|^t e^{-\widehat D t}$.
+\end{mybox}
+
+\begin{mybox}{Finite-loop calibration}
+On a grid with known curvature, vary $h$, $\ell$, and $s$ to measure each contribution in \eqref{eq:bridge} (log--log slopes). 
+\end{mybox}
+
+\paragraph{Minimal estimator (Python-like pseudocode).}
+\begin{verbatim}
+# Fit AR(2): y_{t+2} = V y_{t+1} - Q y_t + u_t
+# Get r_plus, demodulate, estimate D = 0.5 * S_delta(0)
+\end{verbatim}
+
+% =======================================================================
+\section*{Acknowledgments and Cross-References}
+The binary PBC/APBC spectral gap for the time-circle Dirac operator and the checksum demo are elaborated in our short note \emph{``Net--Zero Yet Infinite Time''} (spectral proof, figures).
+
+% =======================================================================
+\appendix
+\section{Details: CH Proof, Ring Green's Function, and Phase-Diffusion Estimator}
+\subsection*{A. CH proof on $M^\ell$}
+Explicit matrices, recursion for $M^\ell$, and projection show \eqref{eq:engine}.
+
+\subsection*{B. Ring Green's function}
+Fourier synthesis on $\mathbb Z/L\mathbb Z$ yields $G^{(L)}_n$ and $\sum G^{(L)}_n=0$ (net-zero).
+
+\subsection*{C. Robust $S_\delta(0)$ at zero frequency}
+Use Bartlett weights $w_k=1-k/(W+1)$ on autocovariances $\gamma(k)$ up to lag $W$:
+$S_\delta(0)=\gamma(0)+2\sum_{k=1}^{W} w_k\,\gamma(k)$, with amplitude-gated phase increments.
+
+\section{Sketches: Strang+BCH, non-Abelian Stokes, and Poincar\'e/trace}
+We bound nested commutators (order $s$), surface terms via $F$, and boundary integrals by $L^2$ energies.
+
+\section{Directed graphs: safe $\alpha$ and singular-value radii}
+Choose $\alpha\in(0,\|\Adj\|_2^{-1})$; replace eigenvalues by singular values in all spectral bounds and estimators.
+
+\end{document}

@@ -1,0 +1,261 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=1in]{geometry}
+\usepackage{amsmath,amsthm,amssymb,mathtools}
+\usepackage{microtype}
+\usepackage{hyperref}
+\hypersetup{colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue}
+
+\title{\textbf{Chebyshev--Lucas Error Correction in Decimated Transfer--Matrix Chains:\\
+A Simple, First--Principles Framework with Robust Decoding}}
+\author{VR \& AI}
+\date{\today}
+
+% theorem envs
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{example}[theorem]{Example}
+
+% macros
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\tr}{\mathrm{tr}}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+We show that any one--dimensional medium governed by a constant $2\times2$ unit--cell transfer matrix $M$ admits a \emph{universal tri--site recurrence} when stroboscopically sampled every $l$ sites:
+\[
+x_{k+2l}\;-\;V_l\,x_{k+l}\;+\;Q^l\,x_k \;=\; 0,\qquad V_l=\tr(M^l),\ \ Q=\det M,\ \ Q^l=\det(M^l)=(\det M)^l.
+\]
+This identity follows directly from Cayley--Hamilton applied to the $l$--step monodromy $M^l$.
+We recast it as a \emph{convolutional constraint} for \emph{event--coded} measurements and obtain a
+\emph{Chebyshev--Lucas checksum} enabling noise--robust decoding via a finite--state trellis (Viterbi/dynamic programming).
+We give rules for choosing the alphabet and window, prove existence of a unique maximum--likelihood (ML) decoded sequence on a finite window, derive logarithmic bounds on the occupied support radius under repeated injection, and extend the construction to weakly coupled multi--track systems by diagonalizing transverse modes.
+We also clarify when ``symmetric regrouping'' into Dickson polynomials applies, provide a counterexample showing the checksum alone is not injective (hence normalization/ML decoding matters), and include concrete validation metrics.
+\end{abstract}
+
+\tableofcontents
+
+\section{From unit cell to decimated tri--site identity}
+\subsection{First principles: second order $\Rightarrow$ $2\times2$ transfer}
+Many one--dimensional media reduce to a scalar second--order recurrence after eliminating a conjugate variable (momentum/flux):
+\begin{equation}\label{eq:secondorder}
+x_{k+1} \;=\; P\,x_k \;-\; Q\,x_{k-1},\qquad P,Q\in\C,\ Q\neq 0.
+\end{equation}
+Collecting into a first--order map,
+\begin{equation}\label{eq:transfer}
+\binom{x_{k+1}}{x_k}\;=\; M\,\binom{x_k}{x_{k-1}},\qquad
+M=\begin{pmatrix} P & -Q\\[2pt] 1 & 0\end{pmatrix},\quad \tr M=P,\ \det M=Q.
+\end{equation}
+
+\subsection{Cayley--Hamilton on the $l$--step monodromy}
+\begin{proposition}[Decimated recurrence]\label{prop:decimated}
+For any $l\in\N$,
+\begin{equation}\label{eq:decimated}
+M^{2l} - \tr(M^l)\,M^l + \det(M^l)\,I \;=\; 0.
+\end{equation}
+Applying~\eqref{eq:decimated} to $\binom{x_k}{x_{k-1}}$ and taking the first component yields
+\begin{equation}\label{eq:trisite}
+x_{k+2l}-V_l\,x_{k+l}+Q^l\,x_k=0,\qquad V_l:=\tr(M^l),\ Q^l:=\det(M^l)=(\det M)^l.
+\end{equation}
+\end{proposition}
+\begin{remark}[Lucas/Dickson polynomials]
+If $\lambda_\pm$ are eigenvalues of $M$, then $V_l=\lambda_+^l+\lambda_-^l$ obeys $V_{n+1}=P V_n - Q V_{n-1}$ with $V_0=2$, $V_1=P$.
+\end{remark}
+
+\section{Events, anchor, and the Chebyshev--Lucas checksum}
+\subsection{Eventization (operational)}\label{subsec:eventization}
+Fix measurement cadence $\Delta t$. For each site $t$ let $E_t[n]$ be integrated power/flux in window $n$.
+Choose a quantum/threshold $\varepsilon>0$ and set
+\begin{equation}\label{eq:event}
+\delta N_t[n]\;:=\;\Big\lfloor \frac{E_t[n]-E_t[n-1]}{\varepsilon}\Big\rfloor \in \Z_{\ge 0},\qquad
+T_s:=\sum_n \delta N_s[n].
+\end{equation}
+An \emph{event} at $(t,n)$ is $\delta N_t[n]>0$. The \emph{anchor} experiment restricts events to $s=0$ (or pre--aligns them by virtual index shifts).
+
+\subsection{Invariant and checksum; when ``symmetric regrouping'' applies}
+Let $r$ be a root of $z^2 - V_l z + Q^l=0$ with $|r|\ge 1$ (the other root is $Q^l/r$).
+For integer sequences $d=\{d_k\}$ with finite support define
+\begin{equation}
+I(d)\;=\;\sum_k d_k r^k.
+\end{equation}
+\begin{lemma}[Invariance under a tri--site move]\label{lem:invariance}
+The local update $(d_{t-1},d_t,d_{t+1})\mapsto (d_{t-1}+Q^l,\ d_t-V_l,\ d_{t+1}+1)$ leaves $I(d)$ unchanged.
+\end{lemma}
+\begin{proof}
+The change is $-V_l r^t + r^{t+1}+Q^l r^{t-1}=0$ by the characteristic equation.
+\end{proof}
+
+\begin{theorem}[Generalized checksum]\label{thm:checksum}
+If $d$ is obtained from an event stream $\{\delta N_s[n]\}$ by any sequence of local tri--site moves, then
+\begin{equation}\label{eq:general-checksum}
+\sum_{k} d_k\,r^k \;=\; \sum_{s} T_s\, r^{s}.
+\end{equation}
+\end{theorem}
+\begin{proof}
+Each unit event at site $s$ increases $I$ by $r^s$. Lemma~\ref{lem:invariance} shows $I$ is invariant under subsequent tri--site moves.
+\end{proof}
+
+\paragraph{Symmetric regrouping (Dickson form).}
+On a \emph{symmetric window} $[-R,R]$ and when the decoded digits satisfy $d_{-t}=d_t$ (e.g., due to symmetric injection/BC or explicit symmetrization of the window), one may regroup
+\begin{equation}\label{eq:dickson}
+\sum_{k=-R}^{R} d_k r^k \;=\; d_0 + \sum_{j=1}^{R} d_j\,\big(r^j + (Q^l/r)^j\big) \;=\; d_0 + \sum_{j=1}^{R} d_j\,D_j(V_l,Q^l),
+\end{equation}
+where $D_0=2$, $D_1=V_l$, and $D_{j+1}=V_l D_j - Q^l D_{j-1}$ are Dickson polynomials ($D_j(V_l,Q^l)=r^j+(Q^l/r)^j$).
+Without symmetry, keep the two geometric progressions separately; the invariant~\eqref{eq:general-checksum} still holds.
+
+\begin{example}[Illustration for $l=1$]\label{ex:l1}
+Let $M=\begin{psmallmatrix}P&-Q\\1&0\end{psmallmatrix}$ with $P=1$, $Q=-1$ so $V_1=1$, $Q^1=-1$, and $r$ solves $r^2-r-1=0$ ($r=\varphi$).
+Anchor events $T=5$ yield decoded digits $d_0=5$, others zero: $\sum_k d_k r^k=5$ matches~\eqref{eq:general-checksum}.
+With $T=11$, a carry creates $(d_{-1},d_0,d_{+1})=(1,8,1)$, giving $11=8+1\cdot(r+(Q/r))=8+1\cdot D_1(V_1,Q^1)$.
+\end{example}
+
+\section{Decoding on a window: trellis, design rules, and streaming}
+We observe $m_t=d_t+\eta_t$ on $t\in[-R,R]$.
+\begin{definition}[Decoder (nearest--integer, constrained)]\label{def:decoder}
+\begin{equation}\label{eq:decoder}
+\hat d \in \arg\min_{d\in\mathcal D^{2R+1}} \ \sum_{t=-R}^{R} w_t\,|d_t - m_t|^2
+\quad \text{s.t.}\quad d_{t+1}=V_l d_t - Q^l d_{t-1}\ \ \forall t\in[-R,R-1].
+\end{equation}
+\end{definition}
+\begin{proposition}[Finite--state trellis]\label{prop:trellis}
+States are pairs $(a,b)=(d_{t-1},d_t)\in\mathcal D^2$.
+A transition $(a,b)\to (b,c)$ is allowed if $c=V_l b - Q^l a$ lies in $\mathcal D$ (soft trellis: $c=\mathrm{round}(\cdot)$ with a penalty).
+Dynamic programming yields the ML path in $O(R\,|\mathcal D|^2)$ time.
+\end{proposition}
+
+\paragraph{Design rules (alphabet and window).}
+Let $r>1$ be the larger root of $z^2-V_l z+Q^l=0$.
+For nonnegative $\mathcal D^+=\{0,1,\dots,A\}$, avoid saturation by
+\begin{equation}\label{eq:Amin}
+A_{\min}(R)\ :=\ \Big\lceil \frac{T_{\max}}{\,1+\sum_{j=1}^{R} D_j(V_l,Q^l)\,} \Big\rceil,\qquad
+A \;=\; \max\!\Big\{\,A_{\min}(R),\ \big\lfloor \sqrt{|V_l|}\,\big\rfloor \Big\},
+\end{equation}
+and choose
+\begin{equation}\label{eq:Rchoice}
+R \;=\; \Big\lceil \log_r\!\Big(1+\frac{(r-1)T_{\max}}{A}\Big)\Big\rceil - 1 \;+\; m,\qquad m\in\{2,3\}.
+\end{equation}
+Balanced $\mathcal D^\pm=\{-A,\dots,A\}$ uses the same rules.
+
+\paragraph{Streaming (guard states).}
+Maintain a sliding window. At each step, freeze the left guard pair $(d_{-R-1},d_{-R})$ from the previous solution,
+prune transitions violating the recurrence at $t=-R$, and run one DP pass over $[-R{+}1,\dots,R{+}1]$.
+This yields amortized $O(|\mathcal D|^2)$ updates per cadence.
+
+\subsection{Noise tolerance (explicit constants)}\label{subsec:noise}
+Assume $m_t=d_t+\eta_t$ with i.i.d.\ $\eta_t\sim\mathcal N(0,\sigma^2)$ and $d$ supported on $[-R,R]$.
+A union bound over trellis paths gives
+\begin{equation}\label{eq:sigmastar}
+\mathbb P(\hat d \neq d) \ \le\ C_R \exp\!\Big(-\frac{d_{\min}^2}{8\sigma^2}\Big),
+\qquad C_R \ \le\ (2R{+}1)\,|\mathcal D|^2,
+\end{equation}
+where $d_{\min}$ is the minimum Euclidean distance between distinct trellis paths and obeys the conservative estimate
+\begin{equation}
+d_{\min}^2 \ \gtrsim\ \min\{ r^{2R},\ (Q^l/r)^{2R}\}.
+\end{equation}
+Thus one admissible operating point is $\sigma_\star \le \frac{1}{\sqrt 8}\min\{ r^{R}, (Q^l/r)^{R}\}$.
+
+\section{Support radius under repeated anchor injection}
+Let $R(T)=\max\{|t|:\ d_t(T)\neq 0\}$ after $T$ anchor events and decoding.
+Define
+\begin{equation}\label{eq:SR}
+S_R(V_l,Q^l)\ :=\ 1+\sum_{j=1}^{R} D_j(V_l,Q^l).
+\end{equation}
+\begin{proposition}[Maximal representable count at radius $R$]\label{prop:Tmax}
+For $\mathcal D^+=\{0,\dots,A\}$,
+\begin{equation}\label{eq:Tmax}
+T_{\max}(R)\;=\; A\,S_R(V_l,Q^l).
+\end{equation}
+\end{proposition}
+\begin{remark}[Why $S_R$ starts with $1$ (not $D_0$)]
+The checksum~\eqref{eq:dickson} uses $d_0$ with coefficient $1$ (the term $r^0$), whereas $D_0=2$ corresponds to the symmetric combination $r^0 + (Q^l/r)^0=2$.
+Maximizing $T$ at fixed radius sets all digits $(d_0,d_1,\dots,d_R)$ to $A$, yielding
+$T_{\max}=A\,(1+\sum_{j=1}^{R} D_j)$, consistent with~\eqref{eq:SR}.
+\end{remark}
+Using $D_j(V_l,Q^l)=r^j+(Q^l/r)^j$ gives
+\begin{equation}
+\frac{r^{R+1}-1}{r-1}\ \le\ S_R(V_l,Q^l)\ \le\ \frac{2(r^{R+1}-1)}{r-1}.
+\end{equation}
+\begin{theorem}[Bounds and scaling]\label{thm:Rbounds}
+\begin{equation}\label{eq:Rbounds}
+\Big\lceil \log_r\!\Big(1+\frac{(r-1)T}{2A}\Big)\Big\rceil -1 \ \le\ R(T)\ \le\
+\Big\lceil \log_r\!\Big(1+\frac{(r-1)T}{A}\Big)\Big\rceil -1.
+\end{equation}
+Hence $R(T)=\Theta(\log_r T)$ for $r>1$.
+\end{theorem}
+\begin{remark}[Marginal $r\approx 1$]
+If $|V_l|\approx 2\sqrt{Q^l}$ then $r\approx 1$ and confinement degrades; choose the stride $l$ (supercell/Floquet) to enforce $|V_l|\ge 2\sqrt{Q^l}+\varepsilon$.
+\end{remark}
+
+\section{Uniqueness: what is and is not determined}\label{sec:uniqueness}
+\paragraph{Checksum is not injective (counterexample).}
+Let $\Delta$ be zero everywhere except at $(t{-}1,t,t{+}1)$ with values $(Q^l,\ -V_l,\ 1)$.
+Then $\sum_k \Delta_k r^k=0$ by the characteristic equation. Thus the checksum \emph{alone} does not determine $d$.
+
+\paragraph{Anchor case: uniqueness via normalization/ML on a window.}
+On a finite window with a fixed alphabet and the recurrence constraint~\eqref{eq:decoder}, the ML decoder is a strictly convex quadratic over a finite trellis;
+ties are broken deterministically by the DP backtrack, hence the decoded $\hat d$ is \emph{unique}.
+This matches the canonical normal form selected by the local normalization calculus.
+
+\paragraph{Multi--site events.}
+For general $\{T_s\}$, the checksum~\eqref{eq:general-checksum} fixes $\sum_k d_k r^k$ but, by the counterexample, does not \emph{by itself} fix $d$.
+Uniqueness is recovered by the same ML principle on a window (fixed alphabet, recurrence constraints) and, if desired, symmetric windows (which eliminate sign--flip ambiguities by construction).
+When per--site totals are known, one may pre--align to the anchor frame and decode per shift; the superposition is then validated by the generalized checksum.
+
+\section{Cross--track coupling: per--mode generalization and norms}
+For a multi--track chain with nearest--track coupling, transverse Fourier diagonalization yields per--mode transfers $M(\theta)$.
+We use the operator norm $\|\cdot\|_2$ unless otherwise stated.
+\begin{proposition}[Per--mode decimation]\label{prop:modal}
+Each mode $\theta$ obeys
+\begin{equation}\label{eq:mode}
+x^{(\theta)}_{k+2l} - V_l(\theta)\,x^{(\theta)}_{k+l} + Q^l(\theta)\,x^{(\theta)}_k=0,\qquad
+V_l(\theta)=\tr(M(\theta)^l),\ \ Q^l(\theta)=\det(M(\theta)^l).
+\end{equation}
+\end{proposition}
+\paragraph{Quantitative robustness.}
+If $M(\theta)\mapsto M(\theta)+E(\theta)$ with perturbation $E$, then
+\begin{equation}
+\big|\tr((M+E)^l)-\tr(M^l)\big| \ \le\ l\,\|M\|_2^{\,l-1}\,\|E\|_2 + O(\|E\|_2^2).
+\end{equation}
+We call coupling \emph{weak at level $\delta$} if $l\,\|M\|_2^{\,l-1}\,\|E\|_2\le \delta\,|\tr(M^l)|$ uniformly in $\theta$;
+under this condition the per--mode checksum is accurate to $O(\delta)$.
+
+\section{Choosing the stride $l$ (natural origins)}
+\begin{itemize}
+\item \textbf{Supercell:} $l$ equals the microperiod (geometry).
+\item \textbf{Floquet locking:} with phase advance $\theta$ per site, pick $l$ s.t.\ $\theta/\pi=p/l$ rational, making $V_l=2\cos(l\theta)$ typically small integers.
+\item \textbf{Topology:} on a ring, one round--trip per residue class $\Rightarrow$ decimation by $l$; APBC ($\pi$--flux) flips the global holonomy.
+\end{itemize}
+
+\section{Experimental protocols and validation metrics}
+P0--P4 as in the main version, with added plots: checksum accuracy vs.\ $\sigma/\sigma_\star$, decoder success rate vs.\ $\sigma/\sigma_\star$, and $R(T)$ scaling with the theoretical bounds.
+
+\section{Related work (selected)}
+\begin{itemize}
+\item \textbf{Transfer matrices and decimation:} G.\ Economou, \emph{Green's Functions in Quantum Physics}, 3rd ed., Springer, 2006.
+\item \textbf{Chebyshev polynomials:} T.\ J.\ Rivlin, \emph{Chebyshev Polynomials}, 2nd ed., Wiley, 1990.
+\item \textbf{Dickson polynomials:} R.\ Lidl and H.\ Niederreiter, \emph{Finite Fields}, Cambridge Univ.\ Press, 1997 (see chs.\ on Dickson polynomials).
+\item \textbf{Convolutional codes and trellises:} A.\ J.\ Viterbi, ``Error bounds for convolutional codes and an asymptotically optimum decoding algorithm,'' \emph{IEEE Trans.\ Inf.\ Theory}, 1967; G.\ D.\ Forney Jr., ``Convolutional codes I: Algebraic structure,'' \emph{IEEE Trans.\ Inf.\ Theory}, 1970.
+\end{itemize}
+\paragraph{Contrast to classical trellises.}
+Classical trellises are engineered algebraically; here the parity constraint (kernel) and alphabet are \emph{medium--determined} via $(V_l,Q^l)$ from the unit cell and the chosen stride $l$ (supercell/Floquet/topology). This enables error--checked, event--coded metrology without explicit coding hardware.
+
+\section*{Acknowledgments}
+We thank the transfer--matrix, special polynomial, and coding theory communities for foundational ideas.
+
+\appendix
+\section{Additional proofs}
+\begin{proof}[Proof of Proposition~\ref{prop:decimated}]
+Cayley--Hamilton on $M^l$ gives $M^{2l}-(\tr M^l)M^l+(\det M^l)I=0$. Acting on $\binom{x_k}{x_{k-1}}$ and taking the first component yields~\eqref{eq:trisite}.
+\end{proof}
+\begin{proof}[Lemma~\ref{lem:invariance}]
+Immediate from $r^2-V_l r + Q^l=0$.
+\end{proof}
+\end{document}

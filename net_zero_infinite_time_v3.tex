@@ -1,0 +1,124 @@
+
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{microtype}
+\usepackage{hyperref}
+\hypersetup{colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue}
+\usepackage{graphicx}
+
+% Theorem-like environments
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\title{\textbf{Net--Zero Yet Infinite Time:\\
+A M\"obius Time Cycle with Exact Green's Functions, a Binary Floquet Test,\\
+and Explicit Spinor Checks (Spectral/Checksum)}}
+
+\author{VR \& AI}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+We formalize the idea that a \emph{temporal} M\"obius cycle enforces zero oriented DC (``net--zero time'') while the universal cover accumulates events without bound (``infinite time'').
+The framework is the $l$--decimated three--term law with closed--form Green's functions. A \emph{binary, falsifiable} prediction follows:
+if one macrocycle contains $L=l$ steps, switching PBC$\leftrightarrow$APBC flips the center coefficient $V_l$ while $Q_l$ is unchanged.
+To strengthen reproducibility, we add two concrete pieces: (i) an explicit spectral proof that APBC gaps the time--circle Dirac operator while PBC admits a zero mode,
+and (ii) a spinor--safe checksum example with a tunable penalty $\mu$ and practical selection rules.
+\end{abstract}
+
+\section{Universal decimated law and Green's functions}
+Identical to the main note (omitted for brevity): $x_{m+1}-Vx_m+Qx_{m-1}=s_m$ with roots $r_\pm$ and Green's function
+$G_n=\tfrac{r_+^n-r_-^n}{r_+-r_-}$ or $G_n=n r^{n-1}$. In SU(2) ($Q=1$, $|V|\le 2$), $V=2\cos\varphi$ and $G_n=\sin(n\varphi)/\sin\varphi$.
+
+\section{Binary holonomy test (recall)}
+If $L=l$, APBC shifts $\theta\mapsto\theta+\pi/L$ so $V_l^{\rm APBC}=-V_l^{\rm PBC}$ and $Q_l$ is unchanged.
+
+\section{Explicit spectral proof (Dirac on a time circle)}\label{sec:spectral}
+Consider the \emph{Euclidean} one--component Dirac operator on a circle of period $T$:
+\begin{equation}
+D := \frac{\mathrm{d}}{\mathrm{d}\tau},\qquad \tau\in[0,T). \tag{$\ast$}
+\end{equation}
+We impose a boundary condition $\psi(\tau{+}T)=\mathrm{e}^{i\pi s}\psi(\tau)$ with $s\in\{0,1\}$ ($s=0$ is PBC/R, $s=1$ is APBC/NS).
+Seek eigenmodes $\psi_n(\tau)=\mathrm{e}^{i\omega_n\tau}$; then $D\psi_n=i\omega_n\psi_n$ and
+\begin{equation}
+\mathrm{e}^{i\omega_n T}=\mathrm{e}^{i\pi s}\quad\Longrightarrow\quad \omega_n=\frac{2\pi}{T}\Big(n+\frac{s}{2}\Big),\quad n\in\mathbb{Z}.
+\end{equation}
+Hence the \emph{Euclidean} eigenvalues are $i\omega_n$ with magnitudes $|\omega_n|$. In particular,
+\begin{align}
+s=0\ (\text{PBC/R}):\ & \omega_0=0\quad\Rightarrow\ \text{zero mode present},\\
+s=1\ (\text{APBC/NS}):\ & \min_{n}|\omega_n|=\frac{\pi}{T}\quad\Rightarrow\ \text{gap}.
+\end{align}
+This shows directly that PBC admits a zero mode (Majorana Pfaffian ill--defined, sign ambiguous), while APBC produces a finite gap around zero (Pfaffian well--defined). A discrete version using the lattice derivative
+\(
+(D\psi)[n]=\frac{\psi[n+1]-\psi[n-1]}{2\Delta\tau}
+\)
+has eigenvalues $iE(k)$ with $E(k)=\tfrac{2}{\Delta\tau}\sin k$, where $k=\tfrac{2\pi}{N}(m+\tfrac{s}{2})$. We numerically confirm $E=0$ for PBC and $|E|\ge\tfrac{2}{\Delta\tau}\sin(\pi/N)$ for APBC (see Fig.~\ref{fig:dirac}).
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=0.75\linewidth]{dirac_pbc_apbc_spectrum.png}
+  \caption{\textbf{Discrete Dirac on a time circle:} smallest $|E|$ for PBC (zero mode) vs APBC (gap). $N{=}128$ sites; see the companion code.}
+  \label{fig:dirac}
+\end{figure}
+
+\paragraph{Remark on boundary extension (Pin$^-$).}
+On a M\"obius band (non--orientable), only the NS spin structure on the boundary extends to a bulk $\Pin^-$ structure.
+A direct, hands--on way to see consistency is: PBC $\Rightarrow$ an unavoidable zero mode on the boundary $S^1$,
+hence a Pfaffian sign ambiguity; NS \emph{removes} the zero mode, restoring reflection positivity and a well--defined amplitude.
+
+\section{Relative ABK via doubling (sketch)}
+The ABK invariant is defined on \emph{closed} $\Pin^-$ surfaces $\Sigma$ and takes values in $\mathbb{Z}_8$; the partition function is
+$\exp(\pi i\,\mathrm{ABK}(\Sigma)/4)$. For manifolds with boundary, one uses a \emph{relative} ABK class.
+A practical test for the M\"obius band $\mathcal{M}$ is: \emph{double} $\mathcal{M}$ along the boundary to obtain the Klein bottle $K$,
+and choose a boundary spin structure $s\in\{\mathrm{R},\mathrm{NS}\}$. The doubled surface inherits a closed $\Pin^-$ structure; the corresponding ABK phase detects compatibility.
+In particular, NS on $\partial\mathcal{M}$ yields a well--defined doubled phase, while R introduces a boundary zero mode and an ill--defined sign (equivalently, a nontrivial relative obstruction). This matches the spectral proof above and is consistent with the standard cobordism classification $\Omega^{\Pin^-}_2\cong\mathbb{Z}_8$.
+
+\section{Spinor checksum: concrete example and $\mu$ tuning}\label{sec:checksum}
+Let $Q=1$ and $V=2\cos\varphi$ so the characteristic roots are $r_\pm=e^{\pm i\varphi}$ (unit circle). For an integer window $\{k_a,\dots,k_b\}$ and digits $d_k\in\mathbb{Z}$, define the \emph{pair} of checksums
+\begin{equation}
+I_\pm(d):=\sum_{k=k_a}^{k_b} d_k\,r_\pm^{\,k}.
+\end{equation}
+Tri--site moves preserve $I_\pm$. For a short anchor example, take $\varphi=\pi/5$ and indices $k\in\{-2,-1,0,1,2\}$ with
+$d=\{1,0,3,2,0\}$. Then $I_-(d)=\overline{I_+(d)}$ and
+\begin{equation}
+I_+(d)=\sum_{k=-2}^{2} d_k \exp(i k\varphi).
+\end{equation}
+Suppose noisy measurements $m_k=d_k+\eta_k$, $\eta_k\sim \mathcal{N}(0,\sigma^2)$. A \emph{soft} reconstruction with checksum penalty
+\begin{equation}
+\min_{d\in\mathbb{R}^{n}} \ \sum_k |d_k-m_k|^2\ +\ \mu\,\bigl|I_+(d)-I_+(d_{\mathrm{true}})\bigr|^2
+\end{equation}
+has the closed--form normal equation $(I+\mu A^\top A)d = m + \mu A^\top b$, where the two--row real operator $A$ enforces $\Re I_+(d)$ and $\Im I_+(d)$, and $b$ is the true checksum pair.
+A small demo (see Fig.~\ref{fig:chk}) shows that increasing $\mu$ reduces the checksum residual and improves stability.
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=0.75\linewidth]{checksum_penalty_demo.png}
+  \caption{\textbf{Checksum penalty $\mu$:} reconstruction across $\mu\in\{0,1,5,20\}$ for a short window with $\sigma=0.25$. The checksum residual $\lvert I_+-I_+^{\rm true}\rvert$ drops by two orders of magnitude while the $\ell^2$ digit error decreases modestly.}
+  \label{fig:chk}
+\end{figure}
+
+\paragraph{Tuning guidance for $\mu$ (rule--of--thumb).}
+Let $\sigma^2$ be the per--digit noise variance and $\kappa(A)=\|A\|_2^2$ the spectral norm square of $A$.
+A practical choice that balances the two terms is
+\begin{equation}
+\boxed{\ \mu \approx \frac{c}{\sigma^2\,\kappa(A)}\ ,\quad c\in[0.5,5]\ \text{(cross--validate on a held--out slice).}\ }
+\end{equation}
+Interpretation: scale the checksum residual to have unit order under noise; sweep $c$ logarithmically and pick the smallest $\mu$ that makes the residual statistically indistinguishable from the noise floor.
+
+\paragraph{Hard vs soft.}
+Use the \emph{hard} constraint ($I_\pm$ enforced exactly) in high--SNR or digitized regimes; use the \emph{soft} variant with the above $\mu$ in analog or mildly mismatched platforms.
+
+\section*{Companion code and artifacts}
+We provide two small, platform--agnostic scripts:
+(i) a discrete Dirac eigenvalue calculator on a time circle that exhibits the PBC zero mode vs the APBC gap (Fig.~\ref{fig:dirac}),
+and (ii) a checksum--penalty reconstruction for a short window showing how $\mu$ tightens the constraint (Fig.~\ref{fig:chk}).
+
+\end{document}

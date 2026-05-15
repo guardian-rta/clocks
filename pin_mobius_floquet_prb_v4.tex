@@ -1,0 +1,273 @@
+\documentclass[aps,prb,twocolumn,superscriptaddress,nofootinbib,10pt]{revtex4-2}
+
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{microtype}
+\usepackage{hyperref}
+\hypersetup{colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue}
+\usepackage{enumitem}
+\usepackage{graphicx}
+
+% Theorem-like envs
+\newtheorem{theorem}{Theorem}
+\newtheorem{proposition}{Proposition}
+\newtheorem{lemma}{Lemma}
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}{Remark}
+
+% Macros
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\tr}{\mathrm{tr}}
+\newcommand{\SU}{\mathrm{SU}}
+\newcommand{\U}{\mathrm{U}}
+\newcommand{\Pin}{\mathrm{Pin}}
+\newcommand{\Spin}{\mathrm{Spin}}
+\newcommand{\Pf}{\mathrm{Pf}}
+\newcommand{\e}{\mathrm{e}}
+\newcommand{\ii}{\mathrm{i}}
+
+\begin{document}
+
+\title{Fermionic Time Crystals with M\"obius Topology:\\
+Pin$^{\pm}$ Geometry, Floquet Decimation, and a Measurable Spinor Signature}
+
+\author{VR}
+\affiliation{Independent Researcher}
+\author{AI}
+\affiliation{Independent Researcher}
+
+\date{\today}
+
+\begin{abstract}
+We study one-dimensional Floquet \emph{spinor} dynamics on a time macrocycle with an orientation-reversing twist (``M\"obius time'').
+We show that consistent fermionic evolution on such a non-orientable time loop requires a $\Pin$ structure; in 1+1D this fixes
+the \emph{anti-periodic boundary condition} (APBC) along the macrocycle as the unique reflection-positive, anomaly-free choice
+under generic assumptions. For a single-step unitary $U\in\SU(2)$ and an $l$-site strobing, the $l$-decimated component obeys
+the Cayley--Hamilton tri-site law $x_{k+2l}-V_l x_{k+l}+Q^l x_k=0$ with $V_l=\tr(U^l)=2\cos(l\theta)$ and $Q^l=\det(U^l)=1$.
+When one macrocycle has $L=l$ steps, APBC shifts the eigenphase by $\pi/L$ and \emph{flips the sign} of $V_l$ while $Q^l$ stays $1$.
+This yields a crisp, falsifiable prediction: the center coefficient in the tri-site law changes sign between PBC and APBC,
+visible from steady-mode data alone. We further show that our event-coded, Chebyshev--Lucas checksum and trellis-decoder layer
+operates on intensities and is unaffected by the global spinor sign, enabling robust experimental verification.
+\end{abstract}
+
+\maketitle
+
+\section{Introduction and main claim}
+Non-orientable time cycles (mapping tori with an orientation-reversing twist) provide a minimal setting where fermionic
+degrees of freedom cannot be globally described by a $\Spin$ bundle; instead a $\Pin^{\pm}$ structure is required.
+In 1+1D, consistency (reflection positivity, anomaly-freedom, non-vanishing partition function) constrains the allowed
+boundary conditions for spinors along the macrocycle to the \emph{anti-periodic} (Neveu--Schwarz, NS) choice.
+Our main experimental prediction is simple: in a one-dimensional Floquet spinor with an $l$-site strobing, the
+\emph{$l$-decimated} tri-site law for a component,
+\begin{equation}\label{eq:trisite}
+x_{k+2l}-V_l\,x_{k+l}+Q^l\,x_k=0,
+\end{equation}
+has $Q^l=1$ and a center coefficient $V_l$ that \emph{flips sign} between PBC and APBC when one macrocycle has $L=l$ steps.
+The flip is directly observable by fitting Eq.~\eqref{eq:trisite} to steady-mode data; no phase-sensitive spin measurement
+is required. All error-correction machinery (checksum/trellis) remains valid because it acts on intensities.
+
+\paragraph*{Contributions.}
+(i) A precise link between $\Pin^{\pm}$ geometry on the M\"obius mapping torus and APBC along the macrocycle.
+(ii) A universal, local tri-site law from Cayley--Hamilton on $U^l$ with the spinor specialization $Q^l=1$, $V_l=2\cos(l\theta)$.
+(iii) The PBC$\leftrightarrow$APBC \emph{sign flip} of $V_l$ when $L=l$ (and its generalization for $L\neq l$).
+(iv) A robust event-coded decoding layer (Chebyshev--Lucas checksum + trellis) that is insensitive to a global sign.
+(v) Platform-agnostic protocols and minimal models for immediate testing.
+
+\section{Floquet spinors and $l$-decimation}
+Consider a discrete-time spinor $\psi_k\in\C^2$ evolving by a one-step unitary $U\in\SU(2)$,
+\begin{equation}\label{eq:step}
+\psi_{k+1}=U\,\psi_k,\qquad \det U=1,\ \ \tr U=2\cos\theta,
+\end{equation}
+so that $U$ has eigenvalues $e^{\pm i\theta}$. Over $l$ steps, $U^l$ has eigenvalues $e^{\pm i l\theta}$ and
+\begin{equation}\label{eq:Ul}
+V_l:=\tr(U^l)=2\cos(l\theta),\qquad Q^l:=\det(U^l)=1.
+\end{equation}
+Eliminating one component of $\psi_k$ yields a scalar recurrence; Cayley--Hamilton on $U^l$ gives the $l$-decimated tri-site law
+\begin{equation}\label{eq:decimated}
+x_{k+2l}-V_l\,x_{k+l}+Q^l\,x_k=0,
+\end{equation}
+where $x_k$ denotes either component in a fixed basis. Eq.~\eqref{eq:decimated} is universal and local.
+
+\section{M\"obius time as a mapping torus and $\Pin^{\pm}$ preliminaries}
+Let $\mathcal{M}$ be the M\"obius band, obtained by identifying $(t,\sigma)\sim(t+T,-\sigma)$ on $[0,T]\times[-1,1]$.
+$\mathcal{M}$ is non-orientable ($w_1(\mathcal{M})\neq 0$), so spin structures do not exist globally; one instead uses
+$\Pin^{\pm}$ structures (double covers of the orthonormal frame bundle for $O(1)$) to place fermions.
+The restriction of a $\Pin$ structure to the boundary circle yields a \emph{spin} structure there, corresponding to
+periodic (Ramond, R) or anti-periodic (Neveu--Schwarz, NS) boundary conditions for the spinor around the macrocycle.
+
+\subsection{Boundary spin structure of the M\"obius band}
+\begin{lemma}[Boundary restriction]\label{lem:boundary}
+On the M\"obius band $\mathcal{M}$, any $\Pin^{-}$ structure restricts on the boundary circle $\partial\mathcal{M}\cong S^1$
+to the \emph{bounding} spin structure, i.e.\ the \emph{anti-periodic} (Neveu--Schwarz) spin structure on $S^1$.
+Conversely, the (unique) NS spin structure on $S^1$ extends to a $\Pin^{-}$ structure on $\mathcal{M}$, whereas the Ramond
+spin structure does \emph{not} extend.
+\end{lemma}
+\begin{proof}[Proof sketch with details]
+Spin structures on $S^1$ are classified by $H^1(S^1,\Z_2)\cong \Z_2$; the nontrivial class (NS) is \emph{bounding}, i.e.\ extends
+over a disk. For non-orientable $\mathcal{M}$, the relevant extension is $\Pin^{-}$; the obstruction to extending a boundary spin
+structure to a bulk $\Pin^{-}$ structure is measured by a relative Arf--Brown--Kervaire (ABK) class. Gluing two M\"obius bands
+along $\partial\mathcal{M}$ yields the Klein bottle. One checks that the $\Pin^{-}$ structure glued from two NS boundaries is
+well-defined, while gluing R boundaries produces an anomalous sign in the ABK phase. Thus NS is the unique boundary spin structure
+that extends to $\Pin^{-}$ on the M\"obius band.
+\end{proof}
+
+\section{Why APBC on M\"obius time: two proofs}
+We now justify APBC as the unique consistent choice along the macrocycle under standard hypotheses.
+
+\subsection{Spectral/zero-mode proof (free Dirac/Majorana, 1+1D)}\label{subsec:spectral}
+Consider a 1D Majorana/Dirac fermion on $\mathcal{M}$ with Euclidean time coordinate $\tau\in[0,T]$. Along the boundary loop,
+impose a spin structure $s\in\{0,1\}$ where $s=0$ is R (periodic) and $s=1$ is NS (anti-periodic). The boundary spectrum of the
+Euclidean Dirac operator is
+\begin{equation}
+\lambda_n^{(s)} \;=\; \frac{2\pi}{T}\Big(n+\frac{s}{2}\Big)+m,\qquad n\in\Z,
+\end{equation}
+with $m$ an effective mass (zero in the conformal limit). For $s=0$ and $m=0$, a zero mode $\lambda_0^{(0)}=0$ appears; the
+Majorana Pfaffian is then ill-defined (changes sign under small deformations), violating reflection positivity. For $s=1$,
+eigenvalues are half-integers and no zero mode occurs; zeta-regularization yields a positive Pfaffian. In the Floquet picture,
+this is the statement that R enforces a quasi-energy crossing pinned at $0$, while NS shifts the spectrum by $\pi/T$, removing
+the protected crossing. Hence NS (APBC) is the only reflection-positive choice generically.
+
+\subsection{Cobordism/TQFT proof (invertible phases)}\label{subsec:cobordism}
+Fermionic invertible phases with reflection in 1+1D are classified by $\Omega^{\Pin^-}_2\cong \Z_8$; the partition function on a
+closed $\Pin^{-}$ surface $\Sigma$ is the ABK invariant $Z(\Sigma)=\exp(\pi i\,\mathrm{ABK}(\Sigma)/4)$. For a manifold with
+boundary, a boundary spin structure extends to a bulk $\Pin^{-}$ structure iff the relative ABK obstruction vanishes. On the
+M\"obius band, the NS boundary is the unique extending choice; R either fails to extend or yields a non-positive/reflection-odd
+amplitude. Therefore APBC is the unique consistent boundary condition on $\partial\mathcal{M}$.
+
+\begin{theorem}[APBC uniqueness along a M\"obius macrocycle]\label{thm:APBC}
+In a gapped 1+1D free-fermion/Floquet spinor system on a M\"obius time macrocycle, the unique reflection-positive,
+anomaly-free boundary condition along the macrocycle is anti-periodic (Neveu--Schwarz), up to measure-zero parameter choices.
+\end{theorem}
+\begin{proof}[Proof outline]
+Combine Lemma~\ref{lem:boundary} with the zero-mode obstruction in Sec.~\ref{subsec:spectral} or the cobordism argument in
+Sec.~\ref{subsec:cobordism}. NS avoids the anomaly and yields a nonvanishing, reflection-positive amplitude.
+\end{proof}
+
+\section{Measurable signature in the decimated law}
+Let one macrocycle contain exactly $L=l$ steps. APBC shifts $\theta\mapsto \theta+\pi/L$; inserting in Eq.~\eqref{eq:Ul},
+\begin{equation}\label{eq:flip}
+V_l^{\mathrm{APBC}}=2\cos(l\theta+\pi)=-\,2\cos(l\theta)=-\,V_l^{\mathrm{PBC}},\qquad Q^l=1\ \text{in both cases}.
+\end{equation}
+\begin{proposition}[PBC$\leftrightarrow$APBC flip]\label{prop:flip}
+For $L=l$, the center coefficient in the tri-site law~\eqref{eq:decimated} flips sign under APBC, while $Q^l$ is unchanged.
+\end{proposition}
+For $L\neq l$, distributing the $\pi$-phase across the macrocycle yields a phase shift $\theta\mapsto\theta+\pi/L$ per step,
+so $V_l^{\mathrm{APBC}}=2\cos(l\theta+\pi l/L)$; a sign flip occurs whenever $l/L$ is an odd half-integer modulo $2$.
+
+\section{Explicit model equations}\label{sec:model}
+\subsection{Two-parameter SU(2) step}
+A minimal model with a closed form for $V_l$ is
+\begin{equation}\label{eq:Umodel}
+U(\phi,\vartheta)\;=\;\e^{-\ii \phi\,\sigma_z}\,\e^{-\ii \vartheta\,\sigma_y}\ \in \ \SU(2),
+\end{equation}
+with $\tr\,U(\phi,\vartheta)=2\cos\phi\,\cos\vartheta$ and
+\begin{equation}\label{eq:Vl-cheb}
+V_l(\phi,\vartheta)\;=\;2\cos\!\big(l\,\varepsilon(\phi)\big)\;=\;2\,T_l\!\big(\cos\phi\,\cos\vartheta\big),\qquad Q^l=1,
+\end{equation}
+where $\varepsilon(\phi)=\arccos(\cos\phi\,\cos\vartheta)$ and $T_l$ is the Chebyshev polynomial of the first kind.
+
+\subsection{Split-step variant (closed form)}
+Consider the split-step Floquet
+\begin{equation}\label{eq:split}
+U_{\mathrm{ss}}(\phi;\alpha,\beta)\;=\;R_y(\beta)\,\e^{-\ii \phi \sigma_z}\,R_y(\alpha)\,\e^{-\ii \phi \sigma_z},
+\qquad R_y(\theta)=\e^{-\ii \theta \sigma_y}.
+\end{equation}
+A direct trace computation gives
+\begin{equation}\label{eq:cos-eps-split}
+\cos \varepsilon_{\mathrm{ss}}(\phi)\;=\;\tfrac12\,\tr\, U_{\mathrm{ss}}(\phi;\alpha,\beta)
+\;=\;\cos\alpha\,\cos\beta\,\cos(2\phi)\;-\;\sin\alpha\,\sin\beta,
+\end{equation}
+hence
+\begin{equation}\label{eq:Vl-split}
+V_l^{\mathrm{ss}}(\phi;\alpha,\beta)\;=\;2\,\cos\!\big(l\,\varepsilon_{\mathrm{ss}}(\phi)\big)
+\;=\;2\,T_l\!\big(\cos\alpha\,\cos\beta\,\cos(2\phi)-\sin\alpha\,\sin\beta\big),\qquad Q^l=1.
+\end{equation}
+When one macrocycle has $L=l$ steps, APBC enforces $\varepsilon\mapsto \varepsilon+\pi/L$, so $V_l^{\rm APBC}=-V_l^{\rm PBC}$.
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=\linewidth]{V4_split_step_PBC_APBC.png}
+  \caption{\textbf{Split-step model, PBC vs APBC.} $V_4(\phi)$ for $U_{\rm ss}$ with $\alpha=0.7$, $\beta=0.9$, $l=L=4$.
+  The APBC curve (dashed) is the negative of the PBC curve, as predicted by Eq.~\eqref{eq:flip}.}
+  \label{fig:split-step}
+\end{figure}
+
+\section{Event-coded layer for spinors: checksum \& decoder}
+Our eventized layer operates on intensities $I_k=\psi_k^\dagger O\,\psi_k$ (e.g.\ $O=\mathbf{1}$ or a projector), so it is
+invariant under $\psi\mapsto -\psi$. Let $d_k\in\Z$ be decoded digits on a window $[-R,R]$ from noisy measurements $m_k$.
+Define $e_t=d_{t+1}-V_l\,d_t+Q^l d_{t-1}$ with $Q^l=1$.
+
+\paragraph*{Checksum with complex roots.}
+Let $r_{\pm}$ be the roots of $z^2-V_l z+1=0$. For $\SU(2)$, $|V_l|\le 2$, so $r_{\pm}=e^{\pm \ii \varphi}$ lie on the unit circle
+(with $\varphi=l\theta$ modulo $2\pi$). The tri-site move preserves both complex sums
+\begin{equation}\label{eq:two-checks}
+I_{\pm}(d)\;:=\;\sum_k d_k\,r_{\pm}^{\,k}\,.
+\end{equation}
+For anchor events ($s=0$) one has $I_{\pm}(d)=T$. In practice we check the \emph{pair} $(I_+(d),I_-(d))$ (or equivalently
+their real/imag parts). This increases robustness when $r_\pm$ lie on the unit circle.
+
+\paragraph*{Soft vs hard trellis (unchanged).}
+We use the same trellis as in the non-spinor case (states $(d_{t-1},d_t)\in\mathcal{D}^2$), with soft cost
+$\sum w_t|d_t-m_t|^2+\lambda\sum |e_t|^2$ or hard equality $e_t\equiv 0$ on the window. Tuning rules for $\lambda$ carry over.
+Optionally, append a \emph{checksum penalty} $\mu\big(|I_+(d)-T|^2+|I_-(d)-T|^2\big)$ to stabilize at low SNR.
+
+\paragraph*{Norms and perturbations.}
+We use the operator (spectral) norm $\|\cdot\|_2$. Under weak errors $E$,
+\begin{equation}
+\big|\tr\big((U{+}E)^l\big)-\tr(U^l)\big| \ \le\ l\,\|U\|_2^{\,l-1}\,\|E\|_2 \;+\; O(\|E\|_2^2).
+\end{equation}
+
+\section{Numerics and protocols}
+\paragraph*{Numerics.} For either model \eqref{eq:Umodel} or \eqref{eq:split}, compute $V_l$ from the closed forms,
+generate steady-mode data, fit Eq.~\eqref{eq:decimated} under PBC/APBC, and verify the sign flip \eqref{eq:flip}.
+Add weak disorder/coupling and track the drift of $V_l$ by the above bound.
+
+\paragraph*{Protocols.} (P0) Calibrate $V_l$ under PBC and APBC by steady-mode fitting. (P1) Verify tri-site law with flipped center coefficient when $L=l$.
+(P2) Event injection $\to$ checksum verification with the measured $V_l$ using \eqref{eq:two-checks}. (P3) Optional spiral/circular envelope via $\Lambda$ sweep.
+Platforms: microwave ladder with a $\pi$ gate; photonic loop with a phase shifter; acoustic analogs.
+
+\section{Discussion, limitations, and outlook}
+Interacting/disordered systems: the APBC sign flip persists for sufficiently weak interactions/disorder (continuity), but
+quantitative drifts in $V_l$ appear; our intensity-layer checksum and optional checksum penalties mitigate decoding errors.
+A broader context links our signature to Floquet topological indices~(e.g.\ anomalous edge states) and fermionic SPT
+classifications; exploring these links in 2D/3D and with space-time non-orientability is an open direction.
+
+\section*{Acknowledgments}
+We thank the communities working on $\Pin$ geometry, Floquet matter, and coding theory.
+
+\bibliographystyle{apsrev4-2}
+\begin{thebibliography}{99}
+
+\bibitem{Witten2016}
+E. Witten, \emph{Fermion Path Integrals And Topological Phases}, Rev. Mod. Phys. \textbf{88}, 035001 (2016).
+
+\bibitem{FreedHopkins2016}
+D. S. Freed and M. J. Hopkins, \emph{Reflection positivity and invertible topological phases}, arXiv:1604.06527.
+
+\bibitem{Kapustin2015}
+A. Kapustin, R. Thorngren, A. Turzillo, and Z. Wang, \emph{Fermionic SPT Phases and Cobordisms}, JHEP 12 (2015) 052.
+
+\bibitem{DebrayGunningham2018}
+A. Debray and S. Gunningham, \emph{The Arf--Brown--Kervaire TQFT of $\Pin^{-}$ surfaces}, arXiv:1803.11183.
+
+\bibitem{Economou2006}
+E. N. Economou, \emph{Green's Functions in Quantum Physics}, 3rd ed., Springer (2006).
+
+\bibitem{Rivlin1990}
+T. J. Rivlin, \emph{Chebyshev Polynomials}, 2nd ed., Wiley (1990).
+
+\bibitem{Kitagawa2010}
+T. Kitagawa, E. Berg, M. Rudner, and E. Demler, \emph{Topological characterization of periodically driven quantum systems}, Phys. Rev. B \textbf{82}, 235114 (2010).
+
+\bibitem{Rudner2013}
+M. S. Rudner, N. H. Lindner, E. Berg, and M. Levin, \emph{Anomalous Edge States and the Bulk-Edge Correspondence for Periodically Driven 2D Systems}, Phys. Rev. X \textbf{3}, 031005 (2013).
+
+\bibitem{Lindner2011}
+N. H. Lindner, G. Refael, and V. Galitski, \emph{Floquet topological insulator in semiconductor quantum wells}, Nat. Phys. \textbf{7}, 490–495 (2011).
+
+\end{thebibliography}
+
+\end{document}

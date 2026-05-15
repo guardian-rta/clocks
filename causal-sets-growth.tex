@@ -1,0 +1,307 @@
+\documentclass[12pt,a4paper]{article}
+
+% ---------- Packages ----------
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[margin=1in]{geometry}
+\usepackage{microtype}
+\usepackage{lmodern}
+\usepackage{mathtools,amsmath,amssymb,amsthm}
+\usepackage{physics}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{enumitem}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning,calc,decorations.pathreplacing}
+\usepackage{hyperref}
+\usepackage[capitalize,noabbrev,nameinlink]{cleveref}
+\hypersetup{colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue}
+
+% ---------- Theorems ----------
+\newtheorem{axiom}{Axiom}
+\newtheorem{assumption}{Assumption}
+\newtheorem{definition}{Definition}
+\newtheorem{proposition}{Proposition}
+\newtheorem{theorem}{Theorem}
+\newtheorem{conjecture}{Conjecture}
+\newtheorem{remark}{Remark}
+\newtheorem{example}{Example}
+\newtheorem{corollary}{Corollary}
+\newtheorem{lemma}{Lemma}
+
+% ---------- Macros ----------
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\rk}{\mathrm{rk}}
+\DeclareMathOperator{\Spin}{Spin}
+\DeclareMathOperator{\Vol}{Vol}
+\DeclareMathOperator{\Arg}{Arg}
+
+% ---------- Title ----------
+\title{\Large Phase-Lifted Causal Growth:\\
+Potential--Actual Dynamics with Gauge-Covariant Phases,\\
+AR($\infty$) Hazards, and Testable Predictions}
+\author{VR}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+We develop a predictive, gauge-covariant theory in which \emph{actual} events emerge from a phase-lifted \emph{potential} layer via size-biased selection on minimal sets. Causality is defined on the colored union (Potential $\sqcup$ Actual) while acyclicity is imposed only on the actual projection, eliminating paradoxes in observed histories. Actualization hazards are the modulus square of a \emph{phase-filtered AR($\infty$)} superposition of (i) memory of past actualizations and (ii) interference from still-potential events transported by a canonical $U(1)$ connection built from kernel phases. A single gauge-covariant Euler--Lagrange equation governs phase dynamics (with previous PD1/PD2 as regimes; PD3 is statistical identification). The vacuum potential field $\beta$ is fixed by a strictly convex variational principle. We quantify local truncation errors (exponential \emph{and} algebraic kernel tails), give a practical complexity budget, and propose three falsifiable signatures that distinguish the framework from standard environment-only decoherence. A discrete field-theory tie-in is provided (1+1 retarded inverse; 3+1 Johnston tail sanity checks using your artifacts).
+\end{abstract}
+
+\tableofcontents
+
+% =========================================================
+\section{Overview and Contributions}
+
+We work on a strongly causal spacetime $(\mathcal E,g)$ with a phase fiber $U(1)$ carrying gauge-covariant dynamics. The \emph{potential} layer $P$ (marked by features in a Hilbert space) and the \emph{actual} token record $T_{\le k}$ coevolve: at each step the next token is drawn from the current minimal move set by a Plackett--Luce rule with hazard $W=|(\text{memory}+\text{interference})|^2$. The phase/interference piece uses a canonical connection $\mathcal A^\*$ extracted from kernel phases. Geometry emerges from order+counts of actual tokens, preserving Lorentzian recovery.
+
+\paragraph{New in this paper.}
+(i) A \emph{single} phase dynamics via a gauge-covariant action, with earlier PD1/PD2 as limits and PD3 as parameter estimation; (ii) a \emph{variational vacuum} that uniquely fixes $\beta$; (iii) \emph{local truncation} bounds for exponential and algebraic tails; (iv) \emph{computational} plan (one connection build, one Poisson solve, local hazard evaluation); (v) \emph{predictions} not mimicked by standard decoherence; (vi) cautious 4D Johnston-tail comparisons (sampling checks, not fits) using your recorded runs.
+
+% =========================================================
+\section{Foundations: Base Spacetime, Phase Fiber, and Potentials}
+
+\begin{axiom}[Phase fiber over spacetime]\label{ax:fiber}
+$(\mathcal E,g)$ is a strongly causal Lorentzian manifold. The phase degree of freedom is a principal $U(1)$ bundle $P_{U(1)}\to\mathcal E$ with connection $\mathcal A$.
+A lifted worldline is a curve $s\mapsto (x^\mu(s),\theta(s))$ with $\dot\theta$ governed by a gauge-covariant law.
+\end{axiom}
+
+\begin{axiom}[Potential Hilbert data and kernel]\label{ax:hilbert}
+Let $H$ be a separable complex Hilbert space. Each potential event $\psi\in P$ carries a feature $\varphi(\psi)\in H$ such that
+$\langle \varphi(x),\varphi(y)\rangle = K(x,y)$ for a Hermitian positive semidefinite kernel $K$ defined on a locally finite proto-causal scaffold $(P,\prec_0)$ with bounded degree. Locality: either $K(x,y)=0$ if $d_{\mathcal D}(x,y)>R$ or $|K(x,y)|\le C e^{-\alpha d_{\mathcal D}(x,y)}$ (exponential tails) or $|K(x,y)|\le C(1+d_{\mathcal D}(x,y))^{-\gamma}$ (algebraic with $\gamma>d(\mathcal D)$).
+\end{axiom}
+
+\paragraph{Remark (helical narrative).}
+A quasi-periodic rotation on the $U(1)$ fiber with an incommensurate rotation number (e.g.\ golden) provides a robust sampling of phases; we treat this as a \emph{regime} of the unified dynamics below rather than as “complex time.”
+
+% =========================================================
+\section{Canonical Connection from Kernel Phases}
+
+\begin{definition}[Edge phases and least-curvature gauge]\label{def:conn}
+On each Hasse edge $x\to y$ of $(P,\prec_0)$ define $\Phi_{x\to y}:=\Arg K(y,x)$.
+A $U(1)$ connection is a $1$-cochain $\mathcal A$ on edges.
+Select the \emph{least-curvature gauge}
+\[
+\mathcal A^\* \;=\; \arg\min_{\mathcal A\sim \Phi}\ \sum_{C} w(C)\,\big|e^{i\sum_{e\in C}\mathcal A_e}-1\big|^2,
+\]
+over cochains cohomologous to $\Phi$ (i.e.\ $\mathcal A=\Phi - d\chi$), with nonnegative cycle weights $w(C)$ decaying with length. The minimizer exists and is unique up to a global phase.
+\end{definition}
+
+\begin{remark}[Wilson lines and path choice]\label{rem:wilson}
+For a path $\gamma:\psi\to m$ we write $e^{i\int_\gamma\mathcal A^\*}:=e^{i\sum_{e\in\gamma}\mathcal A^\*_e}$. When multiple shortest paths exist, either (i) pick any geodesic (tie‑breaking), or (ii) average over a Gaussian path ensemble with weight $e^{-\mathrm{len}(\gamma)^2/2\sigma^2}$; both are gauge‑covariant and coincide on trees.
+\end{remark}
+
+% =========================================================
+\section{Vacuum Potential Field \texorpdfstring{$\beta$}{beta}: Variational Principle}
+
+\begin{axiom}[Invariant prior and kernel mean]\label{ax:prior}
+Let $\mathsf P$ be a $G$-invariant prior on $P$. Define $\beta_0(\psi):=\langle \varphi(\psi),\xi\rangle$ with $\xi=\E_{\psi\sim\mathsf P}[\varphi(\psi)]$.
+\end{axiom}
+
+\begin{theorem}[Strict convexity; existence/uniqueness]\label{thm:beta}
+On a locally finite scaffold, the functional
+\[
+\mathcal J[\beta]=\int_P |\beta-\beta_0|^2\,d\Lambda
+\;+\;\lambda\!\!\sum_{x\to y}\!\! \big|\beta(y)-e^{i\mathcal A^\*_{x\to y}}\beta(x)\big|^2
+\]
+is strictly convex and coercive on $L^2(P,\Lambda)$. Hence a unique minimizer exists up to a global $U(1)$ phase (per connected component).
+\end{theorem}
+
+\begin{proof}[Sketch]
+Quadratic positive terms yield strict convexity. Coercivity follows from bounded degree and a Poincaré inequality for the covariant Dirichlet form. Gauge freedom reduces to a global phase.
+\end{proof}
+
+\paragraph{Normal equations and solver.}
+The EL condition is the sparse SPD system $(I+\lambda\,\Delta_{U(1)}^{\mathcal A^\*})\,\beta=\beta_0$; solve once with conjugate gradients.
+
+% =========================================================
+\section{Unified Phase Dynamics (Single EL Equation)}
+
+\begin{axiom}[Gauge-covariant action for phases]\label{ax:phaseEL}
+Set
+\[
+\mathcal S[\theta]=\int d\tau\;\Big[
+\frac{\kappa}{2}\!\!\sum_{x\to y}\!\! \big(\theta(y)-\theta(x)-\mathcal A^\*_{x\to y}\big)^2
+\;+\;\frac{\alpha}{2}\,\langle \theta,\,L\,\theta\rangle
+\;+\;\frac{\beta_\tau}{2}\,\|\dot\theta-\omega_0\|_2^2\Big],
+\]
+with reversible generator $L$ on $\mathcal D$ and seed $\omega_0(\psi)$.
+\end{axiom}
+
+\paragraph{Euler--Lagrange law.}
+Stationarity $\delta\mathcal S/\delta\theta=0$ yields
+\[
+-\kappa\,\mathrm{div}\big(\nabla_{\mathcal A^\*}\theta\big) + \alpha\,L\theta - \beta_\tau\,\ddot\theta = \beta_\tau\,\dot\omega_0.
+\]
+\emph{Regimes:} (i) \textbf{Phase locking} ($\beta_\tau\ll\kappa$): recover PD1 (covariant Laplacian drift); (ii) \textbf{WKB dispersion} ($\kappa\ll\beta_\tau$): recover PD2, $\dot\theta(\psi)=\sqrt{m^2+p^2(\psi)}$; (iii) \textbf{Data-driven} (unknown regime): estimate parameters via Whittle (Sec.~\ref{sec:arid}).
+
+% =========================================================
+\section{Tokens, Hazards, and Choice}
+
+\begin{axiom}[Tokens and record]\label{ax:tokens}
+Each step emits a token $m_k\in\{+\psi:\psi\notin A_k\}\cup\{-\psi:\psi\in A_k\}$, updating the occupancy $A_k$ by last-token wins per label. The record $T_{\le k}$ grows monotonically (reversible activation allowed; the record is monotone).
+\end{axiom}
+
+\begin{axiom}[Hazards: AR($\infty$) memory + phase interference]\label{ax:hazard}
+Let taps $g_j$ be absolutely summable and carrier $\omega\in\R$. For an admissible move $m\in\mathcal M_k$ with feature embedding, set
+\[
+W(m;S_k)=\Big|\underbrace{\sum_{j=0}^\infty g_j\,e^{i\omega j}\,\langle m,\mu_{k-j}\rangle}_{\text{AR($\infty$) memory}}
+\ +\ \underbrace{\sum_{\psi\in P}\beta(\psi)\,K(m,\psi)\,e^{i\int_{\gamma(\psi\to m)}\mathcal A^\*}}_{\text{phase-lifted interference}}\Big|^2.
+\]
+\end{axiom}
+
+\begin{axiom}[Choice rule (Plackett--Luce on minimal sets)]\label{ax:PL}
+Assuming locality, label invariance, and scale invariance, the next token among the current minimal set $\mathcal M_k$ is
+\(
+\mathbb P(m_{k+1}=m\mid\mathcal F_k)={W(m;S_k)}/{\sum_{z\in\mathcal M_k}W(z;S_k)}.
+\)
+\end{axiom}
+
+\begin{proposition}[Local evaluation and truncation]\label{prop:trunc}
+Let $B_R(m)$ be the radius-$R$ ball in $\mathcal D$. \\
+(i) If $|K|\le C e^{-\alpha d}$, truncating the potential sum to $B_R(m)$ incurs error
+$\le C'e^{-\alpha R}\big(\|\beta\|_{L^1(B_R^c)}+\sum_j|g_j|\big)$. \\
+(ii) If $|K|\le C(1+d)^{-\gamma}$ with $\gamma>d(\mathcal D)$, the truncation error is $O(R^{-(\gamma-d(\mathcal D))})$.
+\end{proposition}
+
+\paragraph{Cost.}
+Build $\mathcal A^\*$ once in $O(E)$; solve $(I+\lambda\Delta_{U(1)}^{\mathcal A^\*})\beta=\beta_0$ in $O(E\sqrt{\kappa_{\rm cond}})$; per step, evaluate hazards in $O(|B_R|+J)$ for $J$ AR taps.
+
+% =========================================================
+\section{Colored Causality and No Paradox}
+
+We keep four edge types $P\!\to\!P$, $A\!\to\!A$, $P\!\to\!A$, $A\!\to\!P$ (pre-influence and back-reaction use $W$ and phase gradients).
+
+\begin{axiom}[Acyclicity on actuals]\label{ax:acyclic}
+The $A$-projection is a DAG: observed actual ranks strictly increase along any $A\leadsto A$ path.
+\end{axiom}
+
+\begin{lemma}[No temporal paradox on observables]
+Under locality and \cref{ax:acyclic}, mixed $A\leadsto A$ paths have increasing actual rank; closed $A$ loops are impossible.
+\end{lemma}
+
+% =========================================================
+\section{Geometry from Order + Counts}
+
+We adopt (CL1)--(CL5) for \emph{faithful approximation} of a Lorentzian manifold by causal sets in Alexandrov regions (order preservation, volume convergence, height scaling, Myrheim--Meyer dimension, locality/mixing). Then:
+
+\begin{theorem}[Metric recovery]
+Under (CL1)--(CL5), causal structure fixes the conformal class (HKM; Malament) and normalized counts fix the conformal factor; $g$ is recovered up to a constant set by density.
+\end{theorem}
+
+The phase fiber affects hazards (statistics of tokens) but not the order+count mechanics of metric recovery.
+
+% =========================================================
+\section{AR($\infty$) Identification (Whittle Program)}\label{sec:arid}
+
+Let $h_k=\langle f,\mu_k\rangle$ be a scalar probe of the state. Linearization yields $h_{k+1}=\sum_{j\ge 0} g_j h_{k-j}+\epsilon_k$.
+Using the periodogram $I(\theta)$, minimize the Whittle functional
+\[
+\mathcal L(G)=\int_{-\pi}^{\pi}\big(\log S(\theta)+I(\theta)/S(\theta)\big)\,d\theta,\quad
+S(\theta)=|G(e^{i\theta})|^2 S_0(\theta),
+\]
+for $G(e^{i\theta})=\sum_{j\ge 0}g_j e^{i\theta j}$ with tap regularization; this consistently estimates $g_j$ under absolute summability and mixing.
+
+% =========================================================
+\section{Observables and Predictions (Distinct from Standard Decoherence)}
+
+\paragraph{What is observed.}
+Observables are cylinder functionals of the token record (counts, heights, two-point token correlations). Phases and $\mathcal A^\*$ are gauge; they affect the \emph{law} of $T_{\le k}$ through $W$.
+
+\paragraph{P1: Rate-dependent fringe visibility.}
+At fixed geometry and time-of-flight, standard environment-induced decoherence predicts visibility $\mathcal V$ set mainly by $\Gamma$ and dwell time, largely independent of detection/actualization \emph{rate} $\nu$.
+Here
+\[
+\mathcal V(\nu)=\frac{|G(e^{i\omega})|}{1+\Gamma_\phi/\nu},\qquad
+|G(e^{i\omega})|=\left|\sum_j g_j e^{i\omega j}\right|,
+\]
+implying $\partial\mathcal V/\partial\nu>0$ at fixed $t,\Gamma_\phi$.
+
+\paragraph{P2: Holonomy (AB-like) at fixed path lengths.}
+On a graph interferometer with equal-length routes enclosing nonzero discrete curvature $\sum_{e\in C}\mathcal A^\*_e$, fringes shift by this holonomy with no change in path lengths or environment.
+
+\paragraph{P3: Density-visibility law.}
+At fixed $u=m\tau$ and dephasing, feedback in \eqref{ax:hazard} yields $\mathcal V\sim \mathcal V_0 e^{-c\,\rho_{\rm act}}$, where $\rho_{\rm act}$ is an actualization-density proxy. This dependence is absent in standard single-particle decoherence models.
+
+% =========================================================
+\section{Field-Theory Tie-in (1+1 and 3+1)}
+
+\subsection{1+1: Discrete d'Alembertian and retarded inverse}
+Let future-layer sets $\mathcal L_k(x)$ be defined by link distance. With
+$(\Box_{\rm cs} f)(x)=c_0 f(x)+\sum_{k=1}^K c_k \sum_{y\in \mathcal L_k(x)}f(y)$,
+set $B:=m^2-\Box_{\rm cs}$ and $G_R:=B^{-1}$ (retarded; forward substitution). Phases can be taken from $\Arg K$ on edges (or the Pauli--Jordan function) to lift $K$ to a complex amplitude used in hazards.
+
+\subsection{3+1: Johnston tail as magnitude sanity check}
+For Hasse links $L_0$, the 4D retarded kernel tail can be coded as a power series in $L_0$ with exact coefficients (mean in sprinkling limit). We compare bin means on a fixed $u=m\tau$ window, fitting a \emph{single} scale to the tail curve; this is a \emph{sampling} check (not a phase fit).
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=0.68\linewidth]{johnston_4d_exact_tail_tristate.png}
+  \caption{4D Johnston tail, bin means on a fixed $u$ window. Tri-state source selection improves sampling coverage (single LS scale).}
+  % Provenance (tri-state 24/64, min-pairs 50): scale=0.91805, corr=0.47432, MSE=0.002199  :contentReference[oaicite:0]{index=0}
+  % Provenance (tri-state 48/96, min-pairs 75): scale=0.92413, corr=0.39672, MSE=0.002391  :contentReference[oaicite:1]{index=1}
+\end{figure}
+
+\begin{table}[t]
+\centering
+\begin{tabular}{lccc}
+\toprule
+Selection & Scale $s$ & Corr.\ (windowed) & MSE (windowed)\\
+\midrule
+Uniform sources (24)       & 0.85993 & 0.19401 & $2.8139\times 10^{-3}$ \\
+Tri-state (24/64, min 50)  & 0.91805 & 0.47432 & $2.1990\times 10^{-3}$ \\
+Tri-state (48/96, min 75)  & 0.92413 & 0.39672 & $2.3908\times 10^{-3}$ \\
+\bottomrule
+\end{tabular}
+\caption{4D Johnston tail: bin-mean comparisons with a single tail scale. Tri-state selection yields better coverage (sampling improvement), not a parameter fit. 
+% Uniform meta: corr=0.19401, MSE=0.00281389, scale=0.85993  :contentReference[oaicite:2]{index=2}
+% Tri-state 24/64/50 meta: corr=0.47432, MSE=0.00219895, scale=0.91805  :contentReference[oaicite:3]{index=3}
+% Tri-state 48/96/75 meta: corr=0.39672, MSE=0.00239077, scale=0.92413  :contentReference[oaicite:4]{index=4}
+}
+\label{tab:johnston}
+\end{table}
+
+\paragraph{Ablations (do-not-do controls).}
+“V-split” and certain normalizations produce unphysical scales and large negative correlations (we retain them as controls, not results).
+% V-split windowed v2: scale=1.52890, corr=-0.98877, MSE=0.0177535  :contentReference[oaicite:5]{index=5}
+% V-split windowed: scale=0.02906, corr=-0.96496, MSE=0.0217785  :contentReference[oaicite:6]{index=6}
+% Tail-norm v2: corr=-0.54169, MSE=0.0354244  :contentReference[oaicite:7]{index=7}
+% Tail-norm:   corr=-0.54785, MSE=0.403627  :contentReference[oaicite:8]{index=8}
+% Early “inside” bins (illustrative only): corr=-0.55152 (N=6400,T=2.0,m=2.5, k_max=16)  :contentReference[oaicite:9]{index=9}
+
+% =========================================================
+\section{Implementation Notes and Complexity}
+
+\begin{itemize}[leftmargin=1.1em]
+\item \textbf{Connection} $\mathcal A^\*$: tree--cotree projection $O(E)$, plus optional polishing iterations.
+\item \textbf{Vacuum} $\beta$: one covariant Poisson solve (SPD), CG with diagonal preconditioner.
+\item \textbf{Hazards}: precompute neighborhoods $B_R$; per step $O(|B_R|+J)$.
+\item \textbf{Truncation}: exponential kernels $\Rightarrow$ exponentially small error; algebraic $\Rightarrow$ error $O(R^{-(\gamma-d)})$.
+\end{itemize}
+
+% =========================================================
+\section{Conclusion}
+
+We presented a unified, gauge-covariant phase dynamics for a potential--actual growth process, with hazards combining AR($\infty$) memory and interference along a canonical connection derived from kernel phases. The vacuum potential field is fixed by a convex variational principle. Geometry from order+counts is unaffected and remains Lorentzian in the continuum limit. The theory offers falsifiable signatures beyond standard decoherence and a pragmatic computational path.
+
+\appendix
+
+\section{Golden Rotation Number (Diophantine Remark)}
+Among irrational rotation numbers, $\phi^{-1}$ maximizes the Diophantine exponent, minimizing rational locking at finite depth. This justifies using a golden rotation for quasi-periodic phase sampling on the $U(1)$ fiber as a robust \emph{regime}, not as a separate ontology.
+
+\section{References (indicative)}
+\begin{thebibliography}{9}
+\bibitem{HKM} S.\,W.\,Hawking, A.\,R.\,King, P.\,J.\,McCarthy, \emph{A new topology for curved spacetime which incorporates the causal, differential, and conformal structures}, J.\ Math.\ Phys.\ 17 (1976).
+\bibitem{Malament} D.\,Malament, \emph{The class of continuous timelike curves determines the topology of spacetime}, J.\ Math.\ Phys.\ 18 (1977).
+\bibitem{Bombelli} L.\,Bombelli, J.\,Lee, D.\,Meyer, R.\,Sorkin, \emph{Space-time as a causal set}, Phys.\ Rev.\ Lett.\ 59 (1987).
+\bibitem{BrightwellGregory} G.\,Brightwell, R.\,Gregory, \emph{Structure of random discrete spacetime}, Phys.\ Rev.\ Lett.\ 66 (1991).
+\bibitem{BBheight} B.\,Bollob\'as, G.\,Brightwell, \emph{The height of a random partial order}, J.\ ACM 44 (1997).
+\bibitem{RideoutSorkin} D.\,Rideout, R.\,D.\,Sorkin, \emph{A classical sequential growth dynamics for causal sets}, Phys.\ Rev.\ D61 (1999).
+\end{thebibliography}
+
+\end{document}

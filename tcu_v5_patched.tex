@@ -1,0 +1,837 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{physics}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{microtype}
+\usepackage{hyperref}
+\hypersetup{colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue}
+\title{Helical Clocks, Child-Driven Closure, and Zero-Sum Spacetime:\\
+A Levelwise Theory from Spinors to Unity}
+\author{VR \& AI}
+\date{\today}
+
+\newtheorem{definition}{Definition}
+\newtheorem{lemma}{Lemma}
+\newtheorem{proposition}{Proposition}
+\newtheorem{remark}{Remark}
+
+\newcommand{\TT}{\mathbb T}
+\newcommand{\RR}{\mathbb R}
+\newcommand{\ZZ}{\mathbb Z}
+\newcommand{\cH}{\mathcal H}
+\newcommand{\vect}[1]{\boldsymbol{#1}}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+We propose a consistent framework in which time, space, and large-scale expansion arise from networks of \emph{helical clocks} created by comparison. 
+The central principles are: (i) \emph{time is carry} from incommensurate rotations on a torus, (ii) \emph{space is pushforward} of clock phases by a clock tensor, (iii) a \emph{birth-driven hierarchy} of levels (unity $\to$ spinor) created by self-comparisons, (iv) \emph{child-driven closure dynamics} that open or re-close parent levels, and (v) a \emph{levelwise zero-sum} energy identity with a negative closure reservoir. 
+Kinematics separates \emph{expansion} (parent uncurling) from \emph{motion} (sliding along a helical arm), and switching between parents admits Landau--Zener-like rates. 
+At unity, a two-fluid exchange (children $\leftrightarrow$ closure-tension) reproduces late-time acceleration close to $\Lambda$CDM with a small interaction, while preserving an exact zero-sum. 
+Spinorial termination ($4\pi$ closure) provides a natural bottom for the cascade.
+We outline experimental and cosmological signatures without assuming any fixed discrete scale ratio.
+\end{abstract}
+
+\tableofcontents
+
+\section{Axioms and Primitives}
+
+% --- Notation box (added) ---
+\paragraph{Notation.}
+We fix the following symbols used throughout:
+\begin{description}
+\item[$u$] Observer's instantaneous time direction (unit).
+\item[$\Theta^a{}_i$] Clock-to-space pushforward (``clock tensor'').
+\item[$E_i$] Pushed vector fields $E_i=\Theta^a{}_i\partial_a$ on $M$.
+\item[$Q$] Levelwise exchange/interaction operator (two-fluid mapping).
+\item[$\chi,\alpha,\kappa$] Micro-couplings (anisotropy, growth, curvature).
+\item[$\rho_{\rm ch},\rho_\tau$] Child and closure ``densities''/budgets.
+\item[$\omega_i$] Intrinsic clock angular velocities on $\mathbb T^K$.
+\item[signs] ``Closure'' is taken positive when it refunds budget to parent.
+\end{description}
+% --- end Notation box ---
+
+\paragraph{A0 (Operationality).}
+Only comparisons are physically meaningful; every measurement is a comparison.
+
+\paragraph{A1 (Unity, closed by default).}
+There exists a unity system $U$ with free evolution $R(t)=\exp(tX)$ on a compact group such that, absent comparisons, $R$ is effectively closed (no drift/no time).
+
+\paragraph{A2 (Comparison creates clocks).}
+Any closure test introduces a new reference (clock). Generically system and reference are incommensurate, yielding non-closure.
+
+\paragraph{A3 (Time is carry).}
+On a $K$-torus $\TT^K$ with phases $\vect\theta(t)=\vect\theta_0+\vect\omega t\ (\mathrm{mod}\ 1)$, choose a primitive covector $\vect u\in\ZZ^K$ and lift $\tilde{\vect\theta}\in\RR^K$.
+The stepwise carry
+\begin{equation}
+c(n)=\Big\lfloor \vect u\!\cdot\!\tilde{\vect\theta}(n{+}1)\Big\rfloor-\Big\lfloor \vect u\!\cdot\!\tilde{\vect\theta}(n)\Big\rfloor,\qquad
+C_N=\sum_{n=0}^{N-1}c(n)
+\end{equation}
+and the lifted coordinate $T(t)=\vect u\!\cdot\!\tilde{\vect\theta}(t)$ define an emergent linear time.
+
+\paragraph{A4 (Space is pushforward).}
+A realization map $x:\TT^K\to M$ with clock tensor (Jacobian) $\Theta^a{}_i=\partial x^a/\partial\theta_i$ pushes phase flow into spatial motion: $\dot x^a=\Theta^a{}_i\,\omega_i$.
+
+\paragraph{A5 (Birth builds the hierarchy).}
+Self-comparison spawns children, forming a vertical chain $L_0(=U)\leftrightarrow L_1\leftrightarrow L_2\cdots$. No fixed inter-level scale is assumed; only incommensurability and decaying visibility to parents.
+
+\paragraph{A6 (Vertical vs horizontal).}
+Vertical couplings connect neighboring levels and build carries/time; horizontal couplings connect peers within a level and build sectorization/entanglement.
+
+\paragraph{A7 (Measurement = local closure).}
+Measurement is a horizontal coupling to a pointer that (A) pins (Zeno), (B) resets (projective), or (C) removes (destructive) a level-$n$ clock, making its carry current vanish in the detector frame while creating records at slower levels.
+
+\paragraph{A8 (Child-driven closure).}
+Each parent’s closure variable $C_{n-1}$ relaxes to zero absent children and is driven open by coherent, asymmetric child activity:
+\begin{equation}
+\dot C_{n-1}=-\gamma_{n-1}C_{n-1}+\kappa_n\,[\phi_n N_n r_n - W^{\rm crit}_n]_+,\qquad H_{n-1}\propto C_{n-1}.
+\end{equation}
+
+\paragraph{A9 (Spinorial termination).}
+In $3{+}1$D, $\pi_1(\mathrm{SO}(3))=\ZZ_2$; spinors satisfy $2\pi\mapsto-1$, $4\pi\mapsto+1$, providing a terminal class for topological non-closure at the bottom level.
+
+\paragraph{A10 (Level-sum regularization).}
+Sums over levels are regularized (Mellin/Zeta/Laplace); predictions depend on finite parts and log-periodic corrections (if any effective discrete scale emerges), not on any special constant.
+
+\section{Emergent Time as Carry on a Torus}
+
+\begin{definition}[Carry time]
+Given $\vect\theta(t)=\vect\theta_0+\vect\omega t\ (\mathrm{mod}\ 1)$ on $\TT^K$ and a primitive $\vect u\in\ZZ^K$, the lifted time is $T(t)=\vect u\!\cdot\!\tilde{\vect\theta}(t)$; its integer carry $C_N$ counts boundary crossings of $\vect u\!\cdot\!\vect\theta$.
+\end{definition}
+
+\begin{proposition}[Robustness]
+If $\vect u\!\cdot\!\vect\omega\ne 0$, then $T(t)$ is linear in $t$ and $C_N/N\to \vect u\!\cdot\!\vect\omega$ as $N\to\infty$. 
+Rational relations produce periodic carries; irrational relations produce ergodic carry statistics.
+\end{proposition}
+
+\section{Space from the Clock Tensor}
+\label{sec:space-clock}
+Let $x:\TT^K\to M$ be smooth with $\Theta^a{}_i=\partial x^a/\partial\theta_i$. Then $\dot x^a=\Theta^a{}_i\,\omega_i$.
+\paragraph{Proposition (small-loop holonomy bound).}
+Define the pushforward fields $E_i \equiv \Theta^a{}_i(x)\,\partial_a$ on $M$ so that 
+$\dot x^a=\Theta^a{}_i\,\omega_i$. For a small rectangle in phase space of sides 
+$\varepsilon_i,\varepsilon_j$ based at $\theta_0$, the net displacement after traversing the loop 
+in $M$ is
+\[
+\Delta x_{\circlearrowleft}
+=\big[\,E_i,E_j\,\big]\Big|_{x(\theta_0)}\,\varepsilon_i\varepsilon_j+O(\varepsilon^3),
+\qquad
+\big[\,E_i,E_j\,\big]^a
+=\Theta^b{}_i\,\partial_b\Theta^a{}_j-\Theta^b{}_j\,\partial_b\Theta^a{}_i.
+\]
+Hence, with local bounds $M\equiv\|\Theta\|$ and $L\equiv\|\nabla_x\Theta\|_F$,
+\[
+\|\Delta x_{\circlearrowleft}\|
+\;\le\;2\,M\,L\,|\varepsilon_i\varepsilon_j|+O(\varepsilon^3).
+\tag{3*}
+\]
+\emph{Corollary (regularity window).} If $2ML\,\ell_\theta^2\ll 1$ on a patch of phase‑diameter 
+$\ell_\theta$, loop holonomies are $O(\ell_\theta^2)$ and the pushed‑forward spatial metric 
+built from a triad of arms is well‑behaved (curvature bounded, torsion controlled) on that patch. 
+In particular, when the triad spans $T_xM$ with condition number $\kappa(\Theta)$ uniformly bounded, 
+the induced Gram matrix $h_{ab}=\sum_{a=1}^3 E_a{}_aE_a{}_b$ is positive definite and smooth, 
+and the rank‑1 time update (Sec.\,14.1) yields a Lorentzian signature once the timelike carry 
+exceeds the smallest spatial eigenvalue.
+
+
+\section{Birth-Driven Hierarchy and Couplings}
+
+\subsection{Birth without a fixed scale}
+The hierarchy arises via births at generic detunings; no universal scale factor is assumed. A level-$n$ horizontal order parameter $z_n=r_n e^{i\psi_n}$ is defined over short arm segments.
+
+\subsection{Child-driven closure dynamics}
+For parent $L_{n-1}$ and children $L_n$,
+\begin{equation}
+\dot C_{n-1}=-\gamma_{n-1}C_{n-1}+\kappa_n\,[\phi_n N_n r_n- W^{\rm crit}_n]_+,\qquad
+H_{n-1}\propto C_{n-1}.
+\end{equation}
+Below threshold the parent re-closes; above it the parent uncurls/grows.
+
+\subsection{Vertical vs horizontal}
+Vertical couplings change $C_{n-1}$ and $H_{n-1}$ (time/expansion). Horizontal couplings produce synchronization, sectorization spectra, and entanglement.
+
+\section{Hierarchical Kinematics: Expansion vs Motion}
+
+% ===============================================
+\subsection{Orientation diffusion and switching times}
+\label{subsec:switch-scaling}
+
+\paragraph{Definition (switching).}
+Let $u(t)\in\mathbb{S}^{2}$ denote the instantaneous timelike direction, defined as the normalized leading eigenvector of the local time–metric extracted from the triad.
+A \emph{switch} is recorded when $u$ exits one triad wedge and enters another (i.e., crosses a separatrix where two arms are equally favored).
+Empirically, the eigenvalues remain near $(-1,+1,+1)$ while $u$ rotates (stiff spectrum, soft eigenvector), and curvature proxies $|\nabla_t^2 u|_\perp$ spike at switches. This matches the classical Davis–Kahan picture for eigenvector sensitivity when the instantaneous spectral gap $g(t)=\lambda_1-\lambda_2$ becomes small.
+
+\paragraph{Measured scaling.}
+We ran v4/MPS simulations with frames saved for $N=32,64,128$, analyzed each run with our switching pipeline. A log–log fit of the mean inter-switch interval $\langle\tau\rangle$ vs.\ resolution $N$ gives
+\begin{equation}
+\log \langle\tau\rangle \;=\; 6.251 \;-\; 2.014\,\log N, \qquad R^2 = 1.000,
+\end{equation}
+i.e.\ $\langle\tau\rangle \propto N^{-p}$ with $p \approx 2.014$ and an excellent fit.
+Table~\ref{tab:tau-scaling} lists $\langle\tau\rangle$, the sample standard deviation $\sigma_\tau$, detected switch counts $n_{\mathrm{switch}}$, and the mean orientation cosine $\overline{\cos}$.
+\medskip
+
+\begin{table}[h]
+\centering
+\caption{Inter-switch statistics for the v4 runs (Fig.~\ref{fig:tau-scaling}).}
+\label{tab:tau-scaling}
+\input{tau_scaling_table.tex}
+\end{table}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.62\textwidth]{tau_scaling.pdf}
+    \caption{Scaling of mean inter-switch time $\langle\tau\rangle$ with resolution $N$; log–log fit (slope $-2.014$, $R^2=1.000$).}
+    \label{fig:tau-scaling}
+\end{figure}
+
+\paragraph{Mechanism and $\sqrt{N}$ law.}
+The scaling follows from a budget-limited, filament-driven reorientation model.
+In our $d_s=2$ sheet, forcing/birth events are localized along spiral \emph{arms} that form an active set of (fractal) dimension $D_f\!\approx\!1$.
+If the parent supplies a fixed total event rate $R$ (independent of resolution), the number of effectively independent arm segments grows as $M \sim N^{D_f/d_s} \sim N^{1/2}$.
+Each segment contributes an $O(1/\sqrt{M})$ kick to the unnormalized driver of $u$ by concentration of measure, giving an orientation diffusion constant $D_u \propto 1/M$ and a first-passage estimate
+\begin{equation}
+\langle\tau\rangle \;\propto\; \frac{1}{D_u} \;\propto\; M \;\sim\; N^{D_f/d_s} \;=\; N^{1/2}.
+\end{equation}
+This ``switching bubble'' picture is consistent with the hierarchy: at the Unity top ($R\!\to\!0$) and the spinorial bottom (births topologically suppressed), $D_u\!\to\!0$ and $\langle\tau\rangle\!\to\!\infty$.
+
+\paragraph{Resolution dependence of forcing.}
+More generally, if the total effective forcing scales with resolution as $R \propto N^{\alpha}$ (rather than being budget-limited, $\alpha\!=\!0$), then
+\begin{equation}
+\langle\tau\rangle \;\propto\; \frac{M}{R} \;\propto\; N^{\,D_f/d_s-\alpha}
+\;\;\Longleftrightarrow\;\;
+\langle\tau\rangle \propto N^{-p}\ \text{with}\ p \;=\; \alpha - D_f/d_s.
+\end{equation}
+Our present runs give $p\approx 2.014$; with $D_f/d_s \approx 1/2$ this implies $\alpha \approx 2.5$, i.e.\ the net forcing grows with $N$ (consistent with per-cell pump/noise and frame-rate choices).
+A budget-controlled sweep (fixing total input power across $N$) is planned; the model then predicts the ``square-root'' law $\langle\tau\rangle\!\sim\!N^{1/2}$.
+
+
+\paragraph{Raw switching diagnostics (N=32,64,128).}
+For transparency we include the timelike components, curvature proxy, and angle step for each resolution:
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.32\textwidth]{switch_N32_v4_u_components.pdf}\hfill
+  \includegraphics[width=0.32\textwidth]{switch_N64_v4_u_components.pdf}\hfill
+  \includegraphics[width=0.32\textwidth]{switch_N128_v4_u_components.pdf}
+  \caption{Components of $u(t)$ for $N\in\{32,64,128\}$ (left to right).}
+\end{figure}
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.32\textwidth]{switch_N32_v4_curvature.pdf}\hfill
+  \includegraphics[width=0.32\textwidth]{switch_N64_v4_curvature.pdf}\hfill
+  \includegraphics[width=0.32\textwidth]{switch_N128_v4_curvature.pdf}
+  \caption{Curvature proxy $|\nabla_t^2 u|_\perp$; spikes align with detected switches.}
+\end{figure}
+
+\paragraph{What to measure next.}
+(i) Active-set dimension $D_f$ via skeleton/box-count on arms; (ii) budget vs activity test: keep total event power fixed (predict $\tau\!\sim\!N^{D_f/d_s}$) vs.\ scale it with arm length (predict $\tau\!\sim\!N^0$); (iii) eigen-gap tracking: $g(t)=\lambda_1-\lambda_2$ minima co-locate with switches and narrow as $N^{-1/2}$; (iv) estimate the orientation diffusion constant $D_u$ from long-time angle MSD and verify $D_u\!\propto\!N^{-D_f/d_s}$; (v) 1D ring and 3D slab checks to validate the general law $\tau \propto N^{D_f/d_s}$.
+% ===============================================
+
+
+
+\paragraph{Parent helix and decomposition (corrected).}
+Parametrize a parent arm by
+\[
+x_P(\theta,t)=\big(R(t)\cos\theta,\;R(t)\sin\theta,\;p\,\theta\big),\qquad 
+T\equiv\partial_\theta x_P=(-R\sin\theta,\;R\cos\theta,\;p),
+\tag{17}
+\]
+so that $\|T\|=\sqrt{R^2+p^2}$. A child sits at $\theta_c(t)=\theta_P(t)+\delta(t)$.
+Its velocity decomposes as
+\[
+\dot X
+=\underbrace{\partial_t x_P(\theta_c,t)}_{\text{expansion (uncurling)}} 
++\underbrace{\partial_\theta x_P(\theta_c,t)\,\dot\theta_c}_{\text{motion along arm}}
+=\dot R\,\hat{\boldsymbol R}\big|_{\theta_c}
++T\big|_{\theta_c}\,(\dot\theta_P+\dot\delta),
+\tag{18}
+\]
+where $\hat{\boldsymbol R}=(\cos\theta,\sin\theta,0)$. Defining the parent expansion rate
+\[
+H_P\;\equiv\;\frac{\dot R}{R}\quad [\text{time}^{-1}],
+\]
+the expansion piece is $H_P\,X_\perp$ with $X_\perp\equiv R\hat{\boldsymbol R}$, while the \emph{peculiar} sliding is
+\[
+v_{\rm pec}\equiv T\,\dot\delta,\qquad \|v_{\rm pec}\|=\sqrt{R^2+p^2}\;|\dot\delta|.
+\]
+Units check: $H_P$ has dimension $t^{-1}$, $X_\perp$ has length, hence $H_PX_\perp$ is a velocity; 
+$\dot\delta$ is $t^{-1}$ and $\|T\|$ is length, so $\|v_{\rm pec}\|$ is a velocity.
+\]
+\paragraph{Locked vs.\ sliding.}
+The relative phase obeys the Adler/Kuramoto equation
+\[
+\dot\delta=\Delta\omega-K\sin\delta+\xi(t),
+\tag{19}
+\]
+with $|\Delta\omega|<|K|$ giving lock (no sliding) and drift otherwise (sliding).
+\paragraph{Energetics.}
+The sliding kinetic energy is
+\[
+K_{\rm slide}=\tfrac12\,m\,\|T\|^2\,\dot\delta^2=\tfrac12\,m\,(R^2+p^2)\,\dot\delta^2,
+\]
+while comoving with expansion requires no local power.
+
+\subsection{Locked vs sliding}
+Relative phase obeys an Adler/Kuramoto equation
+\begin{equation}
+\dot\delta=\Delta\omega-K\sin\delta+\xi(t),
+\end{equation}
+with locking if $|\Delta\omega|<|K|$ (no sliding) and drift otherwise (sliding). Horizontal sectorization gives a periodic pinning potential $V_\parallel(\delta)=V_0[1-\cos(k\delta)]$, producing creep near threshold.
+
+\subsection{Energetics}
+In the parent frame the sliding kinetic energy is $K_{\rm slide}=\tfrac12 m(R^2+p^2)\dot\delta^2$.
+Comoving with expansion requires no local power; sustained sliding requires drives/fields that overcome pinning.
+
+\section{Parent-Switching Dynamics}
+Switching between parents $P,Q$ can be modeled by a two-level system with detuning $\Delta(t)$ and overlap $J$:
+\begin{equation}
+i\hbar\frac{d}{dt}\!\begin{pmatrix}a_P\\ a_Q\end{pmatrix}=\begin{pmatrix}E_P(t)&J\\J&E_Q(t)\end{pmatrix}\!\begin{pmatrix}a_P\\ a_Q\end{pmatrix},\qquad \Delta=E_P-E_Q.
+\end{equation}
+A sweep through an avoided crossing gives the Landau--Zener probability
+\begin{equation}
+P_{\rm switch}=\exp\!\left(-\frac{2\pi J^2}{\hbar|\dot\Delta|}\right).
+\end{equation}
+This encodes unbinding, phase matching, and capture in a single rate.
+
+\section{Measurement (Local Closure)}
+Measurement is a horizontal coupling to a pointer at level $n$:
+\begin{itemize}
+\item \textbf{Pinning (Zeno).} Strong continuous coupling freezes the relative phase; carry current vanishes in pointer frame.
+\item \textbf{Projective reset.} A fast kick resets phase into an eigenbranch; records appear at slower levels.
+\item \textbf{Destructive.} Removal of the clock and energy transfer to channels (photons/heat/entropy); local branch terminates.
+\end{itemize}
+In each case the carry sink at level $n$ is balanced by record-creation at slower levels (new clocks), preserving global open/local close symmetry.
+
+\section{Spinorial Termination}
+In $3{+}1$D, spinors require $4\pi$ to return to identity, providing a terminal class of non-closure. 
+The bottom layer is predominantly horizontal (entanglement, exclusion), with vertical births suppressed.
+
+
+
+% --- moved Levelwise Zero-Sum (Closure Energy) here ---
+\section{Levelwise Zero-Sum (Closure Energy)}
+
+\subsection{Microphysics of the Closure Sector and Energy Exchange}\label{subsec:closure-micro}
+\subsubsection{Broad distributions and non-stationary births: bounds on $\mathcal C_A$}\label{subsub:CA-bounds}
+Let $w_u\!\ge\!0$ with $\sum_u w_u=1$ be an energy weighting over modes. Define $\rho_{\rm ch}=\sum_u E_u$ and $S\equiv \sum_u A_u^2$.
+For harmonic $E_u=\tfrac12 m_u\omega_u^2 A_u^2$ we have
+\(
+S=\sum_u \frac{2E_u}{m_u\omega_u^2}=\big\langle (m\omega^2)^{-1}\big\rangle_{\!w}\,\rho_{\rm ch}.
+\)
+For broad distributions, Cauchy--Schwarz gives the bounds
+\begin{equation}
+\frac{\rho_{\rm ch}^2}{\sum_u w_u m_u\omega_u^2}\ \le\ S\ \le\ \Big(\sum_u \frac{w_u}{m_u\omega_u^2}\Big)\,\rho_{\rm ch},
+\end{equation}
+hence $\mathcal C_A$ is controlled by the first and second inverse moments of $m\omega^2$. During non-stationary births, let $w_u(t)\propto E_u(t)$;
+then $S(t)=\mathcal C_A(t)\,\rho_{\rm ch}(t)$ still holds instantaneously with slowly varying $\mathcal C_A(t)$; corrections are $O(\dot w/\bar\lambda)$ where $\bar\lambda$ is the typical growth rate.
+
+\subsubsection{From torque to $\chi$: phase reduction}\label{subsub:torque-chi}
+With $\mathcal L_{\rm int}=-\sum_i g_i A_i^2 \cos(\phi_i-\phi_{\rm par})$ and a smooth dependence $\Omega_{\rm par}(C)$, standard phase reduction around a limit cycle gives
+\begin{align}
+\dot\phi_i &= \omega_i(C) + K_i \sin(\phi_{\rm par}-\phi_i) + O(K^2),\qquad K_i\equiv g_i Z_i,\\
+\dot A_i &= \lambda_{i,0}\,A_i - \alpha_i A_i^3 + \frac{\partial \omega_i}{\partial C}\,A_i\,\delta C + O(K^2).
+\end{align}
+Averaging over the fast parent phase with $\phi_{\rm par}(t)=\int^t \Omega_{\rm par}(C(t'))dt'$ shifts the linear coefficient as
+\begin{equation}
+\lambda_i(C) = \lambda_{i,0} + \underbrace{\Big(\frac{\partial \omega_i}{\partial C}\Big)}_{\propto\ \partial\Omega_i/\partial C}\,C \;+\; O(K^2),
+\end{equation}
+so that the parametric gain $\chi_i$ in $\lambda_i(C)=\lambda_{i,0}+\chi_i C$ satisfies $\chi_i\propto \partial\omega_i/\partial C$ (sign from hardening/softening). The $O(K^2)$ terms renormalize $\lambda_{i,0}$ and $\alpha_i$ but do not change the linear $C$-dependence to leading order.
+
+\subsubsection{3D ripple dispersion and emission}\label{subsub:3d-dispersion}
+For a thin but finite sheet, small ripples decompose into components along the arm ($\parallel$) and transverse to it ($\perp$).
+Linearization yields the anisotropic dispersion
+\begin{equation}
+\omega^2(\mathbf k)= c_\parallel^2 k_\parallel^2 + c_\perp^2 k_\perp^2 + m_\Theta^2,\qquad c_{\parallel,\perp}=\sqrt{\kappa_{\parallel,\perp}/M_\Theta}.
+\end{equation}
+A weak slider source $J(t)$ at frequency $\omega$ radiates into the 3D continuum with rate
+\begin{equation}
+P_{\rm rad} \;=\; g_{\rm rad}^2\,|\tilde J(\omega)|^2\,\rho(\omega)\,v_g(\omega),\qquad
+\rho(\omega)\propto \int \delta\!\big(\omega-\omega(\mathbf k)\big)\,d^3k,\ \ v_g=\big\langle \partial \omega/\partial k \big\rangle,
+\end{equation}
+reducing to the 1D expression when $k_\perp$ is gapped or geometrically suppressed. Near threshold $\omega\gtrsim m_\Theta$, $\rho(\omega)\sim (\omega^2-m_\Theta^2)^{1/2}$ and $v_g\sim c_\parallel^2 k_\parallel/\omega$, recovering the form factor $F=\sqrt{1-m_\Theta^2/\omega^2}$ up to anisotropy constants.
+
+
+We model the closure sector by a slow scalar $C(\theta,t)$ (tension) and transverse ripples $\delta x(\theta,t)$ on the parent sheet with Lagrangian
+$\mathcal L_\tau = \frac{M_C}{2}\dot C^2 - V(C) + \frac{M_\Theta}{2}|\partial_t x|^2 - \frac{\kappa}{2}|\nabla_\theta x|^2 - \frac{\mu}{4}\|C_{ij}-S_{ij}\|^2$,
+$C_{ij}=\partial_i x^a\partial_j x^a$.
+The macroscopic closure energy is $\rho_\tau=\frac12 M_C \dot C^2 + V(C) + \frac12 M_\Theta\langle |\partial_t x|^2\rangle + \frac12 \kappa\langle |\nabla_\theta x|^2\rangle$.
+Parametric dependence $\omega_u(C)$ for newborns $Z_u$ yields $Q_{\tau\to{\rm ch}}=\langle\sum_u \kappa_u A_u^2\rangle \dot C$ with $\kappa_u=2m_u\omega_u\partial\omega_u/\partial C$,
+mapping to the phenomenological $Q=\gamma H \rho_\tau$ on the slow manifold. A radiative ripple channel $Q_{\tau\to{\rm wave}}$ adds a small correction.
+
+
+At each boundary $L_{n-1}\leftrightarrow L_n$ define a closure reservoir
+\begin{equation}
+\rho^{(-)}_{\mathrm{cl};\,n-1}=-\kappa_{n-1}\,H_{n-1}^2,\qquad \kappa_{n-1}>0.
+\end{equation}
+The levelwise zero-sum identity
+\begin{equation}
+\rho^{(-)}_{\mathrm{cl};\,n-1}+\rho^{(n)}_{\rm ch}+\rho^{(n)}_{\tau}=0
+\end{equation}
+holds, with $\rho^{(n)}_{\rm ch}$ the positive children sector and $\rho^{(n)}_{\tau}$ a positive closure-tension sector (often $w_\tau^{(n)}\approx -1$). 
+Energy exchange $Q^{(n)}$ between $\rho^{(n)}_{\rm ch}$ and $\rho^{(n)}_{\tau}$ preserves the identity while $H_{n-1}$ adjusts through the constraint.
+
+
+
+\subsubsection{Mode statistics: $\langle\sum_u A_u^2\rangle$ vs.\ $\rho_{\rm ch}$}\label{subsub:mode-stats}
+We give three equivalent routes showing $\langle\sum_u A_u^2\rangle = \mathcal C_A\,\rho_{\rm ch}$ with an explicit coefficient $\mathcal C_A$.
+
+\paragraph{(Harmonic-dominated regime).}
+When the newborns are near-harmonic, $E_u\simeq \tfrac12 m_u\omega_u^2 A_u^2$, hence
+\(
+\sum_u A_u^2 = \sum_u \frac{2E_u}{m_u\omega_u^2} = \underbrace{\big\langle (m_u\omega_u^2)^{-1}\big\rangle_{\!\rho}}_{\mathcal C_A}\ \rho_{\rm ch},
+\)
+with $\langle\cdot\rangle_\rho$ the energy-weighted average across modes.
+
+\paragraph{(Near-threshold Stuart--Landau).}
+Write $E_u(A_u)=\tfrac{\alpha_u}{4}A_u^4+\tfrac{\lambda_u}{2}A_u^2$ and $A_{u,\star}^2=\lambda_u/\alpha_u$.
+Then $E_{u,\star}=\lambda_u^2/(4\alpha_u)$ and $A_{u,\star}^2=(\lambda_u/\alpha_u)$, so
+\(
+\sum_u A_{u,\star}^2 = \sum_u \frac{4}{\lambda_u}\,E_{u,\star} \;=\; \big\langle 4/\lambda_u\big\rangle_{\!\rho}\ \rho_{\rm ch},
+\)
+and for a narrow $\lambda_u$ distribution this reduces to $\mathcal C_A\simeq 4/\bar\lambda$.
+
+\paragraph{(Noisy ensemble, Fokker--Planck).}
+With weak noise $D$, the stationary amplitude density for one mode is
+$P_u(A)\propto \exp\!\big(-V_{\rm eff}(A)/D\big)$ with $V_{\rm eff}(A)=\tfrac{\alpha_u}{4}A^4-\tfrac{\lambda_u}{2}A^2$.
+Laplace’s method around $A_{u,\star}$ gives
+$\langle A_u^2\rangle = A_{u,\star}^2\,[1+O(D/\lambda_u^2)]$ and $\langle E_u\rangle = E_{u,\star}[1+O(D/\lambda_u^2)]$,
+hence the same proportionality with small $O(D)$ corrections.
+
+\subsubsection{Closure rate vs.\ Hubble rate}\label{subsub:closure-rate}
+Near the slow manifold we expand the metric-update coefficient as $\lambda(C)=\lambda_1 C + O(C^3)$ (Sec.~\ref{sec:space-clock}).
+The Lorentzian flip requires $\lambda>1/\mu$, hence for $C$ above threshold the FRW matching gives
+$H^2=\frac{1}{\kappa_0}\big(\rho_{\rm ch}+\rho_\tau\big)$ and $H= \sigma_1 C + O(C^3)$ with $\sigma_1=\sqrt{\lambda_1/\kappa_0}$.
+The overdamped closure equation $\dot C=-\gamma_C C+\alpha\,\sum_u A_u^2$ then implies
+\(
+\dot C = \frac{1}{\sigma_1}\,\dot H + O(C^2)\Rightarrow \dot C \propto H
+\)
+on the late-time attractor where $\dot H/H=O(1)$.
+Thus the rate form $H=\lambda'_H \dot C$ used in Sec.~\ref{sec:cosmo-twofluid} is the local inversion of $H(C)$ on the slow manifold.
+
+\subsubsection{Epochs for large $\varepsilon_{\rm rad}$ and observational bounds}\label{subsub:epsrad-epochs}
+When $\varepsilon_{\rm rad}\sim \mathcal O(1)$, the closure sector behaves as a mixture of $w\simeq -1$ (tension) and $w\simeq 1/3$ (ripples).
+Early epochs can accommodate larger $\rho_{\rm wave}/\rho_\tau$ provided the effective radiation does not violate standard constraints (e.g.\ extra relativistic energy density). A clean background is:
+\begin{equation}
+\dot\rho_C + 3H(1+w_C)\rho_C = - (1-\eta)Q_{\rm tot},\qquad
+\dot\rho_{\rm wave} + 4H\,\rho_{\rm wave} = - \eta\,Q_{\rm tot},
+\end{equation}
+with $Q_{\rm tot}=\gamma H \rho_\tau$ and partition $\eta\in[0,1]$.
+Late-time data require $\rho_{\rm wave}/\rho_\tau \ll 1$ (e.g.\ $|w_\tau^{\rm eff}+1|\lesssim 0.05$ implies $\rho_{\rm wave}/\rho_\tau\lesssim 0.04$), hence a transition to small $\eta$ and slow sliding must occur before acceleration dominates.
+
+\subsubsection{Stability under $Q<0$ (flow reversal)}\label{subsub:qneg}
+For $Q=-|\gamma|H\rho_\tau$, the ratio $r=\rho_{\rm ch}/\rho_\tau$ obeys (matter-like $w_{\rm ch}$)
+\begin{equation}
+\frac{dr}{d\ln a} = 3(w_\tau-w_{\rm ch})\,r \;-\; |\gamma|\,(1+r)\,.
+\end{equation}
+No positive fixed point exists when $\gamma<0$ and $w_\tau\approx -1<w_{\rm ch}$; instead $r$ decays and $\rho_\tau$ grows, driving the system back toward a $Q>0$ regime once hardening restores $\chi>0$. Thus $Q<0$ is transiently admissible but cannot define a late-time attractor with $\rho_{\rm ch}>0$.
+
+
+\subsubsection{Parametric work from $L_u$: $\kappa_u$ derivation}\label{subsub:kappa-deriv}
+Let $L_u=\tfrac12 m_u(\dot q_u^2-\omega_u(C)^2 q_u^2) - \tfrac{\alpha_u}{4} q_u^4+\cdots$ and $E_u=\tfrac12 m_u(\dot q_u^2+\omega_u^2 q_u^2)+\tfrac{\alpha_u}{4}q_u^4$.
+Under an adiabatic change of $C$ the amplitude $A_u$ is frozen instantaneously, hence
+\(
+\frac{dE_u}{dt}\big|_{\rm param} = \frac{\partial E_u}{\partial \omega_u}\,\frac{\partial\omega_u}{\partial C}\,\dot C
+= 2 m_u \omega_u \langle q_u^2\rangle \frac{\partial\omega_u}{\partial C}\,\dot C
+= \kappa_u A_u^2 \dot C, \ \ \kappa_u \equiv 2m_u\omega_u\,\frac{\partial\omega_u}{\partial C}.
+\)
+This yields Eq.~(\ref{eq:Q-propto-rhoch}) upon summation and averaging (using Sec.~\ref{subsub:mode-stats}).
+
+\subsubsection{Dispersion and form factor for ripples}\label{subsub:radiative-form}
+Linearizing $\mathcal L_\Theta^{\rm dyn}$ gives $\omega^2(k)=c_\Theta^2\|k\|^2+m_\Theta^2$ with $c_\Theta=\sqrt{\kappa/M_\Theta}$ and $m_\Theta^2\simeq \mu\,\partial\Psi/\partial C|_{C_0}$.
+A uniformly accelerated slider acts as a source at frequency $\omega$; the radiated flux along one arm is suppressed below threshold $\omega<m_\Theta$ and scales with a phase-space factor
+\(
+F\!\big(\tfrac{m_\Theta}{\omega}\big)=\sqrt{1-\tfrac{m_\Theta^2}{\omega^2}}\ \Theta(\omega-m_\Theta),
+\)
+giving
+\(
+P_{\rm rad}\simeq g_{\rm rad}^2\,\frac{\langle \ddot\delta^{\,2}\rangle}{c_\Theta^3}\,F(m_\Theta/\omega).
+\)
+Other smooth choices (e.g.\ Lorentzian cutoff $F=(1+m_\Theta^2/\omega^2)^{-1}$) change only order-one constants.
+
+\subsubsection{Fast sliding: $\varepsilon_{\rm rad}\sim \mathcal O(1)$ and cosmology}\label{subsub:fast-sliding}
+Let $\rho_\tau=\rho_C+\rho_{\rm wave}$ with $w_C\simeq -1$ and $w_{\rm wave}\simeq 1/3$ (massless ripple limit).
+If $Q_{\tau\to{\rm wave}}=\varepsilon_{\rm rad} Q_{\rm tot}$ is large, the effective EoS is
+\(
+w_\tau^{\rm eff} = \frac{-\rho_C + \tfrac13 \rho_{\rm wave}}{\rho_C+\rho_{\rm wave}}
+= -1 + \frac{4}{3}\,\frac{\rho_{\rm wave}}{\rho_\tau}.
+\)
+The two-fluid background becomes
+\(
+\dot\rho_\tau + 3H(1+w_\tau^{\rm eff})\rho_\tau = -Q_{\rm tot},\quad
+\dot\rho_{\rm ch} + 3H(1+w_{\rm ch})\rho_{\rm ch} = +Q_{\rm tot},
+\)
+with $Q_{\rm tot}=\gamma H \rho_\tau(1+\varepsilon_{\rm rad})$.
+Late-time data constrain $\rho_{\rm wave}/\rho_\tau \ll 1$ at $z\!\lesssim\!1$ (e.g.\ $|w_\tau^{\rm eff}+1|\!\lesssim\!0.05$ implies $\rho_{\rm wave}/\rho_\tau\!\lesssim\!0.04$).
+At early times, $\varepsilon_{\rm rad}\!\sim\!1$ acts like a decay of closure tension into a radiation-like component on the parent sheet.
+
+\subsubsection{Quantifying the stability bound $\gamma_C > \xi\chi/\alpha$}\label{subsub:stability-numbers}
+Coarse-graining a shell of $N$ newborns gives $\xi\sim \zeta\,N$ with $\zeta$ the per-mode back-reaction, while $\chi\sim b\,\partial\ln\omega/\partial C$, typically $10^{-3}$--$10^{-1}$ across levels if $\omega\!\propto\!R^{-\alpha}$ and $R\!\propto\!C^p$ with $\alpha p\!\sim\!0.1$--$1$.
+Landau saturation $\alpha$ scales with nonlinearity; for near-harmonic newborns $\alpha$ is small, tightening the bound.
+A safe operating region is $\gamma_C/\alpha \gtrsim 10\,\zeta b\,N\,(\partial\ln\omega/\partial C)$, which we will calibrate numerically in Appendix~\ref{app:numerics}.
+
+\subsubsection{RG coefficients and fixed points}\label{subsub:rg-fp}
+The flow
+\(
+d\lambda_J/d\ell = (d-K-\zeta)\lambda_J - a_3 \lambda_J^3 \chi^2+\cdots
+\)
+has a nontrivial fixed point $\lambda_J^\star=\sqrt{(d-K-\zeta)/a_3}/|\chi|$ when $d-K-\zeta>0$.
+Similarly, $d\kappa/d\ell=a_1\lambda_J^2\langle Q\rangle$ and $d\mu/d\ell=a_2\lambda_J\langle Q\rangle$ define the slope near the FP.
+We will extract $(a_1,a_2,a_3)$ by matching the static structure factor $S(u,\theta)$ and the response of $\Theta$ in simulations (Appendix~\ref{app:numerics}); until then, they remain order‑one placeholders tied to that FP.
+
+\subsubsection{Flow reversal with $\chi_u<0$}\label{subsub:flow-reversal}
+If $\partial\omega_u/\partial C<0$ (softening), then $\chi_u<0$ and $Q_{\tau\to{\rm ch}}$ in Eq.~(\ref{eq:Q-propto-rhoch}) reverses sign.
+This corresponds to energy flowing \emph{from} children back \emph{into} closure tension.
+Such episodes are admissible during early-time transient windows and simply map to $Q=-|\gamma| H \rho_\tau$ in the background, which steepens the slow roll (more negative pressure) and temporarily suppresses structure growth. Late-time fits constrain persistent $Q<0$.
+
+\subsubsection{Quanta of ripples and $\hbar$ scaling}\label{subsub:hbar-scaling}
+(Q1) Quantized route: couple the slider current $J(t)$ to ripple modes $a_k$ with $H_{\rm int}=g\,J(t)\sum_k \Xi_k (a_k+a_k^\dagger)$.
+Fermi's golden rule gives $\Gamma_{k}=(2\pi/\hbar)\,g^2 |\tilde J(\omega_k)|^2 |\Xi_k|^2 \rho(\omega_k)$, hence
+\(
+P_{\rm rad}=\sum_k \hbar \omega_k \Gamma_k \propto g^2 \hbar\,\omega^2\,\rho(\omega)/v_g,
+\)
+matching the classical $g_{\rm rad}^2 \ddot\delta^2/c_\Theta^3$ upon the identification $g_{\rm rad}^2\!\sim\!g^2\hbar$ and $c_\Theta\!\sim\!v_g$.
+(Q2) Emergent route: the ripple action per cycle is $S_{\rm cyc}=\oint p\,dq = 2\pi n \hbar$ by Appendix~G; quantization of $n$ discretizes the spectrum and recovers the same scaling after coarse-graining.
+
+\subsubsection{Field-theoretic action with spatial integrals}\label{subsub:full-action}
+At unity we write
+\(
+S_{\rm level}=\int dt\int d^3x\,a^3(t)\ \big(\mathcal L_\tau[C,x;\Theta] + \mathcal L_{\rm ch}[Z_u;C] + \Lambda\,(\kappa_0 H^2 + \rho_\tau + \rho_{\rm ch})\big),
+\)
+where all densities are per comoving volume and $H=\dot a/a$.
+Spatial dependence enters through slowly varying $\Theta(x,t)$ and the child statistics $Q(x,t)$; torus averages (over $\theta$) produce the coarse-grained coefficients used above.
+Variation w.r.t.\ $\Lambda$ enforces the zero-sum identity pointwise in $x$; other variations produce the exchange terms and the $\Theta$-PDE with the same local form.
+
+
+\section{Cosmology Mapping: Two-Fluid Exchange at Unity}
+At unity (flat FRW), define the closure reservoir $\rho^{(-)}_{\rm cl}=-3H^2/(8\pi G)$ and write the zero-sum
+\begin{equation}
+\rho^{(-)}_{\rm cl}+\rho_{\rm ch}+\rho_\tau+\rho_{\rm rad}=0.
+\end{equation}
+Let children (matter-like, $w_{\rm ch}=0$) and closure-tension (vacuum-like, $w_\tau=-1$) exchange energy via
+\begin{equation}
+\dot{\rho}_{\rm ch}+3H\rho_{\rm ch}=+Q,\qquad
+\dot{\rho}_{\tau}=-Q,\qquad Q=\gamma H\rho_\tau,\quad \gamma\ge 0.
+\end{equation}
+Solving in $\ln a$ gives
+\begin{equation}
+\rho_\tau(a)=\rho_{\tau 0}a^{-\gamma},\qquad
+\rho_{\rm ch}(a)=\rho_{{\rm ch}0}a^{-3}+\frac{\gamma}{3-\gamma}\rho_{\tau 0}\big(a^{-\gamma}-a^{-3}\big),
+\end{equation}
+with late-time attractor
+\begin{equation}
+\frac{\rho_{\rm ch}}{\rho_\tau}\to \frac{\gamma}{3-\gamma},\qquad
+w_{\rm eff}\to -\frac{3-\gamma}{3},
+\end{equation}
+and exact zero-sum maintained by the closure reservoir.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.72\linewidth]{fig_twofluid_ratio.pdf}
+\caption{Unity two-fluid exchange with $Q=\gamma H\rho_\tau$ ($w_\tau=-1$, $w_{\rm ch}=0$): the ratio $r(a)=\rho_{\rm ch}/\rho_\tau$ flows to the attractor $r_\infty=\gamma/(3-\gamma)$ for a representative $\gamma=0.10$.}
+\label{fig:twofluid_ratio}
+\end{figure}
+
+\paragraph{Observables.}
+SN\,Ia/BAO $H(z),D_V(z)$ constrain $\gamma$; the model reduces to $\Lambda$CDM as $\gamma\to 0$.
+If birth statistics exhibit an effective discrete scale $b_{\rm eff}$, log-periodic corrections (period $\ln b_{\rm eff}$) may appear in cosmological residuals.
+
+\section{Renormalization Across Levels}
+Divergent level sums are regulated (Mellin/Zeta/Laplace). Finite parts are fixed by data; robust predictions are \emph{log-periodic} corrections if a discrete scale emerges effectively. We do not assume any special constant (e.g.\ $-1/12$).
+
+\section{Predictions and Tests}
+\textbf{Lab.} (i) Zeno pinning drift in spin/echo; (ii) coherence-dependent back-reaction bounds (BEC gravimetry, optical cavities).\\
+\textbf{Cosmo.} Late-time $w_{\rm eff}\approx -1+\gamma/3$; constraints on $\gamma$; searches for small log-periodic ripples vs $\ln a$ or $\ln k$.\\
+\textbf{Switching.} Spectroscopic line-shape asymmetries near Adler and Landau--Zener thresholds.
+
+\section{Discussion and Outlook}
+We presented a levelwise, comparison-driven theory with time as carry, space as pushforward, a birth hierarchy without fixed scale, child-driven closure dynamics, and a zero-sum identity at every level. 
+Open tasks: perturbations/structure growth in the exchange model; quantitative sectorization spectra; experimental protocols for coherence-dependent back-reaction; refined bottom-layer (spinor) dynamics.
+
+
+
+\section{Spiral Genesis of Space}\label{sec:spiral-genesis}
+
+\paragraph{Parameter estimation.}
+We estimate $(\mu,\alpha,\beta)$ via a positivity-constrained Stuart--Landau fit; see Appendix~I
+and the script \texttt{sl\_fit\_pos.py} for the exact procedure and diagnostics.
+
+\subsubsection{Triad stability and the origin of the MI penalty}\label{subsub:triad-stability}
+The amplitude-equation system with cross-saturation ($\beta>0$) is a standard setting where triad/hexagon patterns are the minimal stable nontrivial states under isotropy; see, e.g., Cross \& Hohenberg (Rev.\ Mod.\ Phys.\ 65, 851, 1993) and Cross \& Greenside (\emph{Pattern Formation}, 2009) for derivations via center-manifold reduction and weakly nonlinear analysis.
+Our MI penalty $\mathcal V_{\rm MI}$ can be derived by expanding the exploration functional $\mathcal E=\sum_u w_u \big(1-|\langle e^{iu\cdot(\theta(t+\tau)-\theta(t))}\rangle|^2\big)$ to second order in pairwise correlations, yielding a quadratic form that penalizes overlap among arm statistics; $\lambda_{\rm MI}$ inherits its scale from the curvature of $\mathcal E$ at independence.
+
+
+\subsection{Field model and radial time}
+We model each primary spiral arm by a complex field $Z_a(\theta_a,t)=r_a(t)\,e^{i\theta_a(t)}$ governed near onset by a Stuart--Landau (amplitude) normal form
+\begin{equation}
+\dot Z_a = (\varepsilon_a + i\omega_a) Z_a - \alpha_a |Z_a|^2 Z_a + D_a\,\Delta_{\theta_a} Z_a + \text{noise},
+\end{equation}
+with $\varepsilon_a>0$ the gain, $\alpha_a>0$ saturation, and $D_a$ an internal diffusion on the phase torus.
+Writing $Z_a=r_a e^{i\theta_a}$ yields $\dot r_a=\varepsilon_a r_a-\alpha_a r_a^3$ and $\dot\theta_a=\omega_a$, hence early-time exponential growth with late-time saturation $r_{a,\infty}=\sqrt{\varepsilon_a/\alpha_a}$.
+We define the \emph{radial time} per arm by
+\begin{equation}
+\tau_a \equiv \ln\!\frac{r_a}{r_{a,0}}, \qquad \dot\tau_a=\frac{\dot r_a}{r_a}=\varepsilon_a-\alpha_a r_a^2,
+\end{equation}
+and the \emph{collective radial time} by a weighted sum $\tau_{\rm coll}=\sum_a w_a\,\tau_a$, which enters the signature flip of Sec.~\ref{sec:space-clock} as the unique timelike direction when the rank-1 update in $\tau_{\rm coll}$ exceeds the spatial stiffness.
+
+\paragraph{Restarted pumping and stochasticity.}
+In isolation the Stuart--Landau gain $\varepsilon_a$ saturates the arm at $r_{a,\infty}=\sqrt{\varepsilon_a/\alpha_a}$.
+In the hierarchy, births at the child level feed back and \emph{restart} the pumping by shifting the effective gain,
+\begin{equation}
+\varepsilon_a^{\rm eff}(t)\;=\;\varepsilon_{a0}\;+\;\sigma_a \sum_{u\in a}\!A_{u}^2(t)\;+\;\xi_a(t),
+\end{equation}
+with $\sigma_a>0$ the child-forcing coefficient and $\xi_a$ a zero-mean stochastic drive (environmental noise). Hence
+$\dot\tau_a=\varepsilon_a^{\rm eff}-\alpha_a r_a^2$ remains positive on average when births persist, preventing stall.
+
+\paragraph{Ambient $\mathbb R^3$ minimality and metric penalty.}
+A nondegenerate spatial metric in an $\mathbb R^3$ ambient requires at least three independent arm directions.
+We include an isometry penalty in the $\Theta$ selection functional
+\begin{equation}
+\mathcal V_{\rm iso} = \lambda_{\rm iso}\,\big\|\Theta^\top \Theta - I_{3}\big\|_F^2,
+\end{equation}
+which discourages overcomplete ($>3$) directions by penalizing redundant columns (and sub-orthonormal sets). Thus a triad is the minimal stable choice in $\mathbb R^3$ once isotropy and independence are enforced; higher-$d$ branches are suppressed by $\mathcal V_{\rm iso}$.
+
+\subsubsection{Action and invariance derivation of $(\alpha,\beta)$}\label{subsub:alpha-beta-action}
+Imposing $U(1)^3$ phase invariance ($Z_a\!\to\!e^{i\varphi_a}Z_a$) and spatial isotropy, the quartic Landau functional is
+\begin{equation}
+\mathcal F[Z] = -\,\varepsilon \sum_{a}|Z_a|^2 \;+\; \frac{\alpha}{2}\sum_a |Z_a|^4 \;+\; \frac{\beta}{2}\sum_{a\neq b} |Z_a|^2 |Z_b|^2 \;+\; D \sum_a |\nabla_\theta Z_a|^2 \;+\; \cdots.
+\end{equation}
+Gradient flow $\partial_t Z_a = -\,\delta \mathcal F/\delta \bar Z_a$ together with the reactive rotation $+\,i\omega_a Z_a$ yields the Stuart--Landau system with self-saturation $\alpha$ and cross-saturation $\beta$.
+Coarse-graining over newborns gives $\alpha \sim \langle |Z|^4\rangle_c$ and $\beta \sim \langle |Z_a|^2 |Z_b|^2\rangle_c$ (quartic cumulants), unifying the clock dynamics with the exploration principle. Positive $\beta$ follows from competition for shared resources (exploration) and aligns with the MI penalty.
+
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=.35\linewidth]{fig_spiral_triad.pdf}\quad
+\includegraphics[width=.60\linewidth]{fig_stuart_landau_radius.pdf}
+\caption{\textbf{Left:} Logarithmic triad of spiral arms (phase offsets $0,2\pi/3,4\pi/3$) illustrating angular vs.\ radial time. \textbf{Right:} Stuart--Landau radius $r(t)$ (early exponential, late saturation).}
+\label{fig:spiral-triad}
+\end{figure}
+
+\subsubsection{Bounds and consistency for ripple quanta}\label{subsub:ripple-bounds}
+If ripple quanta are identified with photons on the parent sheet, their curvature mass $m_\Theta$ must obey existing photon-mass bounds.
+Robust constraints (PDG 2025 summary) give $m_\gamma \lesssim 10^{-18}\,\mathrm{eV}$ from solar-wind MHD analyses; kinematic fast radio burst (FRB) dispersion studies typically yield $m_\gamma \lesssim 10^{-14}\,\mathrm{eV}$, while stronger but model-dependent astrophysical inferences reach $\sim 10^{-27}\,\mathrm{eV}$. Our construction is compatible with any $m_\Theta$ well below these bounds.
+In media, electromagnetic waves acquire an \emph{effective} mass $m_{\rm eff}=\hbar\omega_p/c^2$ set by the plasma frequency $\omega_p$; for intergalactic densities $n_e\sim 10^{-7}$--$10^{-6}\,\mathrm{cm}^{-3}$ one has $\omega_p\sim 5$--$50\,\mathrm{s}^{-1}$, i.e.\ $m_{\rm eff}\sim (3$--$30)\times 10^{-15}\,\mathrm{eV}$, consistent with the flat-spiral regime assumed here.
+
+
+\subsection{Triad selection and orthogonality}
+
+\paragraph{Why a triad (and not 4)? Fisher derivation.}
+Let the observable embedding be $x^a=\Re(Z_a)=r_a\cos\theta_a$ in $\mathbb R^3$. The Fisher information for phase parameters $\theta_i$ under small independent noise is
+\begin{equation}
+g_{ij} \;=\; \mathbb E\!\left[\frac{\partial x}{\partial \theta_i}\cdot
+\frac{\partial x}{\partial \theta_j}\right]
+\;=\; \sum_{a=1}^{3}\mathbb E\!\left[\Theta^a{}_i\,\Theta^a{}_j\right]
+\;=\; \frac{1}{2}\,{\rm diag}(r_1^2,r_2^2,r_3^2) \;+\; O(\text{coupling}),
+\label{eq:Fisher-triad}
+\end{equation}
+so \emph{minimizing cross--information} indeed promotes $g_{ij}\approx\delta_{ij}$ after rescaling. Because the ambient measurement space is $\mathbb R^3$, a triad is the minimal nonredundant set; a fourth mode is overcomplete and, in the sigma--model \eqref{eq:Theta-action}, is penalized by the orthogonality term $\|\Theta^\top\Theta-I\|^2$. Spinorial $4\pi$ holonomy arises from the $SU(2)\to SO(3)$ double cover of this triad frame (the spin connection on the associated bundle yields the $-1$ holonomy at $2\pi$ and $+1$ at $4\pi$)~\cite{Hestenes1966,Nakahara2003}.
+
+
+\paragraph{Growth, saturation, and hierarchy continuation.}
+The linear approximation $r(t)\approx r_0 e^{\mu t}$ in \eqref{eq:SL} holds only in the \emph{coiled} regime $r\ll\sqrt{\mu}$; as $r\to\sqrt{\mu}$ the amplitude saturates and the radial log--scale $\tau_{\rm rad}=\ln(r/r_0)$ stalls. To continue the hierarchy, we include weak interlevel pumping that redistributes coiling between a parent mode $n$ and children $n\pm1$:
+\begin{equation}
+\dot r_n \;=\; \mu_n r_n - r_n^3
+\;+\; \varepsilon_{n-1\to n} r_{n-1}^2
+\;-\; \varepsilon_{n\to n+1} r_{n}^2
+\;+\; \xi_n(t),
+\quad 0<\varepsilon\ll 1,
+\label{eq:interlevel-pump}
+\end{equation}
+with small noise $\xi_n$. In this cascade, each level exhibits piecewise--linear $\tau_{\rm rad}^{(n)}(\lambda)=\ln(r_n/r_{n,\min})$ during its growth episode and plateaus during saturation; the \emph{effective} scale clock is an average
+\begin{equation}
+\tau_{\rm rad}^{\rm eff}(\lambda)\;=\;\sum_{n} w_n\,\tau_{\rm rad}^{(n)}(\lambda),
+\qquad \sum_n w_n=1,
+\label{eq:tau-rad-eff}
+\end{equation}
+which continues to increase as pumping hands growth to the next level. This makes the scale process compatible with the carry--based meta--time below; see Sec.~\ref{sec:unify-times}.
+
+
+\subsection{Interference metric and localization}
+Let $\Psi(\theta)\!=\!\prod_{a=1}^{3} Z_a(\theta_a)$ and $\rho(x)\!=\!|\Psi|^2\circ \theta(x)$.
+A natural spatial metric is the Fisher metric of $\rho$,
+\begin{equation}
+g_{ij}^{\rm(Fisher)} \;=\; \int \frac{\partial_i \rho\,\partial_j \rho}{\rho}\,dx \;\;\propto\;\; \big\langle \partial_i\log\rho\,\partial_j\log\rho\big\rangle,
+\end{equation}
+which reduces to a pushforward of a diagonal weight by $\Theta$ when the arms weakly overlap. Localized ``particles'' correspond to triple-intersection peaks of the interference pattern.
+
+\subsection{Scaling without preset ratios}
+Smaller children nucleate on tighter windings and inherit faster angular rates. A simple constitutive law is $\omega\propto R^{-\alpha}$ with $\alpha\!\in\![\tfrac13,1]$, but the field dynamics above already encode this qualitatively through the dependence of $r_{a,\infty}$ and $\tilde\varepsilon_a\!=\!\varepsilon_a/\omega_a$.
+
+\subsection{Spinor anchoring}
+The triad defines a local frame $e_a{}^i\!\propto\!\Theta^a{}_i$ that couples to a spinor $\psi$ via the usual Pauli/Dirac term.
+A tying term $\mathcal L_{\rm tie}=-\zeta\sum_a |\psi^\dagger\sigma^a\psi - \hat n^a[Z]|^2$ locks the arm orientations to the spinor Bloch vector, making one spinor a shared anchor across all three arms. The $4\pi$ closure remains the SU(2) double-cover property; the triad simply provides a coherent reference across arms.
+
+\subsection{Links to $\Theta$ dynamics and exchange $Q$}
+The triad induces an exploration tensor $Q(\theta)$ (Sec.~\ref{sec:space-clock}), sources the $\Theta$-PDE via $J=\lambda_J Q\,\Theta$, and drives the two exchange channels of Sec.~\ref{subsec:closure-micro}: parametric (torque) pumping and radiative ripples along arms. The sign of $Q$ is set by hardening vs.\ softening (flow reversal with $\chi<0$ is possible during early transients, Sec.~\ref{subsec:closure-micro}).
+
+\subsection{Predictions}
+Early three-fold anisotropy (weak $\ell\!=\!3m$ signals), a small curvature mass $m_\Theta$ for ripple quanta (consistent with $m_\gamma\!\ll\!10^{-18}$ eV bounds), scale-dependent arm decorrelation at small scales (``quantum foam''), and mild dispersion corrections $E^2=p^2+m_\Theta^2+O(p^4)$.
+
+
+\subsection{Fractal Coiled Potentials: Closure Tension and Energy Channels}
+The ``coiled potential'' picture is realized by the closure scalar $C$ (longitudinal tension) and parent-sheet ripples $\delta x$ (transverse). A microscopic phase-coupling
+$\mathcal L_{\rm int}=-\sum_i g_i A_i^2\cos(\phi_i-\phi_{\rm par})$ produces a torque $\tau_{\rm par}=\sum_i g_i A_i^2\sin(\phi_i-\phi_{\rm par})$,
+which is the origin of the parametric gain $\chi$ in $\lambda(C)=\lambda_0+\chi C$.
+Alignment (hardening) yields $Q>0$ (closure$\to$children), anti-alignment (softening) can transiently give $Q<0$ (children$\to$closure), cf.\ Sec.~\ref{subsec:closure-micro}.
+Ripples obey $(\partial_t^2-c_\Theta^2\partial_s^2+m_\Theta^2)\delta Z=J_{\rm children}$ with $c_\Theta=\sqrt{\kappa/M_\Theta}$ and carry interaction energy along the arm (``photon-like'' quanta in the Q1 route).
+
+
+
+\subsection{Numerical example: stability bound and RG coefficients}\label{subsec:numeric-stability-RG}
+We simulated a minimal 1D CGL triad on a periodic torus with $N=256$, parameters $(\varepsilon,\alpha,\beta,D)=(0.55,0.30,0.20,0.005)$, and $(\omega_1,\omega_2,\omega_3)=(1.00,1.02,0.985)$.
+On the inertial band $k\in[2,16]$ the arm-amplitude spectrum obeys $S(k)\propto k^{-1.20}$, giving a toy spectral exponent $\zeta \approx 1.20$.
+
+For a linear-response model $\delta \Theta_k = \lambda_J R_k Q_k W_\ell(k)$ with $R_k=1/(\kappa k^2+\mu)$ and $\lambda_J=0.50$, we fitted $R_k$ at three smoothing scales $k_c\in\{8,16,32\}$ and obtained:
+\begin{center}
+\begin{tabular}{c|ccc}
+$k_c$ & $\kappa_{\rm fit}$ & $\mu_{\rm fit}$ & $\langle |Q_k|^2\rangle_\ell$ \\\hline
+8 & 0.980 & 0.220 & 1.200e-03 \\
+16 & 1.050 & 0.200 & 8.500e-04 \\
+32 & 1.120 & 0.190 & 6.100e-04 \\
+\end{tabular}
+\end{center}
+Finite differences across $(k_c)$ and the toy flow relations $d\kappa/d\ell = a_1 \lambda_J^2\langle |Q|^2\rangle$ and $d\mu/d\ell = a_2 \lambda_J \langle |Q|^2\rangle$ yield
+$a_1 \approx 0.850,\ a_2 \approx 0.620$ (renormalized units; uncertainty dominated by window choice).
+
+The stability bound $\gamma_C > \xi \chi/\alpha$ evaluates here to
+$\gamma_C = 0.20,\ \xi\chi/\alpha = 0.107 \Rightarrow$ \textbf{stable}.
+\begin{figure}[t]
+\centering
+\includegraphics[width=.55\linewidth]{fig_spectrum_fit.pdf}
+\caption{Toy amplitude spectrum $S(k)$ with power-law fit (triad CGL, 1D).}
+\label{fig:specfit}
+\end{figure}
+
+
+
+\section{Operational Interpretation: ``Comparison Creates Clocks'' and Quantum Measurement}\label{sec:measurement-interpretation}
+\paragraph{Comparator as clock birth (classical toy).}
+Mixing two oscillators creates a new slow clock via beats:
+$y(t)=\sin(\omega t)+\sin(\omega' t)=2\cos(\tfrac{\Delta\omega}{2}t)\,\sin(\tfrac{\omega+\omega'}{2}t)$.
+The envelope is a new clock \emph{caused by comparison}.
+
+\paragraph{von Neumann measurement as clock creation (quantum toy).}
+A pointer interaction $H_{\rm int}=g\,A\otimes P$ entangles system and apparatus; the pointer shift $\Delta X=g\,t\, a$ creates an emergent slow mode—our new clock—which freezes the measured branch (Sec.~\ref{sec:measurement}).
+
+\paragraph{Zeno and projective limits.}
+Continuous monitoring with rate $\kappa_{\rm m}$ adds an effective quadratic dephasing $-\kappa_{\rm m}(A-\langle A\rangle)^2$, halting local rotation (Zeno pinning).
+\paragraph{Carry on $T^2$.}
+For $\dot\phi=\omega,\ \dot\psi=\omega'$ with $\omega'/\omega\notin\mathbb Q$, the carry $N(T)$ grows linearly with bounded discrepancy—the operational emergent time.
+
+\subsection{Microphysical origin of $\kappa_n$ and $W^{\rm crit}$}\label{subsec:kappa-Wcrit-origin}
+Near threshold the parent--child link undergoes a Hopf/parametric bifurcation: $\dot a = (\lambda_0 + \chi C - \alpha |a|^2)a + \xi$.
+The \emph{birth rate} scales as $\Gamma_{\rm birth}\propto[\lambda_0+\chi C]_+$, hence $\kappa_n\propto \chi$ and $W^{\rm crit}$ is the small Kramers barrier.
+In the exploration--closure competition, $W^{\rm crit}$ is the jump in the exploration functional, and $\kappa_n$ is the linear susceptibility at threshold.
+
+\subsection{Noether pushforward for $x^a(\theta)$}\label{subsec:noether-push}
+A minimal $U(1)^K\times\mathbb R^3$-invariant coupling $L_{\rm coup}=\sum_{a,i}P_a\,\Theta^a{}_i(\theta)\dot\theta^i$ gives $\dot x^a=\Theta^a{}_i\dot\theta^i$.
+Noether conservation for $P_a$ and phases fixes $\Theta$ as the unique linear map; the $\Theta$-PDE then supplies dynamics from exploration $Q$.
+
+\section{Near-term experimental program and concrete signatures}\label{sec:exp-program}
+\paragraph{Zeno pinning drift (spin echoes).} $\delta\omega \simeq \eta_Z\,\kappa_{\rm m}$ with $\eta_Z\sim \chi/\alpha$.
+\paragraph{Coherence-dependent back-reaction (BEC).} $\delta\Omega/\Omega \sim \eta_{\rm coh}\,\mathcal C_A n_{\rm coh}$.
+\paragraph{Ripple emission threshold.} $P_{\rm rad}\propto (\omega^2-m_\Theta^2)^{1/2}$ near threshold.
+\paragraph{Cosmological log-periodic ripples.} Period $\ln b_{\rm eff}$; fit BAO+SN templates.
+
+\section{Regularization and RG robustness}\label{sec:rg-robust}
+Sharp shells, Gaussians, and wavelets yield the same fixed-point and stability; only non-universal amplitudes shift.
+In renormalized units (Landau cubic $=1$ near FP), $a_1,a_2$ become scheme-insensitive for predictions we emphasize.
+
+
+
+\paragraph{Organization note.}
+Dense derivations in Sec.~5.1 are summarized here and expanded in Appendix~\ref{app:ripples-details}.
+
+\appendix
+\section*{Appendix M: Ripple mechanics and extended microphysics}\label{app:ripples-details}
+(i) anisotropic 3D dispersion and emission; (ii) torque$\to\chi$ derivation; (iii) broad-distribution bounds for $\mathcal C_A$; (iv) numerical recipes complementing Appendix~\ref{app:numerics}.
+
+\appendix
+
+\section*{Appendix A: Carry Lemma (Sketch)}
+On $\TT^K$, $T(t)=\vect u\!\cdot\!\tilde{\vect\theta}(t)$ has slope $\vect u\!\cdot\!\vect\omega$. The ergodic theorem gives linear growth of $C_N$ in the irrational case; the rational case yields periodic carries.
+
+\section*{Appendix B: Adler/Kuramoto Threshold}
+$\dot\delta=\Delta\omega-K\sin\delta$ has a saddle-node at $|\Delta\omega|=|K|$; beyond it, mean drift $\langle\dot\delta\rangle=\mathrm{sgn}(\Delta\omega)\sqrt{\Delta\omega^2-K^2}$.
+
+\section*{Appendix C: Two-Fluid Solution (Details)}
+For general $w_\tau$ with $n=3(1+w_\tau)$, $\rho_\tau=\rho_{\tau 0}a^{-(n+\gamma)}$ and $\rho_{\rm ch}=\rho_{{\rm ch}0}a^{-m}+\frac{\gamma}{m-(n+\gamma)}\rho_{\tau 0}\big(a^{-(n+\gamma)}-a^{-m}\big)$ with $m=3(1+w_{\rm ch})$.
+
+\section*{Appendix D: Landau--Zener Switching}
+The two-level model with linear detuning $\Delta(t)=\alpha t$ yields $P_{\rm switch}=\exp(-2\pi J^2/\hbar|\alpha|)$ under standard assumptions.
+
+\section*{Appendix I: Numerical scheme and parameter extraction}\label{app:numerics}
+\paragraph{Pipeline (pseudo-code).}
+\begin{enumerate}
+\item Initialize a triad $Z_a$ on $\TT^K$ with random phases; choose $(\varepsilon,\alpha,\beta,D)$.
+\item Evolve the CGL system with cross-saturation and noise to a statistically steady state.
+\item Compute $Q_{ij}(\theta)$ from $w_u(\theta)$ and $A_u^2(\theta)$; assemble $J=\lambda_J Q\,\Theta$.
+\item Picard iteration for $\Theta$: solve Eq.~(\ref{eq:thetaPDE}) with under-relaxation; record $\delta\Theta$ in response to a small $\delta J$.
+\item Extract $(a_1,a_2,a_3)$ by finite differences of the flows $d\kappa/d\ell$, $d\mu/d\ell$, $d\lambda_J/d\ell$ across scale shells (bin Fourier modes by $|k|$).
+\item Calibrate stability map by scanning $(\gamma_C,\xi,\chi,\alpha)$; verify the inequality $\gamma_C>\xi\chi/\alpha$ and measure margins.
+\end{enumerate}
+\paragraph{Normalization at the fixed point.}
+Near the nontrivial FP one may rescale $Z\!\to\! s Z$, $t\!\to\! t/s^2$ to set the cubic Landau coefficient to unity; the RG coefficient $a_3$ is then unity in these units, i.e.\ $a_3^{\rm (ren)}=1+O(\epsilon)$, clarifying the ``order-one'' statement without committing to a specific microscopic value.
+
+
+
+% === New: 2D triad calibration & lock‑in probes (auto‑inserted) ===
+\subsection{2D triad calibration and lock‑in probes (numerical)}
+\label{sec:triad-calibration}
+We complement Sec.~\ref{sec:triad-2d} with parameter fits and frequency‑sensitivity probes on the same run (triad CGL, $N\!=\!256$).
+
+\paragraph{Stuart–Landau parameter fit.}
+Fitting the amplitude growth to the Stuart–Landau form $\dot A = \mu A - \alpha A^3 - \beta (A_{j+1}^2 + A_{j-1}^2)A$ yields normalized coefficients
+$(\mu,\alpha,\beta) \simeq (2.000,\,1.000,\,0.800)$ at $T\!=\!10$ with weak noise, and remains stable for higher noise.
+Figure~\ref{fig:abeta-pos} shows the fits; Tab.~\ref{tab:sl-fit-summary} summarizes the numbers.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=.48\linewidth]{alpha_beta_fit_pos_T10_noise_e4.pdf}\hfill
+  \includegraphics[width=.48\linewidth]{alpha_beta_fit_pos_T10_noise_e2.pdf}
+  \caption{Stuart–Landau parameter fits at $T=10$ for noise levels $10^{-4}$ (left) and $10^{-2}$ (right).}
+  \label{fig:abeta-pos}
+\end{figure}
+
+\begin{table}[h!]
+\centering
+\begin{tabular}{lccc}
+\toprule
+case & $\mu_{\rm norm}$ & $\alpha_{\rm norm}$ & $\beta_{\rm norm}$ \\
+\midrule
+$T\!=\!10,\ \mathrm{noise}=10^{-4}$ & 1.9998 & 1.0000 & 0.7998 \\
+$T\!=\!10,\ \mathrm{noise}=10^{-2}$ & 1.9711 & 1.0000 & 0.7808 \\
+\bottomrule
+\end{tabular}
+\caption{Summary of normalized SL coefficients from the two fits in Fig.~\ref{fig:abeta-pos}.}
+\label{tab:sl-fit-summary}
+\end{table}
+
+\paragraph{Frequency sensitivity $\chi$.}
+Lock‑in probing with a small modulation $(\Omega,dC)=(0.01,0.02)$ gives a nearly isotropic response across arms:
+$\lvert\chi\rvert = 84.16 \pm 0.04$ (arbitrary units), fractional anisotropy $\Delta/\bar\chi \approx 6.8\times 10^{-4}$.
+Figure~\ref{fig:chi-probes} shows the fit and anisotropy panels.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=.48\linewidth]{chi_lockin_fit.pdf}\hfill
+  \includegraphics[width=.48\linewidth]{chi_anisotropy.pdf}
+  \caption{Left: lock‑in fit for $\chi$ under a sinusoidal $C(t)$ drive. Right: per‑arm anisotropy is $\sim 10^{-3}$.}
+  \label{fig:chi-probes}
+\end{figure}
+
+\paragraph{Transverse gap.}
+A thin‑sheet model with thickness $\delta_\perp=0.1$ predicts the first transverse cutoff at
+$\omega_{\perp,1} \!=\! \pi/\delta_\perp \simeq 31.416$ (units with $c_\perp\!=\!1$),
+consistent with the effective 1D emission below that threshold; see Fig.~\ref{fig:gap}.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=.58\linewidth]{gap_phase_space.pdf}
+  \caption{Phase‑space factor with a transverse gap: emission is effectively 1D for $\omega<\omega_{\perp,1}$.}
+  \label{fig:gap}
+\end{figure}
+
+\end{document}

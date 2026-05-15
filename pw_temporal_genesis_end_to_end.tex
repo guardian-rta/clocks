@@ -1,0 +1,254 @@
+
+% =======================================================================
+% pw_temporal_genesis_end_to_end.tex
+% From "No Clock" to Relational Time (Page–Wooters): clocks, multiplicities,
+% and geometry, with detailed derivations, experiments and reproducibility.
+% =======================================================================
+\documentclass[11pt]{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,mathtools,bm}
+\usepackage{graphicx}
+\usepackage{lmodern}
+\usepackage{microtype}
+\usepackage{hyperref}
+\usepackage[most]{tcolorbox}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,calc,positioning}
+\hypersetup{colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue}
+
+% --- Box styles ---
+\tcbset{sharp corners, colback=white, boxsep=1.0ex}
+\newtcolorbox{mydef}[1]{breakable,colframe=black!55,colback=black!2,title=\textbf{#1}}
+\newtcolorbox{mythm}[1]{breakable,colframe=blue!60!black,colback=blue!2,title=\textbf{#1}}
+\newtcolorbox{myprop}[1]{breakable,colframe=green!60!black,colback=green!2,title=\textbf{#1}}
+\newtcolorbox{mybox}[1]{breakable,colframe=black!40,colback=black!3,title=\textbf{#1}}
+\newtcolorbox{proofbox}[1]{breakable,colframe=black!60,colback=black!1,title=\textbf{#1}}
+
+% --- Shortcuts ---
+\newcommand{\Id}{\mathsf{I}}
+\newcommand{\M}{M}
+\newcommand{\Lap}{\mathsf{L}_{\alpha}}
+\newcommand{\Adj}{\mathsf{A}}
+\newcommand{\Thet}{\Theta}
+
+\title{\vspace{-0.6cm}\Large From No Clock to Relational Time:\\
+\large A Page--Wooters Genesis of Clocks, Multiplicities, and Geometry}
+\author{}
+\date{\today}
+
+\begin{document}
+\maketitle
+\vspace{-1.2em}\hrule\vspace{0.6em}
+
+\begin{abstract}
+We present a self-contained, experimentally checkable construction of \emph{time as a relational
+observable}. A global, clockless constraint a\,la Page--Wooters (PW) is imposed on a composite
+Hilbert space \((S\otimes C)\). ``Dynamics'' appears only after conditioning on the clock
+$C$, which we realize as a binary spin-structure regulator (PBC vs APBC) on a finite cycle.
+From the conditioned viewpoint we recover: (i) the universal decimated two-step law (AR(2))
+and its exact Green functions, (ii) clock ``births'' from net-zero probes with an envelope that
+sets spiral pitch and speed limits, (iii) multiplicities of species labeled by operational invariants,
+and (iv) a finite-loop bridge from envelope holonomies to Levi--Civita transport with explicit
+error budgets. We supply proofs, minimal experiments, figures, and Python snippets for
+reproducibility.
+\end{abstract}
+
+\tableofcontents
+\vspace{0.6em}\hrule\vspace{0.8em}
+
+% =======================================================================
+\section{Axiom 0: Clockless Universe (PW Constraint)}
+% =======================================================================
+\begin{mydef}{Global, timeless state}
+Let $\mathcal H_S$ (system) carry a two-component engine and let $\mathcal H_C$ (clock)
+be a finite register. We postulate a joint state $|\Psi\rangle\in \mathcal H_S\otimes\mathcal H_C$
+that satisfies the \emph{timeless} constraint
+\begin{equation}
+(\M_S\otimes \M_C)\,|\Psi\rangle \;=\; |\Psi\rangle,
+\label{eq:PWdiscrete}
+\end{equation}
+the discrete analogue of $(H_S+H_C)|\Psi\rangle=0$.
+There is no background time; the constraint encodes a relational invariant.
+\end{mydef}
+
+\paragraph{Clock spin structure as regulator.}
+We realize the clock as a one-dimensional register with a $\mathbb Z_2$ boundary twist:
+\emph{periodic} (PBC/Ramond) vs \emph{anti-periodic} (APBC/Neveu--Schwarz).
+APBC gaps the clock Dirac spectrum; PBC admits a zero mode. Conditioning
+is well-posed only in the gapped sector; this binary choice is a falsifiable prediction.
+
+% =======================================================================
+\section{Relational Dynamics and the Universal AR(2) Law}
+% =======================================================================
+\begin{myprop}{Conditional evolution (PW)}
+Fix a readout basis $\{|t\rangle_C\}$ on the clock. The \emph{conditional} system state
+$|\psi_t\rangle_S \propto {}_C\!\langle t|\Psi\rangle$ obeys
+\begin{equation}
+|\psi_{t+1}\rangle_S = \M_S\,|\psi_t\rangle_S .
+\end{equation}
+\end{myprop}
+
+\begin{proofbox}{Sketch}
+From \eqref{eq:PWdiscrete}, $(\M_S\otimes \M_C)|\Psi\rangle=|\Psi\rangle$.
+Using $\M_C|t\rangle=|t+1\rangle$ and applying ${}_C\!\langle t+1|$ gives
+${}_C\!\langle t+1|\Psi\rangle = \M_S\,{}_C\!\langle t|\Psi\rangle$, i.e., the stated update.
+\end{proofbox}
+
+\begin{mythm}{Cayley--Hamilton $\Rightarrow$ universal decimated law}
+Let $\M_S\in\mathrm{SL}(2,\mathbb C)$ with $V_\ell=\mathrm{tr}(\M_S^\ell)$.
+For any linear observable $x_t=w^\dagger|\psi_t\rangle$, define residue tracks
+$y^{(r)}_t=x_{r+\ell t}$. Then
+\begin{equation}
+y^{(r)}_{t+2} - V_\ell\,y^{(r)}_{t+1} + y^{(r)}_{t}=0,\qquad r=0,\dots,\ell-1.
+\label{eq:AR2}
+\end{equation}
+\end{mythm}
+
+\begin{proofbox}{Explicit $2\times2$ derivation}
+Cayley--Hamilton for $\M_S$ with $\det \M_S=1$ gives $\M_S^{2\ell}-V_\ell \M_S^\ell+\Id=0$.
+Act on $|\psi_t\rangle$ and project by $w^\dagger$ at steps $t, t+\ell, t+2\ell$ to get
+\eqref{eq:AR2}.
+\end{proofbox}
+
+\paragraph{Roots, pitch, and speed.}
+Equation \eqref{eq:AR2} has roots $r_\pm=\tfrac{1}{2}\big(V_\ell\pm\sqrt{V_\ell^2-4}\big)$.
+Write $r_+=\rho e^{i\theta}$; the \emph{spiral pitch} is $\Pi=\log\rho/\theta$.
+A graph-local envelope $E=e^{-\sigma^2\kappa\,\Lap^\dagger\Lap}$ suppresses propagation and
+sets a speed limit $v_{\max}\lesssim a\,\sup\|\nabla\varepsilon\|/(1+\sigma^2\kappa\Lambda_{\max}^2)$.
+
+% =======================================================================
+\section{From No Clock to a Clock: Births via Net-Zero Probes}
+% =======================================================================
+\paragraph{Net-zero probe and exact Green function.}
+For $Q=1$ and $V=2\cos\phi$, the causal Green function is
+$G_n=\sin(n\phi)/\sin\phi$. On a macrocycle of length $L$ choose a net-zero source
+$\sum_{m\,(\mathrm{mod}\,L)} s_m=0$ (e.g.\ $\delta_{m,0}-\delta_{m,L/2}$).
+The relational response is $x_m=\sum_{n\le m}G_{m-n}s_n$.
+An envelope $E$ localizes the birth and fixes the spiral pitch.
+
+\begin{figure}[h!]\centering
+\includegraphics[width=.8\linewidth]{clock_birth_one_macrocycle.png}\\
+\includegraphics[width=.8\linewidth]{clock_birth_cover.png}
+\caption{\textbf{Clock births from net-zero probes.} Top: one macrocycle (raw vs enveloped).
+Bottom: repeated on the universal cover (4 periods).}
+\end{figure}
+
+% =======================================================================
+\section{Binary Spin Structure: PBC Zero Mode vs APBC Gap}
+% =======================================================================
+\paragraph{Dirac on a time circle (discrete).}
+Using the lattice derivative, the clock spectrum is $E(k)=\frac{2}{\Delta\tau}\sin k$ with
+$k=\frac{2\pi}{N}\big(m+\frac{s}{2}\big)$ and $s\in\{0,1\}$ (PBC vs APBC). Thus PBC admits
+a zero mode; APBC has a gap $\gtrsim \tfrac{2}{\Delta\tau}\sin(\pi/N)$.
+
+\begin{figure}[h!]\centering
+\includegraphics[width=.75\linewidth]{discrete_dirac_pbc_apbc.png}
+\caption{\textbf{Discrete Dirac on a time circle.} PBC shows a zero mode; APBC is gapped.}
+\end{figure}
+
+\paragraph{Binary holonomy prediction (falsifiable).}
+If one macrocycle contains $L$ steps, APBC shifts the phase by $\pi/L$, so
+$V^{\mathrm{APBC}}_L=-V^{\mathrm{PBC}}_L$ while $Q^L$ is unchanged.
+
+\begin{figure}[h!]\centering
+\includegraphics[width=.8\linewidth]{binary_holonomy_signflip.png}
+\caption{\textbf{Binary holonomy test.} $V_L$ flips sign under APBC, as predicted.}
+\end{figure}
+
+% =======================================================================
+\section{Multiplicities and Species (Operational Invariants)}
+% =======================================================================
+We label species by $\Lambda=(\ell, V_\ell,\rho,\theta,\chi,(c_0,c_1),\mathrm{hol})$.
+Checksums $(c_0,c_1)$ classify bands/gaps (Hofstadter dictionary); $\chi$ encodes the
+PBC/APBC parity; holonomy distinguishes circle vs M\"obius (Pin$^\pm$).
+
+\begin{myprop}{Independence scale and counts}
+If the envelope has gap $\mu>0$, correlations between residue tracks separated by $d$ decay
+as $\sim e^{-\mu d}$. Tracks beyond $d>\ell$ are effectively independent; counts per label
+$\Lambda$ yield multiplicities.
+\end{myprop}
+
+\paragraph{Strong non-commutativity.}
+For composites $\{M_j\}$, the Magnus/BCH expansion
+$\log M_{\mathrm{eff}}=\sum_j \log M_j+\frac{1}{2}\sum_{i<j}[\log M_i,\log M_j]+\cdots$
+quantifies trace splitting and hence label bifurcations.
+
+% =======================================================================
+\section{Emergent Space from Conditioned Phases; GR Bridge}
+% =======================================================================
+\paragraph{Coframes from clocks.}
+Let $e^a=\Thet^a{}_i\,dx^i$ be the pushforward of conditioned phases. Parallel transport
+under the envelope approximates Levi--Civita holonomy with an explicit finite-loop bound.
+
+\begin{mythm}{Finite-loop bridge (error budget)}
+For a loop $C$ bounding $\Sigma(C)$,
+\begin{equation}
+\|P_{\mathrm{env}}(C)-H_{\mathrm{LC}}(C)\|
+\;\le\; C\Big(\sqrt{\textstyle\int_{\Sigma(C)}\!\!\|F\|^2\,dA}\;+\;h\;+\;\ell^3\|\nabla\Omega\|_\infty
+\;+\;\mu^{-1}\sigma^2\kappa\,\ell\,\tau\Big),
+\end{equation}
+with $F=\partial_i\Thet^a{}_j-\partial_j\Thet^a{}_i$ and mesh $h$.
+\end{mythm}
+
+\begin{proofbox}{Idea of proof}
+(1) Strang split one edge as $U_e=S^{1/2}TS^{1/2}$ and use BCH to track commutators;
+(2) non-Abelian Stokes to compare surface-ordered exponentials; (3) Cartan + Stokes +
+Poincar\'e/trace to bound boundary terms by $\|F\|_{L^2(\Sigma)}$; (4) accumulate leakage
+from the envelope via its spectral gap.
+\end{proofbox}
+
+% =======================================================================
+\section{Directed/Weighted Graphs and Scaling/Tuning}
+% =======================================================================
+For directed or weighted graphs, use $\Lap_{\mathrm{psd}}=(\Id-\alpha \Adj)^\dagger(\Id-\alpha \Adj)$
+and replace spectral radii by singular values. Speed and holonomy bounds adapt up to constants.
+Scaling rules (spacing $a$, step $\tau$, $\Lambda_{\max}\!\sim\!a^{-2}$): choose
+$s=\sigma^2\kappa$ with $s\Lambda_{\max}^2\approx 1$ for a 50\% speed cut; enforce
+$\sqrt{\int\|F\|^2}\le 0.01\,\mathrm{Area}$ by increasing $\gamma$; tie $\Thet\approx\nabla\varphi$
+with $\beta\approx \gamma a^2$.
+
+% =======================================================================
+\section{Experiments and Reproducibility}
+% =======================================================================
+\subsection*{Artifacts}
+We generate the following CSV/PNG files in the working folder:
+\begin{itemize}
+\item \texttt{discrete\_dirac\_pbc\_apbc.png}, \texttt{dirac\_spectrum\_pbc\_apbc.csv}
+\item \texttt{clock\_birth\_one\_macrocycle.png}, \texttt{clock\_birth\_cover.png}, \texttt{clock\_birth\_signal.csv}
+\item \texttt{binary\_holonomy\_signflip.png}, \texttt{binary\_holonomy\_test.csv}
+\item \texttt{checksum\_mu\_sweep.png}
+\end{itemize}
+
+\subsection*{Minimal code (Python)}
+See the companion script \texttt{make\_figs\_and\_data.py}. Run it once to create all artifacts,
+then compile this \texttt{.tex} with \texttt{pdflatex} or \texttt{xelatex}.
+
+% =======================================================================
+\appendix
+\section*{Appendix A: Dirac Spectrum (PBC zero vs APBC gap)}
+On a discrete circle with $N$ sites and spacing $\Delta\tau=T/N$, eigenvalues are
+$E(k)=\frac{2}{\Delta\tau}\sin k$, $k=\frac{2\pi}{N}\big(m+\frac{s}{2}\big)$. Thus $E(0)=0$ for PBC
+and $|E|\ge \frac{2}{\Delta\tau}\sin(\pi/N)$ for APBC.
+
+\section*{Appendix B: Green Function and Births}
+For $x_{m+1}-V x_m + x_{m-1}=s_m$ with $V=2\cos\phi$, the causal Green function is
+$G_n=\sin(n\phi)/\sin\phi$. A net-zero $s$ (e.g.\ $\delta_0-\delta_{L/2}$) produces a localized birth;
+an envelope $E$ creates a spiral with pitch set by $\sigma^2\kappa$.
+
+\section*{Appendix C: BCH and the Bridge}
+We record the Strang/BCH expansion $\log U_e=A+B+\frac{1}{12}[B,[B,A]]-\frac{1}{24}[A,[A,B]]+\cdots$
+with $A\propto \sigma^2\kappa \Lap^\dagger\Lap$, $B\propto \tau \widehat K$.
+
+\section*{Appendix D: Pipeline Snippets}
+\begin{verbatim}
+def invariants_from_stream(y, ell):
+    y0, y1, y2 = y[:-2], y[1:-1], y[2:]
+    Vhat = (np.vdot(y2, y1) + np.vdot(y0, y1)) / (np.vdot(y1, y1) + 1e-12)
+    r_plus = 0.5*(Vhat + np.sqrt(Vhat**2 - 4.0))
+    rho, theta = np.abs(r_plus), np.angle(r_plus)
+    return Vhat, rho, theta
+\end{verbatim}
+
+\end{document}

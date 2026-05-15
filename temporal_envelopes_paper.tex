@@ -1,0 +1,325 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{siunitx}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{microtype}
+\usepackage{booktabs}
+\usepackage{hyperref}
+\usepackage[nameinlink,capitalise]{cleveref}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=blue!50!black,
+  urlcolor=blue!60!black,
+  citecolor=blue!60!black
+}
+
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\e}{\mathrm{e}}
+\newcommand{\im}{\mathrm{i}}
+\newcommand{\T}{\mathsf{T}}
+\newcommand{\dd}{\,\mathrm{d}}
+\newcommand{\half}{\tfrac{1}{2}}
+\newcommand{\elll}{\ell}  % to avoid confusion with \ell in math fonts
+\newcommand{\figpath}{.}  % change to ./figs or similar if needed
+
+\title{\vspace{-2ex}\Large Temporal Envelopes, Decimated AR(2) Dynamics, and Physics-Native Normalization:\\
+From Floquet Quantum Mechanics to ATLAS \texorpdfstring{$\varphi$}{phi}-Histograms}
+\author{}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+We develop and test a discrete-time, discrete-space framework in which coarse observables evolve by
+a second-order autoregressive (AR(2)) law across a rank lattice. We show three routes by which such
+dynamics emerge from standard quantum mechanics (QM): (i) eliminating an internal two-component
+Floquet ``coin'' in a discrete-time quantum walk, (ii) two-frequency dominance of expectation-value
+time series, and (iii) coarse-grained Mori--Zwanzig closures. We then show that, for any one-dimensional
+second-order medium, \emph{decimating} by stride $\ell$ induces a universal tri-site recurrence
+$x_{k+2\ell} - V_\ell x_{k+\ell} + Q^\ell x_k = 0$ where $V_\ell=\mathrm{tr}(M^\ell)$ and $Q=\det M$
+are the trace and determinant of the $\ell$-step monodromy $M^\ell$. The coefficients $V_\ell$ obey a
+Lucas recursion from the one-step pair $(V,Q)$.
+
+On top of this identity we build a physics-native normalization/decoding calculus on each residue
+track $k=r+\ell t$ using a local carry/borrow rule that provably terminates and is confluent. We
+define a Chebyshev--Lucas checksum $I(d)=\sum_t d_t r^t$ (for a root $r$ of $z^2-V_\ell z + Q^\ell=0$)
+that is invariant under the local moves. We implement the full pipeline on ATLAS public \emph{PHYSLITE}
+$\varphi$-histogram data: eventization, per-track normalization, modular checksum validation, and
+stride-$\ell$ recomposition. In a representative configuration (stride $\ell=16$ on electron-like
+histograms with $\varepsilon=10$ event quantum) the RMS violation of the stride-$\ell$ identity
+drops from $\sim\!\num{1.50e7}$ to $\sim\!\num{2.83e6}$ after normalization (factor $\approx5$).
+Modular checksum tests (two 61--64-bit primes) pass bit-for-bit.
+
+We also include a superdeterministic envelope module for Bell--CHSH simulations in which a hidden
+seam phase $\lambda$ biases setting choices with a tunable measurement-dependence parameter $\eta$,
+with an optional $\pi$-symmetrization enforcing no-signaling. This allows principled tests of how
+much alignment between envelope phases and setting RNGs would be required to reproduce quantum-like
+violations in a local model.
+\end{abstract}
+
+\section{Motivation and Overview}
+
+We ask whether a minimal spatiotemporal law,
+\begin{equation}
+\label{eq:ar2-full}
+x_{m+2}(j) = V\,x_{m+1}(j) - Q\,x_m(j) + r\!\left(\e^{\im\xi} x_{m+1}(j{+}1) + \e^{-\im\xi} x_{m+1}(j{-}1)\right),
+\end{equation}
+can capture the long-wavelength, coarse-grained kinematics of observables built from complex
+microscopic dynamics. Here $m\in\Z$ is a stroboscopic time index and $j\in\Z_L$ labels a rank/angle
+position (e.g., $\varphi$-bin). For plane waves $x_m(j)=\e^{\im(kj-\omega m)}$, \eqref{eq:ar2-full}
+implies
+\begin{equation}
+\label{eq:dispersion}
+2\cos\omega \;=\; V + 2r\cos(k+\xi)\qquad(Q=1).
+\end{equation}
+Boundary twists (APBC, M\"obius-like holonomy) shift $k\mapsto k+\pi/L$ and open a spectral gap.
+Within this law we can \emph{measure} $(V,Q,r,\xi)$ from data via $k$--$\omega$ overlays.
+
+A central structural claim is that---independently of the microscopic origin---\emph{decimating} a
+one-dimensional second-order chain by stride $\ell$ always yields a tri-site identity
+\begin{equation}
+\label{eq:decimated}
+x_{k+2\ell} - V_\ell\,x_{k+\ell} + Q^\ell x_k = 0,\qquad
+V_\ell=\mathrm{tr}(M^\ell),\ \ Q=\det M,
+\end{equation}
+where $M$ is the one-step transfer (monodromy) matrix. The $V_\ell$ obey the Lucas/Dickson recursion
+$V_0=2,\ V_1=V,\ V_{n+1}=V V_n - Q V_{n-1}$. This identity underlies both our normalization calculus
+and a strong multi-resolution self-consistency check for fitted parameters.
+
+\paragraph{Contributions.} (i) Three independent derivations of the AR(2) law from textbook QM;
+(ii) a decimation theory that links one-step and stride-$\ell$ recurrences; (iii) a per-track
+normalization/decoding algorithm (deterministic carries) with a physics-native checksum invariant;
+(iv) a practical pipeline tested on ATLAS \emph{PHYSLITE} $\varphi$-histograms; (v) a superdeterministic
+envelope module for controlled measurement dependence in CHSH tests.
+
+\section{AR(2) from Standard Quantum Mechanics}
+\label{sec:qm-to-ar2}
+
+\paragraph{Floquet/coin route (exact).}
+For a discrete-time walk with two-component ``coin'' $\Phi_{m+1}(k)=U(k)\Phi_m(k)$ and unitary
+$U(k)\in\mathrm{U}(2)$, the characteristic polynomial of $U$ is
+$\lambda^2 - \tau(k)\lambda + \det U(k)=0$. Eliminating one component yields
+\begin{equation}
+z_{m+2}(k)-\tau(k)\,z_{m+1}(k)+\det U(k)\,z_m(k)=0.
+\end{equation}
+After a global phase gauge, $\det U(k)=1$ and $\tau(k)=V+2r\cos(k+\xi)$, giving exactly
+\eqref{eq:ar2-full} with $Q=1$ on inverse Fourier transform.
+
+\paragraph{Two-frequency dominance (exact for two lines).}
+If an observable has two Bohr lines $\Omega_{1,2}$ in the sampled sequence
+$x_m=\langle A(m\Delta t)\rangle$, then $x_m$ obeys
+$x_{m+2}- (e^{-\im\Omega_1\Delta t}+e^{-\im\Omega_2\Delta t})x_{m+1} + e^{-\im(\Omega_1+\Omega_2)\Delta t}x_m=0$,
+an AR(2) with complex $(V,Q)$. With more lines the AR(2) is the best linear predictor on windows.
+
+\paragraph{Mori--Zwanzig (approximate with innovations).}
+Projecting unitary dynamics onto a slow subspace yields a second-order equation with memory. With
+a short-memory (two-pole) closure and stroboscopic sampling, one obtains \eqref{eq:ar2-full} with
+an innovation~$\eta_m$ that our high-pass whitening largely removes.
+
+\paragraph{Continuum limit (Klein--Gordon).}
+Setting $\omega\Delta t\ll1$, $ka\ll1$ and expanding \eqref{eq:dispersion} gives
+$\omega^2 \approx \mu^2 + c^2k^2$ with parameters determined by $(V,r,\xi)$ and lattice spacings;
+this is the standard relativistic dispersion in the long-wavelength limit.
+
+\section{Decimation and Chebyshev--Lucas Structure}
+\label{sec:decimation}
+
+Consider a one-dimensional second-order medium with one-step monodromy $M\in\C^{2\times2}$ and
+$(V,Q)=(\mathrm{tr}M,\det M)$. By Cayley--Hamilton, $M^2 - V M + Q I = 0$. Sampling every $\ell$
+sites we work with $M^\ell$ and obtain the \emph{decimated} tri-site identity
+\eqref{eq:decimated}. The coefficient $V_\ell=\mathrm{tr}(M^\ell)$ satisfies the Lucas recursion
+$V_0=2$, $V_1=V$, $V_{n+1}=V V_n - Q V_{n-1}$.
+
+\paragraph{Checksum.} Let $r$ be a root of $z^2 - V_\ell z + Q^\ell=0$. For a (finite-support)
+digit string $d=\{d_t\}$ on a residue track $k=r_0+\ell t$, the quantity
+\begin{equation}
+I(d)=\sum_t d_t\,r^t
+\end{equation}
+is invariant under the local tri-site update $(d_{t-1},d_t,d_{t+1})\mapsto(d_{t-1}+Q^\ell q,\ d_t-V_\ell q,\ d_{t+1}+q)$.
+We use this as a physics-native parity check and as the basis of a small-window trellis decoder.
+
+\section{Complex-Base Normalization on Residue Tracks}
+\label{sec:normalization}
+
+Let the complex base be $B=b\,\e^{\im2\pi/\ell}$ where $b$ solves $b^2-Pb+Q=0$. Grouping indices by
+residue $r\in\{0,\dots,\ell-1\}$ gives tracks $k=r+\ell t$. For even $\ell$ with $Q^\ell>0$ the
+canonical digit alphabet is nonnegative $\{0,\dots,V_\ell-1\}$; for odd $\ell$ with $Q^\ell<0$ we
+use a balanced alphabet $\{-a,\dots,+a\}$, $a=(V_\ell-1)/2$. A rightmost-first rule with the local
+tri-site move terminates under a decreasing potential $E_q=\sum_t d_t q^t$ for $q\in(1,b^\ell)$,
+leading to a unique normal form per track. In practice we normalize each track independently and
+verify $I(d)$ modulo large primes to avoid floating overflow.
+
+\section{Superdeterministic Envelope Module}
+\label{sec:sd}
+
+We model a hidden seam phase $\lambda\in[0,2\pi)$ that biases CHSH settings with strength $\eta\in[0,1]$:
+the preferred setting at a site is the one maximizing $|\cos(\lambda-\theta)|$, chosen with probability
+$(1+\eta)/2$ (the other with $(1-\eta)/2$). Deterministic local outcomes are
+$A=\mathrm{sgn}[\cos(\lambda-a)]$, $B=-\mathrm{sgn}[\cos(\lambda-b)]$. To enforce no-signaling we
+$\pi$-symmetrize $\lambda$ after settings selection (replace $\lambda\to\lambda$ or $\lambda{+}\pi$
+with equal probability), which flips both marginals while preserving the product $AB$. We report
+CHSH $S$, an empirical measurement-dependence index $\hat M$ (TV distance between $p(\lambda|a,b)$
+histograms), and marginal drift diagnostics.
+
+\section{Data and Pipeline}
+\label{sec:data}
+
+We use ATLAS public \emph{PHYSLITE} $\varphi$-histogram NPZ files of shape $(T,L)$ (time windows by
+$\varphi$-bins). The pipeline steps are:
+
+\begin{enumerate}
+\item \textbf{Eventization:} For each rank $j$, integrate time by $E_j=\sum_m\max(Y_{m,j},0)$
+or $E_j=\sum_m|Y_{m,j}|$ and quantize with an event quantum $\varepsilon$ to $N_j=\lfloor E_j/\varepsilon\rfloor$.
+\item \textbf{Track split:} Split $j$ into residue classes $j=r+\ell t$.
+\item \textbf{Normalization:} For each track, apply the local tri-site carry/borrow until all digits
+lie in the legal alphabet; count unit carries.
+\item \textbf{Checksum:} Verify modular equality of $\sum_j N_j r^j$ and $\sum_{r,t} d^{(r)}_t r^{r+\ell t}$
+for two large primes (e.g., $2^{61}{-}1$ and $2^{64}{-}59$).
+\item \textbf{Stride-$\ell$ recomposition:} Reassemble a one-dimensional lattice $x[j]$ and check
+the residuals of $x_{j+2\ell}-V_\ell x_{j+\ell}+Q^\ell x_j$.
+\end{enumerate}
+
+\paragraph{Commands.} Example invocation of the bridge:
+\begin{verbatim}
+python complex_base_bridge.py \
+  --npz PHYSLITE_phiHist_hp256_ell64_Y_ell64.npz \
+  --ell 16 \
+  --P 1 --Q -1 \
+  --mode abs_cumsum --eps 10 \
+  --alphabet auto \
+  --out out_eps10_ell16
+\end{verbatim}
+Recomposition/AR(2) check:
+\begin{verbatim}
+python recompose_spatial_check.py \
+  --digits-raw out_eps10_ell16/digits_raw.csv \
+  --digits-norm out_eps10_ell16/digits_normalized.csv \
+  --ell 16 --P 1 --Q -1 --out spatial_eps10_ell16
+\end{verbatim}
+
+\section{Results}
+\label{sec:results}
+
+\paragraph{Checksum validation.}
+Modular parity checks matched exactly for two independent large primes, providing a strong pass
+without floating overflow. Per-track invariants $I(d)$ are preserved to machine precision.
+
+\paragraph{Stride-$\ell$ residual reduction.}
+For $\ell=16$ (Lucas $V_{16}=2207$, $Q^{16}=1$), eventization with $\varepsilon=10$ produced
+nontrivial carries on most tracks. Recomposition residual RMS for the stride-$\ell$ identity decreased
+from $\sim\!\num{1.50e7}$ (raw digits) to $\sim\!\num{2.83e6}$ (normalized digits), a factor $\approx5$ improvement.
+
+\paragraph{Visualization.}
+\cref{fig:komega-demo} shows a $k$--$\omega$ overlay of a synthetic transport stack built from the
+normalized lattice to illustrate how ridges would appear with time dynamics. \cref{fig:residuals}
+plots the stride-$\ell$ residuals before and after normalization.
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=0.9\linewidth]{\figpath/komega_demo.png}
+  \caption{$k$--$\omega$ overlay (synthetic transport demo) built from normalized digits.}
+  \label{fig:komega-demo}
+\end{figure}
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=\linewidth]{\figpath/residuals.png}
+  \caption{Stride-$\ell$ residuals ($\ell=16$): raw (blue) vs.\ normalized (orange).}
+  \label{fig:residuals}
+\end{figure}
+
+\section{Discussion and Outlook}
+\label{sec:discussion}
+
+\paragraph{Internal consistency.}
+The Chebyshev--Lucas structure provides a stringent self-consistency ladder across strides.
+Fitting a one-step pair $(V,Q)$ from $k$--$\omega$ overlays, we must recover $V_\ell$ by the
+Lucas recursion and $Q^\ell$ by exponentiation. Disagreement flags model or preprocessing issues.
+
+\paragraph{Physical interpretation and limits.}
+Our derivations place the AR(2) law inside orthodox QM via two-component Floquet elimination or
+two-line dominance; decimation is a structural identity of second-order chains. What remains
+\emph{speculative} is whether these coarse rails and their topological locks provide a faithful
+parametrization of high-energy dynamics. The present results show a mathematically precise way to
+regularize and validate rank-lattice data, not a claim of fundamental ontology.
+
+\paragraph{Falsifiable checks.}
+(i) Lucas consistency across strides for $(V,Q)$ from real overlays; (ii) controlled opening of
+holonomy gaps (APBC) in engineered Floquet systems; (iii) envelope-driven CHSH tests where the
+measured $S$ is mapped against the empirical measurement-dependence index $\hat M$.
+
+\paragraph{Near-term experimental routes.}
+Photonic split-step walks and cold-atom Floquet realizations allow direct programming of $U(k)$,
+phase defects (holonomy), and time strobing. Our pipeline can be applied out of the box to their
+time-resolved intensity maps.
+
+\section*{Reproducibility: Minimal Code Listings}
+
+\paragraph{Stride-$\ell$ coefficients via Lucas.}
+\begin{verbatim}
+def lucas_Vn(P, Q, n):
+    if n == 0: return 2.0
+    if n == 1: return float(P)
+    Vm1, V = 2.0, float(P)
+    for _ in range(2, n+1):
+        Vm1, V = V, P*V - Q*Vm1
+    return V
+
+def stride_coeffs(V1, Q1, ell):
+    return lucas_Vn(V1, Q1, ell), (Q1**ell)
+\end{verbatim}
+
+\paragraph{Per-track normalization (deterministic).}
+\begin{verbatim}
+def normalize_track(d, Vell, Qell, balanced=False):
+    d = {int(k): int(v) for k,v in d.items() if v!=0}
+    V = int(round(Vell))
+    carries = 0
+    a = (V-1)//2
+    def inD(x): return (-a <= x <= a) if balanced else (0 <= x <= V-1)
+    while True:
+        bad = [t for t,v in d.items() if not inD(v)]
+        if not bad: break
+        t = max(bad); v = d[t]
+        if balanced:
+            q = int(np.floor((v + a)/V)); d[t] = v - q*V
+        else:
+            if v >= V: q = v // V; d[t] = v - q*V
+            else:      q = (-v + V - 1)//V; d[t] = v + q*V
+        d[t-1] = d.get(t-1,0) + int(Qell)*q
+        d[t+1] = d.get(t+1,0) + q
+        carries += abs(q)
+        # prune zeros ...
+    return d, carries
+\end{verbatim}
+
+\paragraph{Modular checksum.}
+\begin{verbatim}
+def checksum_global_modp(N_rank, tracks_norm, ell, r, primes):
+    out=[]; r=int(r)
+    for p in primes:
+        rp = r % p; r_ell = pow(rp, ell, p)
+        Iev=0; Idg=0
+        for j, Nj in enumerate(N_rank):
+            if Nj: Iev = (Iev + (Nj % p) * pow(rp, j, p)) % p
+        for r0, d in tracks_norm.items():
+            rr0 = pow(rp, r0, p)
+            for t, val in d.items():
+                if val: Idg = (Idg + (val%p) * rr0 * pow(r_ell, t, p)) % p
+        out.append(dict(p=p, equal=(Iev==Idg)))
+    return out
+\end{verbatim}
+
+\section*{Data Availability and Acknowledgements}
+The NPZ files used here are public ATLAS \emph{PHYSLITE}-derived $\varphi$-histograms prepared by
+the authors from the Open Data portal. Intermediate CSVs and figures referenced in this manuscript
+are produced by the scripts distributed alongside this \LaTeX\ source. This document contains no
+proprietary or personally identifiable information.
+
+\end{document}

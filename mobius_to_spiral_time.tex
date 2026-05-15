@@ -1,0 +1,212 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=1in]{geometry}
+\usepackage{amsmath,amsthm,amssymb,mathtools}
+\usepackage{microtype}
+\usepackage{hyperref}
+\hypersetup{colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue}
+
+\title{\textbf{From Möbius Time to Circular/Spiral Time:\\
+Event--Coded Dynamics under Decimated Transfer--Matrix Constraints}}
+\author{VR \& AI}
+\date{\today}
+
+% theorem envs
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{example}[theorem]{Example}
+
+% macros
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\tr}{\mathrm{tr}}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+We propose a simple, self--consistent model of \emph{temporal envelopes} that change topology from a Möbius phase
+(orientation--reversing macrocycle) to a circular or spiral phase (standing vs.\ running) under event injection and relaxation.
+The dynamics are constrained by an $l$--step decimation identity derived from Cayley--Hamilton on the unit--cell transfer monodromy $M^l$:
+\(
+x_{k+2l}-V_l x_{k+l}+Q^l x_k=0
+\)
+with $V_l=\tr(M^l)$ and $Q^l=\det(M^l)$.
+Events are \emph{thresholded increments of integrated power/flux} measured at a fixed cadence; decoded integers satisfy a
+\emph{Chebyshev--Lucas checksum}. A \emph{half--twist macrocycle} ($\pi$ holonomy) realizes Möbius time; a \emph{quench} controlled by a
+dimensionless parameter $\Lambda$ (tick vs.\ normalization time) transitions the system to circular (standing) or spiral (running) regimes.
+We give clear operators, invariants, and selection rules (hard/soft decoding), prove log--growth bounds for the spiral pitch through the decimated roots,
+and describe reproducible protocols in digital, microwave, and acoustic chains. The framework is minimal: topology enters via boundary conditions/holonomy,
+dynamics via transfer matrices, and robustness via a finite--state trellis decoder.
+\end{abstract}
+
+\tableofcontents
+
+\section{Motivation and contributions}
+\paragraph{Temporal envelopes.} We model ``time shape'' not as a new metric, but as a \emph{layout} of stroboscopic samples on a 2D plane:
+a circle (standing), a logarithmic spiral (running), or a figure--8 macrocycle with a half--twist (Möbius--like). The layout is visualization;
+the physics lives in the \emph{transfer} of samples and the \emph{events} we inject/measure.
+
+\paragraph{Contributions.}
+\begin{itemize}
+\item A \emph{minimal dynamical core}: an $l$--step decimation constraint from the unit--cell transfer matrix $M$:
+\(
+x_{k+2l}-V_l x_{k+l}+Q^l x_k=0,\ V_l=\tr(M^l),\ Q^l=\det(M^l).
+\)
+\item A \emph{Möbius macrocycle}: an orientation--reversing holonomy ($\pi$) constructed from blocks; decimation invariants survive the twist.
+\item An \emph{eventization/decoding layer}: events are thresholded increments of integrated power/flux; decoded digits obey a Chebyshev--Lucas checksum;
+hard vs.\ soft trellis decoders with selection/tuning rules.
+\item A \emph{mode switch} governed by $\Lambda$ (tick vs.\ normalization); circular (standing) vs.\ spiral (running) phases.
+\item \emph{Pitch law}: spiral support radius grows like $R(T)=\Theta(\log_r T)$ with $r$ the large root of $z^2-V_l z+Q^l=0$;
+the helix pitch in the plane follows from $R(T)$ and the sampling angle.
+\item \emph{Protocols}: platform--agnostic steps to realize, observe, and test the topology switch and the checksum.
+\end{itemize}
+
+\section{Core constraint from transfer matrices}
+\subsection{Second--order chain and $l$--decimation}
+A one--dimensional chain with nearest--neighbor coupling reduces after eliminating a conjugate variable to
+\begin{equation}\label{eq:secondorder}
+x_{k+1}=P x_k - Q x_{k-1},\qquad P,Q\in\C,\ Q\neq 0,
+\end{equation}
+equivalently
+\begin{equation}\label{eq:transfer}
+\begin{pmatrix}x_{k+1}\\ x_k\end{pmatrix}
+\;=\;
+M\,\begin{pmatrix}x_k\\ x_{k-1}\end{pmatrix},
+\qquad
+M=\begin{pmatrix}P&-Q\\[3pt]1&0\end{pmatrix},\quad \tr M=P,\ \det M=Q.
+\end{equation}
+Cayley--Hamilton on $M^l$ yields the $l$--decimated tri--site identity
+\begin{equation}\label{eq:trisite}
+x_{k+2l}-V_l x_{k+l}+Q^l x_k=0,\qquad V_l:=\tr(M^l),\quad Q^l:=\det(M^l)=(\det M)^l.
+\end{equation}
+
+\subsection{Time topology as boundary condition: PBC vs.\ APBC}
+On a ring (finite $k$ mod $L$), \emph{periodic} boundary conditions (PBC) enforce monodromy $+1$.
+\emph{Anti--periodic} boundary conditions (APBC, $\pi$--flux) enforce a \emph{half--twist} (holonomy $-1$): after one round--trip,
+the local phase flips. APBC instantiate a Möbius--like time on a discrete ring. The decimated constraint \eqref{eq:trisite} is local
+and survives either BC.
+
+\section{Layouts in the plane: circle, spiral, and figure--8}
+Fix a stride $l$ and an angle step $\Delta\theta=2\pi/l$. Define a \emph{complex base} $B=b\,e^{i\Delta\theta}$ with $b>1$.
+We lay out sites $k$ in the plane by $z_k = B^{k}$ (up to a global scale), so consecutive samples rotate by $\Delta\theta$ and expand by $b$.
+\begin{itemize}
+\item \textbf{Circle (standing):} choose $b=1$; samples lie on a circle (no radial drift).
+\item \textbf{Logarithmic spiral (running):} choose $b>1$; samples lie on a logarithmic spiral (constant angle step, geometric radial growth).
+\item \textbf{Figure--8 macrocycle:} two blocks with net rotation $\pi$ and unit radial gain realize an orientation--reversing loop;
+see Sec.~\ref{sec:macrocycle}.
+\end{itemize}
+The geometry is a visualization; dynamics are enforced by \eqref{eq:trisite}.
+
+\section{Events, decoding, and invariants}
+\subsection{Eventization (operational)}\label{subsec:event}
+At cadence $\Delta t$ and site $t$, let $E_t[n]$ be integrated power/flux in window $n$ and fix a quantum $\varepsilon>0$.
+Define event increments
+\begin{equation}\label{eq:event}
+\delta N_t[n]=\Big\lfloor \frac{E_t[n]-E_t[n-1]}{\varepsilon}\Big\rfloor\in\Z_{\ge0},\qquad T_s:=\sum_n \delta N_s[n].
+\end{equation}
+
+\subsection{Chebyshev--Lucas checksum}
+Let $r$ be a root of $z^2 - V_l z + Q^l=0$ with $|r|\ge 1$ and define $I(d)=\sum_k d_k r^k$ for finite integer sequences $d$.
+Tri--site moves $(d_{t-1},d_t,d_{t+1})\mapsto(d_{t-1}+Q^l,\,d_t-V_l,\,d_{t+1}+1)$ preserve $I(d)$, hence
+\begin{equation}\label{eq:checksum}
+\sum_k d_k r^k \;=\; \sum_s T_s\, r^{s}.
+\end{equation}
+With anchor events only ($s=0$) we get an integer checksum $\sum_k d_k r^k=T$. On a symmetric window $[-R,R]$ with $d_{-t}=d_t$,
+\begin{equation}\label{eq:dickson}
+\sum_{k=-R}^{R} d_k r^k = d_0 + \sum_{j=1}^{R} d_j\,D_j(V_l,Q^l),\quad D_{j+1}=V_l D_j - Q^l D_{j-1},\ D_0=2,\ D_1=V_l.
+\end{equation}
+
+\subsection{Decoders: selection and tuning}\label{subsec:decoders}
+We observe $m_t=d_t+\eta_t$ on a window $[-R,R]$ and recover integers $d_t\in\mathcal D$.
+Let $e_t=d_{t+1}-V_l d_t + Q^l d_{t-1}$. We use:
+\begin{align}
+\textbf{Soft:}\quad
+\hat d&\in \arg\min_{d\in\mathcal D^{2R+1}} \ \sum_{t=-R}^R w_t |d_t-m_t|^2 + \lambda \sum_{t=-R}^{R-1} |e_t|^2,\label{eq:soft}\\
+\textbf{Hard:}\quad
+\hat d&\in \arg\min_{d\in\mathcal D^{2R+1}} \ \sum_{t=-R}^R w_t |d_t-m_t|^2 \ \ \text{s.t.}\ e_t=0\ \forall t.\label{eq:hard}
+\end{align}
+\emph{Selection:} use hard when the window sits in a periodic/twisted segment (nontrivial kernel present) and model mismatch $\ll$ noise;
+use soft otherwise. \emph{Tuning $\lambda$:} balance residuals, use $\lambda\approx \sigma^2/\sigma_{\mathrm{mod}}^2$, or L--curve.
+
+Both problems admit a finite--state trellis (states $(d_{t-1},d_t)\in\mathcal D^2$), solved by dynamic programming in $O(R\,|\mathcal D|^2)$ time.
+Design rules: $A=\max\{A_{\min}(R),\lfloor\sqrt{|V_l|}\rfloor\}$ with $A_{\min}(R)=\big\lceil T_{\max}/(1+\sum_{j=1}^{R} D_j)\big\rceil$, and
+$R=\lceil \log_r(1+\tfrac{(r-1)T_{\max}}{A})\rceil-1+m$ with $m\in\{2,3\}$.
+
+\section{Half--twist macrocycle (Möbius time)}\label{sec:macrocycle}
+Partition one macrocycle into $J$ consecutive blocks $j=1,\dots,J$. Block $j$ advances by $m_j\in\N$ steps of
+$B_j=b_j e^{i 2\pi/l_j}$ and applies a phase gate $\theta_j$ and a positive block scale $S_j$.
+The macrocycle transform is
+\begin{equation}\label{eq:Tmacro}
+T \;:=\; \Big(\prod_{j=1}^J S_j b_j^{m_j}\Big)\;\exp\!\Big(i\,2\pi\sum_{j=1}^J \tfrac{m_j}{l_j}\Big)\; e^{\,i\sum_j \theta_j}.
+\end{equation}
+\paragraph{Möbius (half--twist) condition.} Choose $(m_j,S_j,\theta_j)$ so that
+\begin{equation}\label{eq:half}
+\prod_j S_j b_j^{m_j}=1,\qquad \sum_{j=1}^J \frac{m_j}{l_j}+ \frac{1}{2\pi}\sum_j \theta_j \equiv \frac12 \ (\mathrm{mod}\ 1).
+\end{equation}
+Then $T=-1$: the macrocycle returns to the same point with reversed local phase (APBC). The decimated constraint \eqref{eq:trisite} is local and unaffected.
+
+\section{Mode switch: circular vs.\ spiral}
+Let $\tau_{\mathrm{tick}}$ be the event cadence and $\tau_{\mathrm{norm}}$ the normalization time per step (trellis update/carry relaxation).
+Define $\Lambda:=\tau_{\mathrm{norm}}/\tau_{\mathrm{tick}}$.
+\begin{itemize}
+\item \textbf{Standing (circular).} For small $\Lambda$ (fast relaxation), decoded digits equilibrate within each macrocycle, producing $b\approx 1$ (no radial drift).
+\item \textbf{Running (spiral).} For larger $\Lambda$, residual load carries across macrocycles; effective $b>1$ and the layout runs along a logarithmic spiral.
+\end{itemize}
+The \emph{Chebyshev--Lucas invariant} \eqref{eq:checksum} holds in either mode (after decoding).
+
+\section{Spiral pitch and growth laws}
+Let $r>1$ be the large root of $z^2 - V_l z + Q^l=0$ and let $T$ be the total anchor events accumulated.
+On a window, the occupied radius obeys
+\begin{equation}\label{eq:Rbounds}
+\Big\lceil \log_r\!\Big(1+\frac{(r-1)T}{2A}\Big)\Big\rceil -1 \ \le\ R(T)\ \le\
+\Big\lceil \log_r\!\Big(1+\frac{(r-1)T}{A}\Big)\Big\rceil -1.
+\end{equation}
+In the plane, each step rotates by $\Delta\theta=2\pi/l$ and expands radius by $b$ per index; after $l$ steps (one visual turn),
+the \emph{radial} growth is $b^l$ and the \emph{support} growth in digits follows \eqref{eq:Rbounds}. Thus the spiral pitch scales like
+\begin{equation}
+\text{pitch} \ \propto\ \frac{\Delta\text{angle}}{\Delta \log \text{radius}} \ \sim\ \frac{2\pi}{l\log b}\quad\text{with}\quad \log b\ \text{set by}\ \Lambda\ \text{and}\ r.
+\end{equation}
+In particular $R(T)=\Theta(\log_r T)$ gives a logarithmic law for how far the support advances per macrocycle.
+
+\section{Fractal spawn and termination (optional)}
+To model child loops spawned at smaller scales, add levels $\ell=0,1,\dots$ with shrink $s\in(0,1)$:
+$z=\sum_{\ell\ge 0} s^\ell \sum_k d_{\ell,k} B^{k}$.
+If each level satisfies the decimated constraint and the per--level workload obeys
+$\sum_\ell s^\ell \sum_{t} |d_{\ell,t}| q^{t}<\infty$ for some $q\in(1, b^l)$, then normalization converges per level and the sum converges absolutely.
+A \emph{macro re--closure} arises when the half--twist condition \eqref{eq:half} is again met after finitely many levels.
+
+\section{Multi--site events: pre--alignment and uniqueness}
+Let $d^{(0)}$ be the decoded anchor profile for one event, normalized by $\sum_j d^{(0)}_j r^j=1$.
+For totals $\{T_s\}$, set $\tilde d=\sum_s T_s\, S^{-s} d^{(0)}$ with $(S^{-s}d)_k=d_{k+s}$.
+Then $\sum_k \tilde d_k r^k = \sum_s T_s r^s$ matches \eqref{eq:checksum}. If the anchor ML decoder is unique at SNR $\ge\gamma$ and the shifts
+have disjoint (or dominated) overlap within the window at the same SNR, then $\tilde d$ is the unique ML solution (hard or soft).
+
+\section{Modal extension (coupled tracks)}
+With weak transverse coupling, diagonalize modes $\theta$ to obtain per--mode transfers $M(\theta)$ and decimated recurrences
+$x^{(\theta)}_{k+2l}-V_l(\theta) x^{(\theta)}_{k+l}+Q^l(\theta) x^{(\theta)}_k=0$, $V_l(\theta)=\tr(M(\theta)^l)$.
+The checksum and decoder apply per mode. Perturbations $E(\theta)$ change $V_l(\theta)$ by at most $l\|M\|_2^{l-1}\|E\|_2+O(\|E\|_2^2)$.
+
+\section{Protocols and observables}
+\textbf{P0 (calibrate).} Measure $P=\tr M$, $Q=\det M$; choose $l$ as supercell length or Floquet denominator.
+\textbf{P1 (Möbius).} Impose APBC (π--flux) and two--block macrocycle with \eqref{eq:half}; visualize figure--8 centerline.
+\textbf{P2 (checksum).} Inject $T$ anchor events; decode; verify \eqref{eq:dickson} (symmetric) or \eqref{eq:checksum} (general).
+\textbf{P3 (mode switch).} Sweep $\Lambda$ by changing cadence or normalization time; observe circular $\to$ spiral transition.
+\textbf{P4 (pitch law).} Plot $R(T)$ vs.\ $\log T$ and compare to \eqref{eq:Rbounds}; estimate effective $b$ from angular/radial drift.
+\textbf{Platforms.} Digital/FPGA proxy (exact arithmetic); microwave ladder (with π--flux); mechanical/acoustic chain.
+
+\section{Discussion and limits}
+We avoid cosmological claims; this is an engineered, falsifiable framework.
+Topology is a boundary/holonomy choice (APBC vs.\ PBC); dynamics come from the unit--cell transfer; robustness from a trellis decoder.
+Clean bifurcation types under $\Lambda$ depend on nonlinearity and dissipation; the invariant checksum holds after decoding regardless.
+
+\section*{Companion reference}
+A companion paper \emph{Chebyshev--Lucas Error Correction in Decimated Transfer--Matrix Chains} develops the decimation identity,
+checksum, decoder, uniqueness, and bounds in detail; this note reuses those results.
+
+\end{document}

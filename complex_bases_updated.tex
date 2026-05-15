@@ -1,0 +1,422 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{microtype}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\hypersetup{colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue}
+
+\title{\textbf{Local Normal Forms for Complex Base Expansions:\\
+A General $(s,b,l)$ Framework and the $\varphi$ Specialization}}
+\author{VR \& AI}
+\date{\today}
+
+% --- theorem envs ---
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{example}[theorem]{Example}
+
+% --- macros ---
+\newcommand{\Val}{\mathrm{Val}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\C}{\mathbb{C}}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+We present a local, phase-aware normalization theory for complex base expansions built from three parameters: sites per turn $l\in\N_{\ge2}$, per-step radial growth $b>1$, and a per-level shrinkage factor $s\in(0,1]$. For canonical integer-digit normalization we assume $b$ is a quadratic algebraic integer. We prove a \emph{tri-site, same-phase} carry identity that yields termination and confluence on each residue class (``phase track''), provide digit-set choices and carry-count bounds, and show how to obtain global self-similarity with track-dependent angular lattices. We then specialize to $\varphi$, recovering Lucas-number coefficients and the familiar $\pm1$ neighbor effects.
+\end{abstract}
+
+\section{Setup: the general $(s,b,l)$ model}\label{sec:setup}
+Fix integers $l\ge2$ and parameters $b>1$, $s\in(0,1]$. Let
+\[
+U:=e^{i\,2\pi/l}\qquad\text{and}\qquad B:=b\,U.
+\]
+
+\begin{definition}[Complex $(b,l)$-string; phase tracks]\label{def:string}
+A complex $(b,l)$-string is an integer sequence $(d_k)_{k\in\Z}$ satisfying:
+\begin{enumerate}
+\item \emph{finite right tail:} $\exists K\in\Z$ such that $d_k=0$ for all $k>K$;\vspace{2pt}
+\item \emph{absolutely summable left tail:} $\sum_{t\ge0} |d_{-t}|\,b^{-t}<\infty$.
+\end{enumerate}
+Its value is the absolutely convergent series
+\[
+\Val(d):=\sum_{k\in\Z} d_k\,B^k,\qquad\text{with }|B|=b.
+\]
+Indices decompose into $l$ \emph{phase tracks} by residue $r\equiv k\pmod l$, where $k=r+lt$ and $t\in\Z$. On a fixed track $r$ we write $d_t:=d_{r+lt}$.
+\end{definition}
+
+\begin{definition}[Hierarchical sum with shrink $s$]\label{def:hier}
+For levels $\ell=0,1,\dots$, a finite-depth address chooses integers $d_{\ell,k}$ and positions $k_\ell$; its value is
+\[
+z \;=\; \sum_{\ell\ge0} s^{\ell}\!\sum_{k\in\Z} d_{\ell,k}\,B^{k}.
+\]
+For infinite depth, $s^\ell\to0$ and absolute convergence of each inner sum ensure $z$ is well-defined.
+\end{definition}
+
+\begin{remark}[Quadratic $b$ for integer carries]\label{rem:quad}
+To obtain \emph{integer} carry coefficients (and thus integer digits under normalization), we assume $b$ is a root of
+\begin{equation}\label{eq:quad}
+b^2 - P\,b + Q \;=\; 0,\qquad P,Q\in\Z,\ \ b>1.
+\end{equation}
+This includes all metallic means ($Q=-1$, $P\ge1$) and their integer powers $b^h$.
+\end{remark}
+
+\subsection*{Convergence of hierarchical sums (sufficient bound)}
+Let $\beta_l:=b^l>1$. If, for each level $\ell$, the per-track reindexed series obeys
+\[
+\sum_{t\in\Z}\! |d_{\ell,r+lt}|\,\beta_l^{t}\ \le\ C_\ell\quad\text{for all residues }r,
+\]
+then
+\[
+|z|\ \le\ \sum_{\ell\ge0} s^\ell \sum_{r=0}^{l-1} C_\ell.
+\]
+Thus $s<1$ and $\sup_\ell C_\ell<\infty$ imply absolute convergence.
+
+\paragraph{Post-normalization quantification.}
+After per-track normalization into a digit set of size $V:=V_l(P,Q)$, each digit satisfies $|d_{\ell,r+lt}|\le V-1$ (or $\le a=\lfloor(V-1)/2\rfloor$ in the balanced case). If the normalized support on level $\ell$ has $\nu_\ell$ nonzero sites in total and the maximal occupied site index is $t_{\max,\ell}$ (measured on its track), then the crude but effective bound
+\[
+\boxed{\ C_\ell\ \le\ (V-1)\,\beta_l^{\,t_{\max,\ell}}\,\nu_\ell\ }
+\]
+holds, since $\beta_l^{t}\le \beta_l^{t_{\max,\ell}}$ for all occupied $t$. When occupied sites form blocks, the sharper geometric sum
+$\sum_{t=a}^{b}\beta_l^t=\beta_l^{a}\frac{\beta_l^{b-a+1}-1}{\beta_l-1}$
+may be used trackwise; either way $C_\ell$ scales linearly in the (finite) active support at level $\ell$.
+
+\paragraph{Numerical illustration ($\varphi,\,l=4$).}
+Here $\beta_l=\varphi^4\approx 6.854$. Suppose a level $\ell$ has $\nu_\ell=3$ occupied sites on a track, at $t\in\{-1,0,1\}$, with digits bounded by $V-1=L_4-1=6$. The crude bound yields
+\[
+C_\ell \ \le\ (V-1)\,\beta_l^{\,t_{\max,\ell}}\,\nu_\ell \ =\ 6\cdot 6.854^{\,1}\cdot 3\ \approx\ 123.4.
+\]
+Using the geometric sum per block (here contiguous from $-1$ to $1$):
+\[
+\sum_{t=-1}^{1} \beta_l^{t} \ =\ \beta_l^{-1}\,\frac{\beta_l^{3}-1}{\beta_l-1}
+\ \approx\ 0.146\cdot \frac{321.996-1}{5.854} \ \approx\ 8.0,
+\]
+so $C_\ell\le 6\cdot 8.0\approx 48$, a tighter bound.
+
+\section{Local identity and normalization on one lattice $(b,l)$}\label{sec:one-lattice}
+
+Let $U_n(P,Q),V_n(P,Q)$ be the Lucas sequences:
+\[
+U_0=0,\,U_1=1,\quad V_0=2,\,V_1=P,\quad X_{n+1}=P X_n - Q X_{n-1}.
+\]
+From \eqref{eq:quad} one has for $n\ge1$:
+\begin{equation}\label{eq:lucas-power}
+b^{2n}=V_n(P,Q)\,b^n - Q^n.
+\end{equation}
+
+\begin{proposition}[Phase-aligned (tri-site) carry identity]\label{prop:carry-general}
+For all $k\equiv r\ (\mathrm{mod}\ l)$,
+\begin{equation}\label{eq:carry-general}
+B^{k+2l} - V_l(P,Q)\,B^{k+l} + Q^{l}\,B^{k} \;=\; 0.
+\end{equation}
+Equivalently on a track (with $\beta_l=b^l>1$):
+\[
+\beta_l^{t+1} \;=\; V_l(P,Q)\,\beta_l^t \;-\; Q^l\,\beta_l^{t-1}.
+\]
+\end{proposition}
+
+\begin{proof}[Proof of Proposition~\ref{prop:carry-general}]
+Let $b$ be quadratic with $b^2-Pb+Q=0$, and let $U=e^{i2\pi/l}$. The Lucas identity
+$b^{2n}=V_n(P,Q)\,b^{n}-Q^{n}$ holds for all $n\ge1$. Taking $n=l$ gives
+$b^{2l}=V_l(P,Q)\,b^{l}-Q^l$. Multiply by $U^{k}$ and note $U^{l}=1$:
+\[
+(bU)^{k+2l} - V_l(P,Q)\,(bU)^{k+l} + Q^{l}\,(bU)^k \;=\; 0.
+\]
+Since $B=bU$, this is exactly $B^{k+2l} - V_l(P,Q)\,B^{k+l} + Q^{l}B^k=0$, and it holds for every $k\equiv r\ (\mathrm{mod}\ l)$, i.e.\ along each residue track.
+\end{proof}
+
+\paragraph{Local moves (per track).}
+For $t^\star\in\N$, define the value-preserving carry/borrow at center $t$ by
+\begin{align}
+\textbf{carry: }&(d_{t-1},d_t,d_{t+1})\mapsto (d_{t-1}+Q^{l}t^\star,\ d_t-V_l(P,Q)t^\star,\ d_{t+1}+t^\star),\label{eq:carry}\\
+\textbf{borrow: }&(d_{t-1},d_t,d_{t+1})\mapsto (d_{t-1}-Q^{l}t^\star,\ d_t+V_l(P,Q)t^\star,\ d_{t+1}-t^\star).\nonumber
+\end{align}
+
+\begin{definition}[Digit sets]\label{def:digits}
+Normalize per track into a contiguous set $\mathcal D$ of size $V_l(P,Q)$:
+\[
+\mathcal D\ =\
+\begin{cases}
+\{0,1,\dots,V_l(P,Q)-1\}, & \text{nonnegative},\\[2pt]
+\{-a,\dots,a\},\ a=\big\lfloor(V_l(P,Q)-1)/2\big\rfloor, & \text{balanced}.
+\end{cases}
+\]
+\end{definition}
+
+\subsection*{Algorithm 1: Deterministic per-track normalization}
+Let $V:=V_l(P,Q)$ and let the target digit set be either $\{0,\dots,V-1\}$ (nonnegative) or the balanced set $\{-a,\dots,a\}$ with $a=\lfloor(V-1)/2\rfloor$. The following rightmost‑first procedure yields the canonical normal form guaranteed by Theorem~\ref{thm:terminate}.
+
+\medskip
+\noindent\textbf{Input:} integer array $(d_t)_{t\in\Z}$ with finite right tail. \quad
+\textbf{Output:} normalized digits $(\hat d_t)$ in $\mathcal D$.
+
+\begin{enumerate}
+\item \textbf{Rightmost selection.} While some $t$ has $d_t\notin\mathcal D$, choose the \emph{maximum} such index $t^\star$.
+\item \textbf{One-shot fix at $t^\star$.}
+\begin{itemize}
+  \item \emph{Nonnegative digits:} If $d_{t^\star}\ge V$, set $t=\big\lfloor d_{t^\star}/V\big\rfloor$ and apply a carry with multiplicity $t$:
+  \[
+  (d_{t^\star-1},d_{t^\star},d_{t^\star+1}) \leftarrow (d_{t^\star-1}+Q^l t,\ d_{t^\star}-Vt,\ d_{t^\star+1}+t).
+  \]
+  If $d_{t^\star}<0$, set $t=\big\lceil(-d_{t^\star})/V\big\rceil$ and apply a borrow of multiplicity $t$:
+  \[
+  (d_{t^\star-1},d_{t^\star},d_{t^\star+1}) \leftarrow (d_{t^\star-1}-Q^l t,\ d_{t^\star}+Vt,\ d_{t^\star+1}-t).
+  \]
+  \item \emph{Balanced digits:} Replace the division by $V$ with centered rounding $t=\big\lfloor (d_{t^\star}+a)/V\big\rfloor$ so that the new center lands in $\{-a,\dots,a\}$ in one step.
+\end{itemize}
+\item \textbf{Repeat} Step~1.
+\end{enumerate}
+
+\begin{theorem}[Termination and confluence (single lattice)]\label{thm:terminate}
+Fix a track and $q\in(1,\beta_l)$ with $\beta_l=b^l$. The potential $E_q=\sum_{t\in\Z}|d_t|q^t$ strictly decreases under one elementary carry \eqref{eq:carry}. Hence normalization terminates on the track. Overlaps of carries occur only at adjacent centers; critical pairs are joinable. Summing the $l$ tracks yields a unique normal form for the string.
+\end{theorem}
+
+\begin{proof}[Termination]
+A carry at $t$ changes
+\[
+\Delta E_q\ \le\ q^{t-1}\big(|Q|^{l} - V_l(P,Q)\,q + q^2\big).
+\]
+The quadratic has roots $q_\pm=b^l$ and $|Q|^{l}/b^l$. For any $q\in(1,b^l)$ we have $\Delta E_q<0$.
+\end{proof}
+
+\begin{lemma}[Critical-pair check (adjacent carries commute)]\label{lem:commute}
+Let $C_t$ denote a unit carry at center $t$ (i.e.\ $t^\star=1$), and write $V:=V_l(P,Q)$, $Q_0:=Q^l$.
+Restrict to $\{t-1,t,t+1,t+2\}$ with digits $(a,b,c,d)$. Then
+\[
+C_{t+1}\,C_t(a,b,c,d)\ =\ C_t\,C_{t+1}(a,b,c,d)\ =\ (a+Q_0,\ b-V+Q_0,\ c+1-V,\ d+1).
+\]
+By linearity, carries with $t^\star>1$ decompose into sums of unit carries. Hence overlapping carries at $t$ and $t{+}1$ commute.
+\end{lemma}
+
+\begin{proof}
+Apply the updates in both orders and compare; the two linear maps coincide on $(a,b,c,d)$.
+\end{proof}
+
+\begin{proof}[Confluence]
+Local confluence follows from commutation of adjacent carries and disjointness of nonadjacent ones. With termination, Newman's lemma yields global confluence and a unique per-track normal form.
+\end{proof}
+
+\paragraph{Tick and cost.}
+A \emph{tick} adds $+B^0$ (track $r=0$, site $t=0$) and normalizes along that track.
+If the saturated block length is $n$, the tick uses $O(n)$ carries.
+
+\subsection*{Numerical example (\texorpdfstring{$\varphi,\,l=4$}{phi, l=4})}
+Here $P=1$, $Q=-1$, $V_l=V_4=7$, $Q^l=+1$, digit set $\mathcal D=\{0,1,\dots,6\}$.
+On a single track (say $r=0$), start with $(d_{-1},d_0,d_1)=(0,13,0)$. One carry at $t=0$ gives $(1,6,1)$, already normalized; value is preserved because $B^{k+8}-7B^{k+4}+B^k=0$.
+
+\subsection*{Adjacent multi-carry example (\texorpdfstring{$\varphi,l=4$}{phi, l=4})}
+Here $P{=}1$, $Q{=}-1$, hence $V=7$ and $Q^l=+1$. Consider a window $(d_{t-1},d_t,d_{t+1},d_{t+2})=(0,13,12,0)$.
+Both centers $t$ and $t{+}1$ require carries.
+
+\noindent\textbf{Order A: $C_t$ then $C_{t+1}$.}
+\[
+(0,13,12,0)\xrightarrow{C_t}(1,6,13,0)\xrightarrow{C_{t+1}}(1,7,6,1)
+\xrightarrow{C_t}(2,0,7,1)\xrightarrow{C_{t+1}}(2,1,0,2).
+\]
+
+\noindent\textbf{Order B: $C_{t+1}$ then $C_t$.}
+\[
+(0,13,12,0)\xrightarrow{C_{t+1}}(0,14,5,1)\xrightarrow{C_t}(1,7,6,1)
+\xrightarrow{C_t}(2,0,7,1)\xrightarrow{C_{t+1}}(2,1,0,2).
+\]
+Both orders terminate at the same normalized state, illustrating Lemma~\ref{lem:commute}.
+
+\section{Digit-set variants and fast addition}\label{sec:digits-fast}
+\begin{itemize}
+\item \textbf{Balanced signed digits.} With $\mathcal D=\{-a,\dots,a\}$, a provisional sum $s_t$ satisfies $|s_t|\le 2a\le V_l-1$. A \emph{single} carry at $t$ reduces $|s_t|$ to $\le a$; this yields one-pass, bounded-carry addition per track (plus bounded neighbor fixes).
+\item \textbf{Sparse (NAF-like).} Use a small signed set (e.g.\ $\{-1,0,+1\}$) and forbid adjacent nonzeros on a track. Add a local penalty to the potential to keep termination; sparsity reduces Hamming weight.
+\end{itemize}
+
+\section{Carry-count bounds (per track)}\label{sec:bounds}
+Let $S=\sum_t |d_t|$.
+
+\begin{proposition}[Uniform $\ell^1$ bound]
+Assume $|Q|\le 1$ (metallic and similar). Each carry reduces the center by $V_l(P,Q)$ and increases the two neighbors' absolute sum by at most $|Q|^{l}+1\le 2$. Hence
+\[
+\#\mathrm{carries}\ \le\ \frac{S}{\,V_l(P,Q) - (|Q|^{l}+1)\,}.
+\]
+\emph{Metallic case:} when $|Q|=1$ this simplifies to $S/(V_l(P,Q)-2)$.
+\end{proposition}
+
+\begin{proposition}[Weighted bound]
+For $q\in(1,b^l)$ and $E_q=\sum_t |d_t|q^t$, the choice $q=V_l(P,Q)/2<b^l$ gives
+\[
+\Delta E_q\ \le\ -\Big(\tfrac{V_l(P,Q)^2}{4}-|Q|^{l}\Big)\,q^{t-1},
+\]
+hence
+\[
+\#\mathrm{carries}\ \le\ \frac{E_q^{\mathrm{init}}}{\,\tfrac{V_l(P,Q)^2}{4}-|Q|^{l}\,}.
+\]
+\emph{Edge case check:} for $\varphi$ with $l=2$, $V_l=3$ and $b^l=\varphi^2\approx 2.618>3/2$, so $q=V_l/2$ is admissible.
+\end{proposition}
+
+\paragraph{Carry-count instantiation ($\varphi,\,l=4$).}
+On one track with initial digits $(0,13,12,0)$ we have $S=25$, $V=7$, $|Q|^l=1$.
+The uniform $\ell^1$ bound gives $\#\le 25/(7-2)=5$.
+With $q=3.5$, $E_q=13+12q=55$, so the weighted bound gives $\#\le 55/(49/4-1)\approx 4.89$.
+A concrete normalization needs exactly 4 carries (cf.\ the example above), showing both bounds are nontrivial and reasonably tight.
+
+\section{Track-dependent $l_r$ with global self-similarity}\label{sec:selfsimilar}
+Fix a \emph{global similarity exponent} $M\in\N$ and set $\beta:=b^{M}>1$. Choose tracks $r$; for each track pick $l_r\mid M$ and define
+\[
+h_r:=\frac{M}{l_r}\in\N,\qquad B_r:=b^{h_r}\,e^{i2\pi/l_r}.
+\]
+Then $(b^{h_r})^{l_r}=\beta$ (same full-turn radial factor on all tracks). With level shrink $s^\ell$, the value is
+\[
+z=\sum_{\ell\ge0}s^\ell \sum_{r}\sum_{k\in\Z} d_{r,\ell,k}\,B_r^{k}.
+\]
+
+\begin{proposition}[Uniform carry across tracks]\label{prop:uniform}
+If $b$ satisfies $x^2-Px+Q=0$, then for each track $r$ and $k\equiv r\ (\mathrm{mod}\ l_r)$,
+\begin{equation}\label{eq:uniform}
+B_r^{k+2l_r}-V_{M}(P,Q)\,B_r^{k+l_r}+Q^{M}\,B_r^{k}=0.
+\end{equation}
+Thus every track uses the \emph{same} coefficients $V_{M}(P,Q)$ and $Q^{M}$; the digit-set size is $V_{M}(P,Q)$. Termination/confluence and bounds hold uniformly with $\beta=b^{M}$.
+\end{proposition}
+
+\begin{proof}[Proof of Proposition~\ref{prop:uniform}]
+Fix the global $M\in\N$ and a track with $l_r\mid M$, $h_r=M/l_r$. Then $b^{h_r}$ is quadratic over $\Z$ with the same $(P,Q)$, hence
+\[
+(b^{h_r})^{2l_r} = V_{l_r}(P,Q)\,(b^{h_r})^{l_r} - Q^{\,l_r}.
+\]
+Because $h_r l_r=M$, the composed Lucas coefficient is $V_{h_r l_r}(P,Q)=V_M(P,Q)$ and $Q^{h_r l_r}=Q^{M}$. Thus
+$b^{2M}=V_M(P,Q)\,b^{M}-Q^{M}$. Multiplying by $U_r^{k}$ with $U_r^{l_r}=1$ yields
+\[
+B_r^{k+2l_r} - V_M(P,Q)\,B_r^{k+l_r} + Q^{M}B_r^{k}=0,
+\]
+which is track‑independent.
+\end{proof}
+
+\paragraph{Notation.}
+We write $\beta_l:=b^l>1$ for a single lattice’s full‑turn factor and $\beta:=b^M>1$ for the common factor in the multi‑track construction ($l_r\mid M$). Choosing $s=\beta^{-\nu}$ ($\nu\in\N$) makes the level-$\ell$ pattern a scaled copy of level $\ell-\nu$. One full turn on any track scales by $\beta$.
+
+\section{Specialization to $\boldsymbol\varphi$}\label{sec:phi}
+Set $b=\varphi=\tfrac{1+\sqrt5}{2}$, which satisfies $x^2-x-1=0$ ($P=1$, $Q=-1$). Then
+\[
+V_n(P,Q)=L_n\quad\text{(Lucas numbers)},\qquad Q^{n}=(-1)^n.
+\]
+\paragraph{Single lattice $(\varphi,l)$.}
+The carry identity becomes
+\[
+B^{k+2l}-L_l\,B^{k+l}+(-1)^l B^k=0,\qquad B=\varphi\,e^{i2\pi/l},
+\]
+and per-track digits normalize into a set of size $L_l$; with $l$ even, $\{0,\dots,L_l-1\}$ is natural. The potential window is $(1,\varphi^{l})$.
+
+\begin{example}[$\varphi$ and quarter-turns]
+Take $l=4$. Then $L_4=7$ and $B^{k+8}-7B^{k+4}+B^k=0$ ($(-1)^4=+1$).
+Nonzeros, e.g.\ at $k\in\{-2,2,5\}$, decompose by residues:
+$r=2$ has $t=-1$ and $t=0$; $r=1$ has $t=1$; tracks $r=0,3$ empty.
+Since digits lie in $\{0,\dots,6\}$, no carries are needed here.
+\end{example}
+
+\section{Representation properties (scope and limits)}
+Our canonical normalization provides a unique normal form \emph{within the language} of $(b,l)$-strings with finite right tail and absolutely summable left tail. Two classical questions are (i) \emph{existence/completeness} (does every $z\in\C$ admit such an expansion?) and (ii) \emph{uniqueness before normalization}.
+
+\paragraph{Existence (scope).}
+With the finite-right constraint, the value set is
+\[
+\mathcal V=\bigg\{\sum_{k\in\Z} d_k B^k : \text{ finite right tail, absolutely summable left tail, } d_k\in\Z\bigg\}.
+\]
+It is closed under addition and under multiplication by $B^{\pm1}$, but it is not all of $\C$. For quadratic algebraic $b$ and sufficiently rich digit sets, existence results for \emph{canonical number systems} are known in related settings (e.g.\ Gaussian and imaginary quadratic bases \cite{Penney1965,Gilbert1981,Heuberger2007,AkiyamaPetho2011}). Our framework is compatible with those existence theories but we do not claim completeness for $\C$ under the present (finite-right) constraint.
+
+\paragraph{Uniqueness.}
+Pre-normalization representations can be nonunique in complex bases (see \cite{Gilbert1983}); our tri-site calculus yields a \emph{canonical} representative per residue track. Thus normalization provides uniqueness \emph{modulo} the local identities we allow, i.e.\ within the congruence generated by \eqref{eq:carry-general} (and \eqref{eq:uniform} in the multi-track case).
+
+\paragraph{Density.}
+Allowing infinite left tails makes $\mathcal V$ infinite and ``one‑sided dense’’ along rays, but not dense in $\C$ under the finite-right restriction. Extending the framework to two‑sided infinite strings (outside the present scope) would address density/completeness questions but requires additional regularity to retain uniqueness.
+
+\clearpage
+\section{Figures}
+\begin{figure}[!htbp]
+  \centering
+  \includegraphics[width=0.62\linewidth]{fig_spiral_rays_phi_l4.png}
+  \caption{\textbf{Tri-site normalization is ray-local.} Example with $b=\varphi$, $l=4$.
+  The discrete sites lie on a logarithmic spiral (faint curve) with per-step growth $b$ and rotation $2\pi/l$.
+  Residue classes $r=0,1,2,3$ appear as fixed rays (same angle, every full turn).
+  A tri-site triple $k,k{+}l,k{+}2l$ (all on the same ray) is highlighted; the carry identity
+  $B^{k+8}-7B^{k+4}+B^k=0$ acts only on these three collinear sites, preserving value.}
+  \label{fig:spiral-rays}
+\end{figure}
+
+\begin{figure}[!htbp]
+  \centering
+  \includegraphics[width=0.62\linewidth]{fig_spiral_residues_phi_l6.png}
+  \caption{\textbf{Residues indicated on a logarithmic spiral.} Example with $b=\varphi$, $l=6$.
+  Consecutive sites step along the spiral; markers distinguish residues $k\bmod l$.
+  Within a fixed residue $r$, indices differ by multiples of $l$ and align radially, forming a phase track.}
+  \label{fig:spiral-colored}
+\end{figure}
+
+\begin{figure}[!htbp]
+  \centering
+  \includegraphics[width=0.62\linewidth]{fig_self_similarity_phi_l4.png}
+  \caption{\textbf{Level self-similarity.} Two spirals overlaid for levels $\ell$ (solid) and $\ell{+}1$ (dashed) with $b=\varphi$, $l=4$, and
+  $s=\beta_l^{-\nu}$ for an integer $\nu\ge1$. One full turn on any phase track multiplies radius by $\beta_l=b^{l}$; choosing $s=\beta_l^{-\nu}$
+  yields exact self-similarity after $\nu$ turns.}
+  \label{fig:spiral-selfsimilar}
+\end{figure}
+
+\begin{figure}[!htbp]
+  \centering
+  \includegraphics[width=0.62\linewidth]{fig_multitrack_phi_M12.png}
+  \caption{\textbf{Track-dependent angular lattices with common full-turn factor.}
+  Example with global similarity exponent $M=12$, tracks $l_r\in\{3,4,6\}$, and $b=\varphi$.
+  Each track uses base $B_r=\varphi^{M/l_r}e^{i2\pi/l_r}$, so one full turn scales radius by the common factor $\beta=b^{M}=\varphi^{12}$.
+  The per-level shrink $s$ (not shown) can be chosen as $s=\beta^{-1}$ to obtain exact self-similarity level-to-level.}
+  \label{fig:selfsimilar}
+\end{figure}
+
+\begin{figure}[!htbp]
+  \centering
+  \includegraphics[width=0.70\linewidth]{fig_carry_seq_strip_phi_l4.png}
+  \caption{\textbf{Carry sequence (strip view) on one residue ray} for $(\varphi,l{=}4)$, residue $r{=}0$.
+  Sites $t\in\{-1,0,1,2\}$ are arranged along a 1D strip; digits $d_t$ are annotated above each site and arrows indicate carries.
+  This overlap-free layout shows the sequence at a glance without geometric clutter.}
+  \label{fig:carry-strip}
+\end{figure}
+
+\begin{figure}[!htbp]
+  \centering
+  \includegraphics[width=0.70\linewidth]{fig_carry_seq_matrix_phi_l4.png}
+  \caption{\textbf{Carry sequence (matrix view).} Rows correspond to steps in the sequence; columns correspond to sites $t$.
+  Each cell shows the digit value $d_t$ (color and numeric annotation). This compact panel highlights how adjacent carries
+  commute to yield the same final normal form $(2,1,0,2)$, illustrating Lemma~\ref{lem:commute}.}
+  \label{fig:carry-matrix}
+\end{figure}
+
+\clearpage
+
+\section{Related work (brief pointers)}
+Complex bases and non-standard radices have a rich history.
+Knuth \cite{Knuth1997} discusses negative and unusual bases in a foundational algorithmic context.
+Penney \cite{Penney1965} introduced base $-1+i$ arithmetic.
+Gilbert \cite{Gilbert1981,Gilbert1983} studied arithmetic and representations in complex bases.
+Frougny and Sakarovitch \cite{FrougnySakarovitch1992} surveyed automatic/normalized representations in algebraic bases.
+Our contribution is a \emph{phase-aware tri-site} normalization that (i) works uniformly on residue tracks, (ii) gives simple termination/confluence proofs via a potential, and (iii) extends cleanly to track-dependent lattices with \emph{uniform} carry coefficients under a global self-similarity constraint
+(see also \cite{Heuberger2007,AkiyamaPetho2011} for modern developments on canonical number systems in quadratic/imaginary settings).
+Unlike \cite{Heuberger2007}, which establishes canonical number systems in imaginary quadratic fields (existence/tilings for $\Z[\alpha]$), and \cite{AkiyamaPetho2011}, which surveys CNS criteria across algebraic settings, our focus is on \emph{phase-aware local normalization} with uniform tri-site coefficients per residue track, a tool that applies uniformly across complex rotations $e^{i2\pi/l}$ and supports self-similar, track-dependent lattices.
+
+\section{Beyond quadratic bases (remark)}
+If $b$ has minimal polynomial of degree $d>2$, the analogue of \eqref{eq:carry-general} is a local identity with at most $(d{+}1)$ sites on each residue track, obtained by multiplying the minimal polynomial by $U^{k}$ and grouping indices by steps of $l$. The stencil length equals the number of nonzero coefficients of the polynomial.
+\emph{Example (cubic).} If $b$ is the real root of $x^3-2x-1=0$, then $b^3=2b+1$, so for any $l\ge2$,
+\[
+B^{k+3l}-2\,B^{k+l}-B^{k}=0,\qquad B=be^{i2\pi/l}.
+\]
+This is a tri-site rule with larger spacing. The same potential method applies: choose $q\in(1,b^l)$ so that the induced quadratic in $q$ is negative on that interval; termination and confluence then follow as in the quadratic case, with integer coefficients unchanged.
+
+\section{Conclusion and outlook}
+Starting from the minimal $(s,b,l)$ data with $b$ quadratic, we obtain phase-aware, value-preserving local carries that terminate and are confluent, yielding canonical normal forms with explicit complexity bounds. The $\varphi$ specialization recovers Lucas coefficients and simple signs. A track-dependent choice $l_r\mid M$ produces a self-similar multi-track system with \emph{uniform} normalization across tracks.
+\emph{Applications:} potential links include efficient on-line arithmetic in nonstandard bases, symbolic dynamics on subshifts with local normalization, and geometric encodings for quasicrystal tilings.
+
+\bibliographystyle{plain}
+\bibliography{refs}
+
+\end{document}

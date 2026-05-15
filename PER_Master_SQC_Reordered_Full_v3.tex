@@ -1,0 +1,627 @@
+
+\documentclass[11pt]{article}
+
+% --- Packages
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,mathtools,bm}
+\usepackage{amsthm}
+\usepackage{graphicx}
+\usepackage{subcaption}
+\usepackage{booktabs}
+\usepackage{siunitx}
+\usepackage{microtype}
+\usepackage{enumitem}
+\usepackage{framed}
+\usepackage{hyperref}
+\hypersetup{colorlinks=true, allcolors=blue}
+
+% --- Title
+\title{PER as an Information--Dynamical Principle:\\
+Potential--Evanescent--Real, Variational Structure, and Data Tests\\
+{\large with LIGO GW150914 and the NIST CH Pockels Bell Test}}
+\author{}
+\date{\today}
+
+% --- Macros
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\p}{\bm{p}}
+\newcommand{\f}{\bm{f}}
+\newcommand{\one}{\bm{1}}
+\newcommand{\inner}[2]{\left\langle #1,#2 \right\rangle}
+\newcommand{\brak}[1]{\left( #1 \right)}
+\newcommand{\Brak}[1]{\left[ #1 \right]}
+
+% Fisher/Shahshahani metric
+\newcommand{\fish}[2]{\sum_i \frac{#1_i\,#2_i}{p_i}}
+\newcommand{\normp}[1]{\left\| #1 \right\|_p}
+
+% Theorems
+\newtheorem{lemma}{Lemma}
+\newtheorem{prop}{Proposition}
+\newtheorem{remark}{Remark}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+We present \emph{PER}---a Potential$\to$Evanescent$\to$Real pipeline---that unifies selection, intrinsic time, and recording into one compact formalism.
+The evanescent stage is a Fisher--metric (Shahshahani) replicator ascent of a coherence potential $C(\p,t)$; the record is a stopping time when a concentration or coherence threshold is crossed.
+We derive Onsager--Machlup, Hamiltonian, and contact/GENERIC formulations; a Hamilton--Jacobi and time-reparametrized action; and diagnostics that forecast transient ``evanescence''.
+We couple PER to an amplitude‑level SQC lift, obtaining a single Fisher-Bures variational principle that recovers weak‑measurement behavior; we illustrate with double‑slit interference and the Quantum Cheshire Cat, and we show how witness‑rate leads/nonunitarity‑leads lags align with rise/fall transitions in data.
+We then test PER on two public datasets: (\textbf{I}) \textbf{LIGO GW150914}, where the witness ratio $R_w$ \emph{leads} the SQC nonunitarity derivative during the \emph{rise} by \SIrange{32}{48}{ms}, while a full-trace (rise+fall) statistic shows \emph{collapse-lead}; (\textbf{II}) the \textbf{NIST CH Pockels (100\,kHz) Bell test}, where conservative full-trace statistics show \emph{collapse-lead} with lags of \SIrange{7.6}{30}{s} depending on the SQC grid; early ROIs and more local witnesses shrink the magnitude.
+Across both, PER's intrinsic clock and stopping rules are consistent, and $R_w,R_1$ and an FDR diagnostic spike at transitions.
+\end{abstract}
+
+\paragraph{Roadmap.}
+Section~\ref{sec:per-core} derives the PER flow, core identities, and the intrinsic clock with stopping.
+Section~\ref{sec:variational} develops Onsager--Machlup, Hamiltonian/contact, HJ, and time-reparametrized actions.
+Section~\ref{sec:info-geom} gives the information geometry (Shahshahani), geodesics, integrability, and optimal-transport links.
+Section~\ref{sec:per-sqc-unified} unifies PER and SQC; 
+Section~\ref{sec:weak} views PER as weak-measurement; 
+Section~\ref{sec:double-slit} illustrates double-slit interference; Section~\ref{sec:qcc} illustrates the Quantum Cheshire Cat.
+% Section~\ref{sec:sqc} consolidates the Stochastic--Quantum Correspondence (SQC).
+Section~\ref{sec:diagnostics} defines $R_1$, $R_w$, and an FDR diagnostic; Section~\ref{sec:design} records the experimental pipeline.
+Sections~\ref{sec:gwosc}--\ref{sec:bell} present results for LIGO and Bell.
+% Appendix~\ref{app:HK} treats Hellinger--Kantorovich; Appendix~\ref{app:kuramoto} summarizes Kuramoto scaling.
+
+\paragraph{Notation}
+\begin{center}
+\begin{tabular}{@{}ll@{}}
+\toprule
+Symbol & Meaning (default) \\ \midrule
+$p\in\Delta$ & pathway probabilities, $\sum_i p_i=1$ \\
+$f_i=s_i+(Kp)_i-\lambda\,\kappa_i$ & PER drive (witness $s$, compatibility $K$, penalty $\kappa$) \\
+$C(p,t)=\sum_i p_i f_i$ & coherence potential (Fisher gradient ascent) \\
+$H(p)=-\sum_i p_i\ln p_i$ & Shannon entropy (PER) \\
+$\theta$ & intrinsic clock, $\dot\theta=\alpha\,\dot C$ (forward/smoothed) \\
+$\eta$ & MWU step (default $0.6$) \\
+$\lambda$ & penalty weight (default $0$) \\
+$R_1=-\dot H/\dot C$ & information–to–coherence ratio \\
+$C_{\rm ext}=\sum_i p_i s_i$ & external witness contribution \\
+$C_{\rm int}=p^\top K p-\lambda\sum_i p_i\kappa_i$ & internal contribution \\
+$R_w=\dot C_{\rm ext}/(\dot C_{\rm int}+\varepsilon)$ & witness ratio (stabilized) \\
+$\rho$ & SQC density operator with $\mathrm{diag}\,\rho=p$ \\
+$Q_F=\|\Theta^\dagger\Theta-\mathbb I\|_F$ & SQC nonunitarity (dimensionless) \\
+$d_{\rm uni}(\Gamma)$ & distance of step kernel to unistochastic set \\
+$\alpha_\theta$ & clock scale in $\dot\theta = \alpha_\theta\,\dot C$ (units: time/evidence) \\
+$\alpha_{\text{deph}}$ & coefficient in $\gamma(t)=\gamma_0+\alpha_{\text{deph}}\,[R_w(t)]_+$ (Sec.~\ref{sec:per-sqc}) \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+% =========================================================
+\section{PER: equations, identities, and intrinsic time}\label{sec:per-core}
+
+\paragraph{Potential $\to$ Evanescent.}
+Let candidates $i=1,\dots,N$ carry weights $p_i(t)\ge 0$ with $\sum_i p_i=1$.
+Witness channels $(s(t),K(t))$ define
+\begin{equation}
+  f_i(t) \;=\; s_i(t) + \big(K(t)\,p(t)\big)_i - \lambda\,\kappa_i(t),
+\end{equation}
+and the \emph{evanescent} evolution is the Shahshahani replicator
+\begin{equation}\label{eq:replicator}
+  \dot p_i \;=\; p_i\big(f_i-\bar f\big),\qquad \bar f=\sum_j p_j f_j,
+\end{equation}
+the gradient ascent of $C(\p,t)=\sum_i p_i f_i(t)$ with respect to the Fisher metric
+$\inner{u}{v}_p=\sum_i u_i v_i/p_i$:
+\begin{equation}
+  \dot \p \;=\; \mathrm{grad}_p\,C(\p,t).
+\end{equation}
+
+\noindent\emph{Assumptions.}
+The identities below hold exactly when $s(t)$ and $K(t)$ are time–independent (or vary slowly so that coarse–graining with window $\Delta$ makes remainders negligible). When witnesses vary in time, an additive term $\dot C_{\rm ext}$ appears; we enforce $\dot\theta\ge 0$ via smoothing (Methods).
+
+\paragraph{Boxed identities (quasi-static witnesses).}
+When $(s,K)$ are frozen in time,
+\begin{framed}
+\begin{align}
+  \dot C \;=\; \sum_i f_i\,\dot p_i \;=\; \sum_i p_i\,(f_i-\bar f)\,f_i \;=\; \mathrm{Var}_p(f) \;\ge 0, \label{eq:Cdot}\\[2pt]
+  \dot H \;=\; -\sum_i \dot p_i\ln p_i \;=\;
+  \sum_i p_i\,(f_i-\bar f)\,(-\ln p_i) \;=\; -\,\mathrm{Cov}_p\!\big(f,\ln p\big), \label{eq:Hdot}
+\end{align}
+\end{framed}
+with $H=-\sum_i p_i\ln p_i$.
+The information-to-coherence ratio
+\begin{equation}
+  R_1(t) \;:=\; \frac{-\dot H}{\dot C}
+  \;=\; -\,\frac{\mathrm{Cov}_p(f,\ln p)}{\mathrm{Var}_p(f)}
+  \;=\; -\,\mathrm{Corr}_p(f,\ln p)\,\frac{\sigma_{\ln p}}{\sigma_f},
+\end{equation}
+obeys $|R_1|\le \sigma_{\ln p}/\sigma_f$; it diverges at critical slowing-down when $\sigma_f\!\to\!0$.
+
+\paragraph{Kernel term (correction).}
+For time-independent witnesses,
+\begin{equation}
+ \frac{d}{dt}\Big(\tfrac12\,\p^\top K\,\p\Big)
+ \;=\; \mathrm{Cov}_p\!\Big((Kp)_i,\ f_i\Big)
+ \;=\; \mathrm{Var}_p\!\big((Kp)_i\big) \;+\; \mathrm{Cov}_p\!\Big((Kp)_i,\ s_i-\lambda\kappa_i\Big),
+\end{equation}
+reducing to a pure variance when the last term vanishes (e.g.\ $s_i-\lambda\kappa_i$ constant across $i$ or uncorrelated with $(Kp)_i$ under $p$).
+When differentiating $\tfrac12 p^\top K p$, the identity $d/dt(\tfrac12 p^\top K p)=(Kp)\!\cdot\dot p$ assumes $K$ is symmetric.
+For general $K$ use the symmetric part $(K+K^\top)/2$ in that derivative.
+
+
+\paragraph{Discrete-time MWU identity.}
+For multiplicative weights,
+\begin{equation}
+  p_i^{(t+1)} \;\propto\; p_i^{(t)}\,e^{\eta f_i^{(t)}},\qquad
+  \ln p_i^{(t+1)} - \ln p_i^{(t)} \;=\; \eta f_i^{(t)} - \ln Z^{(t)},
+\end{equation}
+or, centered for intuition,
+\begin{equation}
+  \ln p_i^{(t+1)} - \ln p_i^{(t)} \;=\; \eta\big(f_i^{(t)}-\bar f^{(t)}\big)\;-\;\big[\ln Z^{(t)}-\eta\bar f^{(t)}\big],
+\end{equation}
+where the bracket is a normalization \emph{scalar} (nonzero except to $O(\eta)$).
+
+\paragraph{Small–$\eta$ expansion.}
+With $Z=\sum_k p_k e^{\eta f_k}=\mathbb{E}_p[e^{\eta f}]$, 
+$\ln Z=\eta\,\bar f+\tfrac12\eta^2\mathrm{Var}_p(f)+O(\eta^3)$,
+so the normalization bracket equals $\tfrac12\eta^2\mathrm{Var}_p(f)+O(\eta^3)$ (nonzero beyond first order).
+
+
+\paragraph{Time as change: intrinsic clock and monotonicity.}
+Define the PER clock $\theta$ by
+\begin{equation}
+  \dot\theta = \alpha\,\dot C \qquad \text{or} \qquad
+  \theta(t)=\alpha\!\int_0^t\!\max\{\dot C(\tau),0\}\,d\tau,
+\end{equation}
+or by smoothing $C$ at scale $\tau$ so that $\dot\theta\ge 0$ at the chosen coarse-graining.
+A \emph{record} forms when $p_k$ crosses a threshold (with Plackett--Luce tie-breaking).
+
+\paragraph{When do we keep $\dot C\ge 0$?}
+Sufficient conditions at a coarse scale: bounded total variation of $(s(t),K(t))$; mild time-scale separation (witnesses slower than selection); or explicit smoothing/averaging in $C$.
+
+\paragraph{Units.} If $C$ is in “evidence–rate” units, choose $\alpha$ with units time/evidence so $\theta$ is dimensionless. 
+For the forward–only clock we use a Gaussian or triangular kernel $\mathcal{S}_\tau$ (e.g.\ $\tau=\SI{50}{ms}$ for LIGO) to enforce $\dot\theta\ge0$ at the chosen coarse scale.
+
+% =========================================================
+\section{Variational, symplectic, contact, and HJ structure}\label{sec:variational}
+
+\subsection*{Mapping between $C$ and the Hamiltonian; contact lift (dissipation explicit)}
+The PER flow is a \emph{dissipative} Fisher–gradient ascent of $C$.
+To place Hamilton–Jacobi notation alongside without erasing dissipation, set
+\[
+\mathcal{E}(p,t) := -\,C(p,t)+\text{const}(t),
+\]
+so the characteristic momentum $\pi_i=\partial_{p_i}W$ matches $\pi_i=f_i-\bar f$ on the \emph{slow manifold}.
+Using a contact Hamiltonian $h=H-\gamma\,\mathcal{S}$ with $H(p,\pi,t)=\tfrac12\sum_i p_i\pi_i^2+\mathcal{E}(p,t)$ and 1–form $\eta=d\mathcal{S}-\sum_i\pi_i\,dp_i$, the dynamics contracts transversely (rate $\gamma>0$) onto
+\[
+\pi_i=f_i-\bar f,\qquad \sum_i p_i\pi_i=0,
+\]
+and the reduced flow on $\Delta^\circ$ is exactly $\dot p=\mathrm{grad}_pC$.
+Thus the replicator is the \emph{dissipative} (contact) reduction of the lifted dynamics.
+
+\subsection*{Onsager--Machlup / Rayleighian action}
+On $T\Delta^\circ$ with Fisher metric $G(\p)$ and small noise $\varepsilon$,
+\begin{equation}
+\mathcal{A}_\varepsilon[\p(\cdot)] \;=\; \frac{1}{2\varepsilon}\int_0^T
+ \big\|\dot\p - \mathrm{grad}_p\,C(\p,t)\big\|_p^2\,dt,
+\end{equation}
+whose extrema satisfy Eq.~\eqref{eq:replicator}.
+Near criticality $\|\nabla C\|\!\to\!0$ the barrier collapses and large fluctuations proliferate.
+
+\subsection*{Symplectic structure on $T^*\Delta$}
+The cotangent bundle $T^*\Delta$ carries the canonical symplectic form $\omega = \sum_i dp_i\wedge d\pi_i$; in log-simplex fiber coordinates $\pi_i=\dot p_i/p_i$ with gauge constraint $\sum_i p_i\pi_i=0$ the Hamiltonian
+\begin{equation}
+H(\p,\bm{\pi},t) \;=\; \frac{1}{2}\sum_i p_i \pi_i^2 + \mathcal{E}(\p,t),
+\qquad \pi_i=f_i-\bar f,
+\end{equation}
+generates the replicator characteristics.
+
+\subsection*{Hamilton--Jacobi and Rayleighian link}
+The principal function $W(\p,t)$ satisfies
+\begin{equation}
+  \partial_t W + \frac{1}{2}\sum_i p_i\left(\partial_{p_i}W\right)^2 + \mathcal{E}(\p,t) \;=\; 0.
+\end{equation}
+Its characteristics coincide with replicator trajectories; $W$ acts as a Lyapunov function whose level-sets track approach to recording.
+
+\subsection*{Contact lift and GENERIC}
+On the contact manifold with 1-form $\eta= d\mathcal{S} - \sum_i \pi_i\,dp_i$ and contact Hamiltonian $h=H-\gamma\mathcal{S}$, the slow manifold $\pi_i=f_i-\bar f$ is \emph{exponentially attracting} for $\gamma>0$; the gauge $\sum_i p_i\pi_i=0$ is enforced throughout.
+
+\subsection*{Critical phenomena in the action}
+For a generic one-parameter transverse crossing (saddle-node normal form), the action barrier scales as $\Delta\mathcal{A}\sim \|\nabla \mathcal{E}\|^2/\varepsilon$, predicting large fluctuations near criticality and the divergence of FDR defined below.
+
+\subsection*{Time reparametrization invariance}
+The intrinsic arclength $d\theta = \normp{\dot\p}\,dt$ yields a Jacobi--Maupertuis form
+\begin{equation}
+\mathcal{A}[\theta] \;=\; \int \left(\frac{1}{2}\left\|\frac{d\p}{d\theta}\right\|_p^2 - \mathcal{E}(\p,\theta)\right) d\theta,
+\end{equation}
+% and connects naturally to transport metrics in Appendix~\ref{app:HK}.
+
+% =========================================================
+\section{Information geometry, geodesics, and integrability}\label{sec:info-geom}
+
+\paragraph{Shahshahani geometry (square–root chart).}
+Equip $\Delta^\circ$ with the Fisher/Shahshahani metric $\langle u,v\rangle_p=\sum_i u_i v_i/p_i$ on $\sum_i u_i=0$.
+Use the isometric square–root embedding
+\[
+x_i = 2\sqrt{p_i}\quad\Rightarrow\quad x\in \mathbb{S}^{N-1}_2\cap\mathbb{R}^N_{>0},
+\]
+so geodesics lift to great–circle arcs. This avoids coordinate artifacts and makes the gradient interpretation immediate; a concise derivation is given in Appendix~\ref{app:shahshahani}.
+
+\paragraph{Geodesics and forcing.}
+For quadratic $\mathcal{E}$ the replicator flow follows geodesics; deviations capture forcing by witnesses (``external fields'').
+
+\paragraph{Integrability.}
+For $N=2$ the flow is integrable; for $N\ge 3$ generic time-dependent forcing destroys integrability. Exact solutions persist for special $\mathcal{E}$ (e.g.\ quadratic/geodesic).
+
+\paragraph{Optimal transport links.}
+With the intrinsic time element, PER's evolution is equivalent to transporting probability along Fisher geodesics perturbed by a potential; Appendix~\ref{app:HK} details the mapping to unbalanced OT (HK).
+
+
+% =========================================================
+\section{PER/SQC combination and a unified action}
+\label{sec:per-sqc-unified}
+
+\paragraph{SQC layer (amplitude lift).}
+Given PER marginals $p(t)\!\in\!\Delta$ and a classical step kernel $\Gamma(t\!\leftarrow\!0)$ with $p(t)=\Gamma p(0)$, the \emph{stochastic–quantum correspondence} (SQC) lifts $\Gamma$ to amplitudes $\Theta$ with
+\[
+|\Theta_{ij}(t\!\leftarrow\!0)|^2=\Gamma_{ij}(t\!\leftarrow\!0),\qquad
+\sum_i|\Theta_{ij}|^2=1,
+\]
+and defines $\rho(t)=\Theta(t)\,\mathrm{diag}(p(0))\,\Theta^\dagger(t)$ so that $\mathrm{diag}\,\rho(t)=p(t)$.
+Column phases are fixed by the \emph{minimal‑twist} gauge
+$\min_\Theta\!\int\|\operatorname{skew}(\dot\Theta\,\Theta^\dagger)\|_F^2\,dt$ subject to $|\Theta|^2=\Gamma$.
+
+\paragraph{Diagnostics on the SQC layer.}
+We use $Q_F(t)=\|\Theta^\dagger\Theta-\mathbb{I}\|_F$ to quantify nonunitarity (disturbance/back‑action/coarse‑graining) and
+$d_{\rm uni}(\Gamma)=\min_{U\in U(N)}\|\Gamma-|U|^2\|_F$ as a distance to unistochastic maps.
+
+% --- In “Diagnostics on the SQC layer” ---
+\paragraph{Scale and invariances.}
+$Q_F=\|\Theta^\dagger\Theta-I\|_F$ is dimensionless and equals $0$ for column-orthonormal $\Theta$.
+It is invariant to right-multiplication by diagonal phase matrices, and—when $|\Theta|^2=\Gamma$ exactly—to column permutations,
+but increases under column rescalings that depart from unistochasticity. We therefore report $d_{\mathrm{uni}}(\Gamma)$ alongside $Q_F$.
+
+\paragraph{Unistochasticity and approximation.}
+A stochastic step $\Gamma$ admits $|\Theta|^2=\Gamma$ iff it is \emph{unistochastic} ($N=2$ always; not guaranteed for $N\ge3$).
+When $d_{\rm uni}(\Gamma)>0$ we pick $\Theta$ in a minimal–twist gauge minimizing $\|\Gamma-|\,\Theta|^2\|_F$ subject to column normalization.
+In that case $Q_F$ captures both physical nonunitarity \emph{and} factorization mismatch; we therefore report $d_{\rm uni}$ with $Q_F$ and treat it as a covariate in lag analyses.
+
+\paragraph{Coupling PER and SQC (three standard modes).}
+\begin{enumerate}[leftmargin=1.05em,itemsep=2pt,topsep=2pt]
+\item \textbf{Passive lift (PER$\rightarrow$SQC).} Evolve $p$ by PER (replicator/MWU); factor the step kernel $\Gamma$; pick $\Theta$ with $|\Theta|^2=\Gamma$; set $\rho=\Theta\,\mathrm{diag}(p(0))\,\Theta^\dagger$. This provides phases/interference consistent with PER’s diagonals.
+\item \textbf{Decoherence feedback (two‑way).} Let the PER witness ratio drive dephasing,
+$\gamma(t)=\gamma_0+\alpha\,[R_w(t)]_+$,
+and evolve
+$\dot\rho=-i[H_{\rm eff}(t),\rho]+\sum_i\gamma_i(t)\big(P_i\rho P_i-\tfrac12\{P_i,\rho\}\big)$.
+Optionally feed residual coherence back to PER by $f_i \leftarrow f_i + \beta \sum_{j\ne i}\mathrm{Re}[\rho_{ij}G_{ij}]$.
+\item \textbf{Kernel‑consistent lift (tight coupling).} Discretize PER as $p\mapsto \Gamma p$ (e.g., softmax/Plackett–Luce or OT step) and \emph{require} $|\Theta|^2=\Gamma$ each step. This keeps $\mathrm{diag}\,\rho=p$ by construction.
+\end{enumerate}
+
+\paragraph{Unified variational principle.}
+A single hybrid action on $(p,\rho,\Theta)$ recovers both flows as zero‑action limits and enforces consistency:
+\[
+\boxed{\;
+\mathcal{S}[p,\rho,\Theta]=\!\int_0^T
+\underbrace{\tfrac{1}{2\varepsilon}\big\|\dot p-\mathrm{grad}_p C(p,t)\big\|_{p}^{2}}_{\text{PER/Fisher}}
++\underbrace{\tfrac{1}{2\varepsilon_q}\big\|\dot\rho-\mathcal{L}_{p,t}(\rho)\big\|_{B}^{2}}_{\text{SQC/Bures}}
++\underbrace{\kappa\,\|\mathrm{diag}(\rho)-p\|^2}_{\text{consistency}}
++\underbrace{\lambda\,\|\operatorname{skew}(\dot\Theta\Theta^\dagger)\|_F^2}_{\text{gauge}}
+\,dt\; }
+\]
+Here $\|\cdot\|_p$ is the Fisher/Shahshahani norm on $\Delta^\circ$ and $\|\cdot\|_B$ is a Bures‑type norm on density matrices.
+Limits: (i) \emph{pure interference}: $\varepsilon^{-1}\!\to 0$, unitary $\mathcal{L}$; (ii) \emph{strong measurement}: large $\gamma(t)$ from witnesses $\Rightarrow$ $Q_F\uparrow$, fast PER commit.
+
+\begin{framed}\small
+\textbf{Algorithm (coupled PER/SQC loop).}
+At each step $t$: (1) PER: $p\!\leftarrow\!\mathrm{MWU}(p,f)$ with $f=s(t)+K(t)p-\lambda\kappa(t)$; (2) choose $\Gamma$ for that step and $\Theta$ with $|\Theta|^2=\Gamma$ in minimal‑twist gauge; (3) SQC: $\rho\!\leftarrow\!\Theta\rho\Theta^\dagger$ plus Lindblad with rate $\gamma(t)\propto [R_w(t)]_+$; (4) enforce/penalize $\mathrm{diag}\,\rho=p$; (5) compute $R_w,\,R_1,\,Q_F$; (6) stop when the record rule (entropy/concentration + hold) is met.
+\end{framed}
+
+% ---------------------------------------------------------
+\section{Weak‑measurement view and testable lags}
+\label{sec:weak}
+
+\paragraph{Pre/post selection in PER/SQC.}
+Let $F$ be the projector for the realized record (Real stage). For any observable $A=\sum_i a_i P_i$ on the SQC layer,
+\[
+A_w(t) \;=\; \frac{\mathrm{tr}\!\big(F\,A\,\rho(t)\big)}{\mathrm{tr}\!\big(F\,\rho(t)\big)}
+\]
+is the PER‑adapted weak value (column phases fixed by minimal‑twist gauge). Weak couplings keep $Q_F\!\approx\!0$ and $R_w\!\approx\!0$; strong couplings raise both.
+
+\paragraph{Lag prediction.}
+On the \emph{rise} (weak‑information regime) the \emph{witness rate} tends to \emph{lead} the disturbance: $R_w$ leads $\dot Q_F$;
+near \emph{collapse} the sign flips (nonunitarity leads).
+These are exactly the patterns we observe in LIGO and the Bell data (rise: small positive lags; full‑trace: negative lags), and they co‑localize with spikes in $R_w$, $R_1$, and FDR.
+
+% ---------------------------------------------------------
+\section{Interference patterns in PER/SQC (double slit)}
+\label{sec:double-slit}
+
+\paragraph{Fringes from SQC; recording from PER.}
+Let $\psi(x)=\psi_1(x)+\psi_2(x)$. With which‑path entanglement $|E_1\rangle,|E_2\rangle$ the screen intensity is
+\[
+I(x;\gamma)=|\psi_1|^2+|\psi_2|^2
++2\,|\gamma|\,\mathrm{Re}\!\big[\psi_1^*(x)\psi_2(x)\big],\qquad
+\gamma=\langle E_2|E_1\rangle.
+\]
+Thus $|\gamma|$ sets visibility (SQC), while PER supplies the stopping rule (click formation).
+In Fraunhofer geometry with slit width $a$, separation $d$, distance $L$, wavelength $\lambda$,
+\[
+I(x;\gamma)\ \propto\ 2\,\mathrm{sinc}^2\!\!\left(\frac{\pi a x}{\lambda L}\right)\!\Big[\,1+|\gamma|\cos\!\Big(\tfrac{2\pi d}{\lambda L}x+\varphi_0\Big)\Big].
+\]
+(Any AB phase adds to $\varphi_0$.)
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=.68\linewidth]{double_slit_interference_demo.png}
+  \caption{\textbf{Double‑slit.} Predicted $I(x;\gamma)$ for $|\gamma|\in\{1,0.6,0\}$.
+  PER’s $R_w$ and SQC’s $Q_F$ grow with which‑path strength; visibility falls accordingly.}
+  \label{fig:double-slit}
+\end{figure}
+
+% ---------------------------------------------------------
+\section{Quantum Cheshire Cat in PER/SQC}
+\label{sec:qcc}
+
+\paragraph{Setup and weak values.}
+On $\mathcal{H}_{\rm path}\!\otimes\!\mathcal{H}_{\rm prop}$ with path $\{|A\rangle,|B\rangle\}$ and property (spin/polarization), take
+\[
+|\psi\rangle=\frac{|A\rangle+|B\rangle}{\sqrt2}\otimes|{+}\rangle_x,\qquad
+|\phi\rangle=\frac{|A\rangle\otimes|{+}\rangle_x+|B\rangle\otimes|{-}\rangle_x}{\sqrt2}.
+\]
+Then the PER‑adapted weak values
+\[
+\langle \Pi_A\rangle_w=1,\ \ \langle \Pi_B\rangle_w=0,\qquad
+\langle \Pi_A\,\sigma_z\rangle_w=0,\ \ \langle \Pi_B\,\sigma_z\rangle_w=1
+\]
+exhibit the “cat/grin” separation:
+a weak path probe responds in arm $A$ while a weak property probe responds in arm $B$, conditioned on the post‑selection $F$.
+In PER/SQC this is a \emph{conditional weak‑response} statement in the evanescent regime; as coupling grows, $Q_F$ rises, the interference dies, and the effect disappears.
+
+
+% =========================================================
+
+% =========================================================
+\section{Causality, coherent broadcasts, and the intrinsic clock}
+\label{sec:causality}
+
+\paragraph{Front velocity vs.\ phase/group velocity.}
+Only the \emph{front} (signal) velocity $v_f$ matters for causality: it is the speed at which the first nonzero disturbance can arrive. 
+Phase or group velocities may exceed $c$ in dispersive media without conveying new information; the causal front obeys $v_f\le c$ (and in vacuum $v_f=c$).
+
+\paragraph{Causal witness kernels.}
+We encode witnesses by retarded convolutions
+\begin{equation}
+s_i(x)\;=\;\int d^4y\;\,G_{\mathrm{ret}}(x-y)\,J_i(y),\qquad x=(\mathbf x,t),
+\end{equation}
+with $G_{\mathrm{ret}}(x-y)=0$ for spacelike separations $(x-y)^2<0$.
+The PER driver $f_i=s_i+(Kp)_i-\lambda\kappa_i$ then yields
+$\dot p_i(\mathbf x,t)=0$ until $s_i(\mathbf x,t)\neq 0$.
+Hence the \emph{earliest} change of $(p_i,C,\theta)$ at $(\mathbf x,t)$ is light-cone limited by the sources of $J$.
+
+\begin{lemma}[Coherence-front bound]
+Let $A=(\mathbf y,t')$ be a source event with compact current $J$, and $B=(\mathbf x,t)$ a detector event.
+Assume (i) witnesses use a retarded kernel $G_{\mathrm{ret}}$ supported inside the light cone; (ii) PER updates at $(\mathbf x,t)$ depend only on $s(\mathbf x,t)$.
+Then the intrinsic clock $\theta(\mathbf x,t)$ (with $\dot\theta=\alpha\,\dot C$, or its forward-only/smoothed variants) satisfies
+\begin{equation}
+\dot\theta(\mathbf x,t)=0\quad\text{whenever}\quad t-t' < \frac{\|\mathbf x-\mathbf y\|}{c}\,.
+\end{equation}
+Equivalently, the set where $\dot\theta$ first becomes positive due to $A$ is contained in $J^+(A)$ (the future light cone of $A$).
+\end{lemma}
+
+\noindent\emph{Proof sketch.}
+By causality, $s_i(\mathbf x,t)=(G_{\mathrm{ret}}*J_i)(\mathbf x,t)=0$ until $t-t'\ge \|\mathbf x-\mathbf y\|/c$.
+Therefore $f_i(\mathbf x,t)$ and $\dot p_i$ vanish; $\dot C$ (a Fisher-quadratic in $f$) remains zero; hence $\dot\theta=\alpha\,\dot C=0$ until the front arrives.
+
+\paragraph{SQC microcausality.}
+With a local, gauge-covariant generator $\dot\rho=-i[H(\mathbf A,\phi,g_{\mu\nu}),\rho]+\mathcal D(\rho)$, microcausality ($[\hat{\mathcal O}(x),\hat{\mathcal O}(y)]=0$ for spacelike $x-y$) implies that neither the coherent part nor the GKLS dissipator can alter $\rho$ outside the light cone.
+Thus the nonunitarity diagnostic $Q_F$ at $(\mathbf x,t)$ can rise only after the witness front intersects the detector worldline.
+
+\paragraph{Operational speed and coherence cones.}
+Define the operational bound for broadcast-driven commits
+\begin{equation}
+c_{\rm op}\;:=\;\sup\ \frac{\|\mathbf x_B-\mathbf x_A\|}{\,T_{\rm commit}(B)-T_{\rm emit}(A)\,}\,,
+\end{equation}
+taken over events where the only driver is a broadcast. In vacuum $c_{\rm op}=c$.
+In HK (reaction--transport) form, impose $\|\mathbf v(x,t)\|\le c$; PER probability mass then propagates within \emph{coherence cones} analogous to light cones.
+
+\paragraph{Implications for data.}
+Our rise-phase lags (e.g.\ LIGO \SIrange{32}{48}{ms} witness-lead) and collapse-phase lags (e.g.\ Bell full-trace collapse-lead) compare local time series \emph{after} front arrival.
+They reflect the weak$\to$strong measurement crossover under causal witnesses; they do not imply superluminal propagation.
+
+
+% =========================================================
+\section{Entropy, potentialization, and the force dictionary}
+\label{sec:entropy-forces}
+
+\paragraph{Three entropies and ``potentialization.''}
+We distinguish: (i) the PER Shannon entropy $H(p)=-\sum_i p_i\ln p_i$ obeying $\dot H=-\mathrm{Cov}_p(f,\ln p)$ and $\dot C=\mathrm{Var}_p(f)\!\ge 0$ for frozen witnesses; (ii) the SQC von Neumann entropy $S(\rho)=-\mathrm{tr}(\rho\ln\rho)$, conserved by unitary transport and increased by Lindbladian decoherence; and (iii) the thermodynamic/environmental entropy $S_{\rm env}$.
+We call the rate at which \emph{accessible, redundant} Real records are converted into broadly distributed, non-redundant field degrees of freedom the \emph{potentialization rate} $\Pi(t)$.
+Landauer/Clausius considerations give the budget
+\begin{framed}\small
+\begin{equation}
+\frac{d}{dt}\,S_{\rm env}(t)\ \gtrsim\ k_B(\ln 2)\,\Pi(t),
+\end{equation}
+\end{framed}
+with equality in ideal isothermal erasure.
+Operationally, potentialization is indicated by \emph{source-side} SQC nonunitarity increases ($Q_F\uparrow$), little immediate decoding by witnesses ($R_w\downarrow$ at receivers), and a drop or stall in local PER coherence accumulation.
+
+\paragraph{Replication vs.\ potentialization (index).}
+We define a dimensionless index
+\begin{equation}
+P \;\equiv\; 1 - \frac{\text{rate of new decoded records (receivers)}}{\text{rate of source record loss}},
+\end{equation}
+so that $P\!\approx\!1$ indicates near-pure potentialization (e.g.\ thermal radiation far from detectors) and $P\!\approx\!0$ indicates near-pure replication (e.g.\ coherent, structured broadcasts that promptly create new Real at receivers).
+In practice the numerator/denominator can be estimated from PER/SQC traces: receiver-side $R_w$ and source-side $Q_F$ (and local $C$) with appropriate coarse-graining.
+
+\paragraph{Forces in PER/SQC (one dictionary).}
+We collect conservative, dissipative, and informational drives in the coupled $(\rho,p)$ system:
+\begin{center}
+\begin{tabular}{@{}p{2.6cm}p{4.7cm}p{4.9cm}p{3.2cm}@{}}
+\toprule
+\textbf{Force class} & \textbf{SQC generator piece} & \textbf{PER driver piece} & \textbf{Typical signature} \\
+\midrule
+Conservative (EM, gravity, etc.) & Hamiltonian $H(t)$ with minimal coupling / metric; unitary $\dot\rho=-i[H,\rho]$ & (none directly; enters via what witnesses measure) & $Q_F\!\approx\!0$, $R_w\!\approx\!0$ until readout; interference patterns shaped \\
+Measurement / dephasing & Lindblad $\mathcal D=\sum_\alpha \gamma_\alpha(L_\alpha\rho L_\alpha^\dagger-\tfrac12\{L_\alpha^\dagger L_\alpha,\rho\})$ & penalties $\kappa$, reduced effective coupling, or explicit witness scores $s_i$ & $Q_F\uparrow$, visibility$\downarrow$; potentialization if no receivers \\
+Which-path / evidence & weak$\to$strong measurement sequence; GKLS with growing rates & Fisher-gradient drive $\dot p_i=p_i(f_i-\bar f)$ with $f_i=s_i+(Kp)_i-\lambda\kappa_i$ & \emph{Rise}: $R_w$ leads $\dot Q_F$; \emph{Collapse}: $\dot Q_F$ leads \\
+Radiation damping / friction & amplitude damping channels & increased $\kappa$, reduced $K$ & drains local Real, $Q_F\uparrow$; often potentialization \\
+Entropic/free-energy & contact/GENERIC $h=E-TS$ with $\dot h=-\gamma h$ & Fisher free-energy ascent $\mathrm{grad}_p C$ & $R_1$ and FDR spike at bottlenecks \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\paragraph{Lag/commit signatures.}
+The weak-measurement crossover predicts the \emph{rise} ROI to show a small \emph{witness-lead} (positive lag: $R_w$ before $\dot Q_F$), while the \emph{collapse} shows a \emph{nonunitarity-lead} (negative lag).
+This matches our LIGO and Bell analyses and provides a practical classification: early replication vs.\ late potentialization.
+
+\paragraph{Relation to the hybrid action.}
+All forces above appear in the unified action
+\begin{equation}
+\mathcal{S}[p,\rho,\Theta]=\!\int\!
+\underbrace{\tfrac{1}{2\varepsilon}\big\|\dot p-\mathrm{grad}_p C\big\|_{p}^{2}}_{\text{information / Fisher}}\;
++\;\underbrace{\tfrac{1}{2\varepsilon_q}\big\|\dot\rho-\mathcal{L}(\rho)\big\|_{B}^{2}}_{\text{conservative \& dissipative}}\;
++\;\kappa\,\|\mathrm{diag}(\rho)-p\|^2
++\;\lambda\,\|\mathrm{skew}(\dot\Theta\Theta^\dagger)\|_F^2\,dt,
+\end{equation}
+with the slow manifold $\mathrm{diag}\,\rho=p$ and $\pi=f-\bar f$ capturing PER/SQC consistency and the replicator momentum, respectively.
+
+\paragraph{Practical recipe.}
+To estimate $P$ and potentialization epochs in data: (i) compute source-side $Q_F(t)$ and local $C(t)$; (ii) sum receiver-side $R_w(t)$ over actual detectors; (iii) coarse-grain both with the same window; (iv) define $\mathcal{R}_{\rm lost}=\int (\text{source record loss})\,dt$ and $\mathcal{R}_{\rm created}=\int (\text{receiver decodes})\,dt$ and set $P=1-\mathcal{R}_{\rm created}/\mathcal{R}_{\rm lost}$. High-$P$ intervals indicate potentialization.
+
+
+\section{Diagnostics: coherence, information, and witnesses}\label{sec:diagnostics}
+
+% \paragraph{Definitions.}
+% Let $C_{\rm ext}$ (witness-driven) and $C_{\rm int}$ (internal) sum to $C$.
+% Define the witness ratio and fluctuation--dissipation diagnostic:
+% \begin{equation}
+%   R_w(t)=\frac{\dot C_{\rm ext}(t)}{\dot C_{\rm int}(t)},\qquad
+%   \mathrm{FDR}(t)=\frac{\mathrm{Var}_t[\dot C]}{\E_t[\dot C]}.
+% \end{equation}
+% We compute $R_w$ stably by smoothing $C_{\rm ext}$, differencing, clipping denominators, and low-pass filtering.
+
+\paragraph{Definitions.}
+We set
+\[
+C(p,t)=\underbrace{\sum_i p_i(t)\,s_i(t)}_{C_{\rm ext}(t)}\ +\ \underbrace{p(t)^\top K(t)\,p(t)\ -\ \lambda\sum_i p_i(t)\kappa_i(t)}_{C_{\rm int}(t)}.
+\]
+Derivatives: apply the \emph{same} low–pass (boxcar or EWMA, window $\Delta$) to $C_{\rm ext}$ and $C_{\rm int}$, central–difference, then compute
+\[
+R_w=\frac{\dot C_{\rm ext}}{\dot C_{\rm int}+\varepsilon},\qquad \varepsilon\in[10^{-6},10^{-3}] \text{ for scale}.
+\]
+Defaults: LIGO $\Delta=\SI{100}{ms}$; Bell $\Delta$ equals one witness step (e.g.\ $40$k trials).
+
+\paragraph{Lag statistic and rise/fall split.}
+We correlate $R_w$ with $\dot Q_F$ across integer lags; the best lag is the argmax of $|\mathrm{corr}|$.
+For transients, we use a derivative-gated ROI, and we split by $\mathrm{sign}(\dot Q_F)$ into \emph{rise} and \emph{fall}.
+
+% =========================================================
+\section{Experimental design (common pipeline)}\label{sec:design}
+
+\begin{enumerate}[leftmargin=1.2em, itemsep=2pt]
+\item \textbf{Witnesses.}
+LIGO: cumulative dissipation and redundancy of local carriers;
+Bell: prefix-sum CHSH windows over all four settings, mapping $S(t)$ to two-path supports $(\mathrm{H}_0:\,S\!\le 2,\ \mathrm{H}_1:\,S>2)$ via a cumulative or local (EWMA/boxcar) map.
+\item \textbf{PER.} MWU/replicator on supports $\to$ $p(t)$; compute $C,H,R_1,R_w$.
+\item \textbf{SQC.} OT/lazy transport on $p(t)$ with entropy $\varepsilon$ $\to$ $Q_F(t)$ (two-path identity cost).
+\item \textbf{Alignment \& lags.} Align SQC to the PER grid ($t_{\rm SQC}=t_{1:}$); compute lags on (i) ROI and (ii) full trace; report record times (PER entropy threshold; SQC threshold $\tau$ with hold).
+\end{enumerate}
+
+% =========================================================
+\section{Results I: LIGO GW150914}\label{sec:gwosc}
+
+We analyze \texttt{GWOSC} strain around GW150914 (H and L sites; standard filtering).
+In early evanescence (\emph{rise}), a derivative-gated ROI (z-threshold 0.5, pad 10) yields a short \emph{positive} lag (witness-lead)
+\begin{equation*}
+\text{lag} \approx \SI{0.032}{s}\ \text{to}\ \SI{0.048}{s}\quad\text{(positive: $R_w$ leads $\dot Q_F$)},
+\end{equation*}
+with moderate correlations (0.35--0.45).\footnote{Representative ROI metrics: $\{0.032\,\mathrm{s},\,0.28\mbox{--}0.40\}$ and $0.048\,\mathrm{s}$ runs; see the repository figures and JSONs.}
+On the full trace (rise+fall) the best lag is \emph{negative} $\approx\SI{-0.112}{s}$ (collapse-lead).
+PER commits before SQC (\emph{e.g.} $T_{\rm PER}\approx\SI{15.60}{s}$ vs.\ $T_{\rm SQC}\approx\SI{15.73}{s}$).
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=.47\linewidth]{gwosc_QF_norm.png}\hfill
+\includegraphics[width=.47\linewidth]{gwosc_Rw.png}\\[4pt]
+\includegraphics[width=.47\linewidth]{gwosc_lag_scan_roi.png}\hfill
+\includegraphics[width=.47\linewidth]{gwosc_overlay.png}
+\caption{\textbf{LIGO GW150914.} Top: SQC nonunitarity $\tilde Q_F(t)$ and PER witness ratio $R_w(t)$ (seconds). Bottom: ROI lag scan (positive means $R_w$ leads) and overlay at the best ROI lag. ROI shows a short positive lead ($\sim\!30$--$50$\,ms); full trace flips sign during collapse.}
+\label{fig:gwosc}
+\end{figure}
+
+\vspace{-8pt}
+\paragraph{Numbers used in Fig.~\ref{fig:gwosc}.}
+ROI: $+0.032$\,s and $+0.048$\,s best lags (positive) with moderate correlations; full trace: $-0.112$\,s; commits: PER $15.60$\,s vs.\ SQC $15.73$\,s.
+
+% =========================================================
+\section{Results II: NIST CH Pockels Bell test (100\,kHz)}\label{sec:bell}
+
+We construct a trial-wise CSV and compute CHSH via prefix sums with windows $(200{,}000,\,40{,}000)$ and $\ge 10$ per cell.
+We map $S(t)$ to two-path supports and run PER/SQC as above.
+
+\paragraph{Scale and units.}
+After thinning/filters the working set contains $\sim 4.07\times 10^7$ trials; the trial clock is converted at \SI{10}{\micro s}/trial.
+
+\paragraph{Full-trace statistic (conservative supports).}
+With a coarse SQC grid ($\mathrm{d}t_{\rm SQC}\!\approx\!\SI{5.078}{s}$) the best lag is
+\begin{equation*}
+\text{lag}\approx \SI{-30.5}{s}\quad\text{with}\quad \mathrm{corr}\approx 0.316\quad (\dot Q_F\ \text{leads}\ R_w),
+\end{equation*}
+and with a denser grid ($\mathrm{d}t_{\rm SQC}\!\approx\!\SI{2.536}{s}$) the sign persists with $\text{lag}\approx\SI{-7.61}{s}$.
+
+\paragraph{Early ROI and local witnesses.}
+Restricting to the first 10--20\% of the SQC timeline and switching to local supports (EWMA/boxcar) consistently \emph{shrinks} the magnitude and can flip the sign in subsets, but a conservative, full-trace statistic remains \emph{collapse-lead}.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=.47\linewidth]{bell_QF_norm.png}\hfill
+\includegraphics[width=.47\linewidth]{bell_Rw.png}\\[4pt]
+\includegraphics[width=.47\linewidth]{bell_lag_scan_rise.png}\hfill
+\includegraphics[width=.47\linewidth]{bell_lag_scan.png}
+\caption{\textbf{NIST Bell.} Top: $\tilde Q_F(t)$ and $R_w(t)$ in seconds. Bottom-left: rise-only lag scan (negative indicates $\dot Q_F$ leads); bottom-right: full-trace lag scan. Conservative smoothing emphasizes collapse-lead; local supports and ROI-gating reduce the lag magnitude.}
+\label{fig:bell}
+\end{figure}
+
+\vspace{-8pt}
+\paragraph{Numbers used in Fig.~\ref{fig:bell}.}
+Full-trace lags $\{-30.47\,\mathrm{s},\,-7.61\,\mathrm{s}\}$ for $\mathrm{d}t_{\rm SQC}\!\approx\!\{5.078\,\mathrm{s},\,2.536\,\mathrm{s}\}$, respectively; working set size $\sim 4.07\times 10^7$ trials.
+
+% =========================================================
+\section{Discussion}
+\begin{enumerate}[leftmargin=1.2em]
+\item \textbf{Rise vs.\ fall universality.} Both case studies exhibit \emph{collapse-lead} (negative lags) on the fall/whole trace, while the rise often shows a short \emph{witness-lead} once we restrict to the evanescent ROI and use local witnesses.
+\item \textbf{PER$\to$SQC handoff.} PER commits slightly before SQC (LIGO), consistent with witness assimilation preceding amplitude-level (near-)unitarity.
+\item \textbf{Diagnostics.} $R_w$ and $R_1$ spike at transitions; FDR grows near quasi-critical slowdowns; both support the action picture.
+\end{enumerate}
+
+% =========================================================
+\section{Methods (key settings)}
+Unless otherwise noted:
+\begin{itemize}[leftmargin=1.2em]
+\item \textbf{PER:} MWU step $\eta\!=\!0.6$, no internal regularizer ($\alpha\!=\!0$), initial $p_0=(\tfrac12,\tfrac12)$.
+\item \textbf{Witness supports:} CHSH windows $(200\mathrm{k},40\mathrm{k})$; supports from $S(t)$ via cumulative (conservative) or EWMA (span 4--6) or boxcar (8--10) on an $N_{\rm steps}$ grid (600--800).
+\item \textbf{SQC:} OT with identity cost ($N\!=\!2$) and $\varepsilon\!=\!0.06$; SQC commit uses threshold $\tau\!=\!0.20$ (LIGO) and $0.20$--$0.30$ (Bell) with hold $0.20$\,s (LIGO) and $0.20$ grid units (Bell).
+\item \textbf{Lag:} z-gated ROI on $|\mathrm{z}(\dot Q_F)|>\!0.5$, pad 10, Pearson correlation over lags $|k|\le L/8$; surrogates: phase or circular shifts; for Bell the trial clock uses \SI{10}{\micro s}/trial.
+\end{itemize}
+
+\subsection*{Lag–scan significance and familywise control}
+We scan integer lags $k\in[-K,K]$ and use the maximum absolute Pearson correlation as the test statistic.
+We build phase–randomized (or circular–shift) surrogates that preserve the spectra and the ROI rule, compute the null distribution of the \emph{max–across–lags} statistic, and report $p$–values and 95\% CIs.
+We also report Bartlett–corrected effects after AR(1) prewhitening.
+
+\subsection*{ROI gating and bias control}
+We use $|z(\dot Q_F)|>\tau_z$ with padding as default. To test circularity we (i) gate on witness side $|z(R_w)|$, and (ii) use a symmetric union gate.
+The chosen gate is preserved in surrogates to estimate any bias.
+
+\subsection*{Alignment and common time base}
+We interpolate (or aggregate) both $R_w$ and $Q_F$ to a common, oversampled grid before lag scans; unit conversions (e.g.\ $10\,\mu$s/trial for Bell) are applied once on that grid.
+
+\subsection*{Witness construction for Bell}
+Beyond cumulative windows we test EWMA, boxcar, per–setting witnesses, and randomized blocks; across these choices the full–trace sign (collapse–lead) persists in our runs, with magnitude changes reported in the supplement.
+
+\subsection*{Commit thresholds and holds}
+We report commit times with the $(\tau,\text{hold})$ used and include a sensitivity sweep in code (typical: $\tau\in[0.1,0.3]$, hold $\in[0.15,0.25]$\,s for LIGO; Bell in grid units).
+
+% =========================================================
+\section*{Availability}
+Python scaffolds, the LIGO and NIST drivers (including the rise/fall split), and all figures used here come from the same PER/SQC repository companion.
+
+\appendix
+\section{Deriving the Shahshahani geometry and geodesics}\label{app:shahshahani}
+On $\Delta^\circ=\{p>0:\sum_i p_i=1\}$ with $T_p\Delta=\{u:\sum_i u_i=0\}$, define $G_p(u,v)=\sum_i u_i v_i/p_i$.
+The square–root map $F:\Delta^\circ\to\mathbb{S}^{N-1}_2$, $x_i=2\sqrt{p_i}$, pulls back the Euclidean metric to $G$; hence geodesics correspond to great circles under $F$.
+
+
+\end{document}
